@@ -1,14 +1,8 @@
-drop database if exists tiendaWebDB;
+-- drop database if exists tiendaWebDB;
 create database tiendaWebDB;
 use tiendaWebDB;
 
-create table Clientes(
-	idCliente int auto_increment,
-    correoCliente varchar(256) not null,
-    contrasenaCliente varchar(256) not null,
-    telefonoCliente varchar(32) not null,
-    constraint pk_clientes primary key (idCliente)
-);
+
 
 
 create table Empleados(
@@ -18,6 +12,17 @@ create table Empleados(
     contrasenaEmpleado varchar(256) not null,
     tipoEmpleado ENUM('Administrador') default 'Administrador',
     constraint pk_empleados primary key (idEmpleado)
+);
+
+create table Clientes(
+	idCliente int auto_increment,
+    correoCliente varchar(256) not null,
+    contrasenaCliente varchar(256) not null,
+    telefonoCliente varchar(32) not null,
+    idEmpleado int not null,
+    constraint pk_clientes primary key (idCliente),
+     constraint fk_clientes_empleados foreign key (idEmpleado)
+		references Empleados(idEmpleado) on delete cascade
 );
 
 create table Proveedores(
@@ -46,11 +51,14 @@ create table Productos(
 	stockProducto int not null,
     idCategoria int,
 	idProveedor int,
+    idEmpleado int,
     constraint pk_productos primary key (idProducto),
     constraint fk_productos_categorias foreign key (idCategoria)
 		references Categorias(idCategoria) on delete cascade,
     constraint fk_productos_proveedores foreign key (idProveedor)
-		references Proveedores(idProveedor) on delete cascade
+		references Proveedores(idProveedor) on delete cascade,
+     constraint fk_productos_empleados foreign key (idEmpleado)
+		references Empleados(idEmpleado) on delete cascade
 );
 
 create table Compras(
@@ -75,7 +83,7 @@ create table Pagos(
 		references Compras (idCompra) on delete cascade
 );
 
-create table Carrito( -- DetalleCompra 
+create table Carritos( -- DetalleCompra 
 	idCompra int not null,
     idProducto int not null,
     cantidadProducto int not null,
@@ -104,75 +112,6 @@ create table Facturas(
 	constraint fk_facturas_pagos foreign key (idPago)
 		references Pagos(idPago) on delete cascade
 );
-
-
--- CRUD CLIENTES ---------------------------------------------------------------
--- LISTAR
-DELIMITER $$
-	create procedure sp_ListarClientes()
-		begin
-			select 
-			idCliente as ID,
-			correoCliente as CORREO_CLIENTE,
-			contrasenaCliente as CONTRASEÑA,
-			telefonoCliente as TELEFONO
-			from Clientes;
-		end$$
-	
-DELIMITER ;
-call sp_ListarClientes();
-
--- AGREGAR
-DELIMITER $$
-	create procedure sp_AgregarCliente(
-			in p_correoCliente varchar(256),
-			in p_contrasenaCliente varchar(256), 
-			in p_telefonoCliente varchar(32))
-		begin
-			insert into Clientes (correoCliente, contrasenaCliente, telefonoCliente)
-				values(p_correoCliente, p_contrasenaCliente, p_telefonoCliente);
-		end$$
-	
-DELIMITER ;
-call sp_AgregarCliente('iossg8@gmail.com', '12345','30071148');
-call sp_ListarClientes();
-
--- ACTUALIZAR
-DELIMITER $$
-	create procedure sp_ActualizarCliente(
-			in p_idCliente int,
-			in p_correoCliente varchar(256),
-			in p_contrasenaCliente varchar(256), 
-			in p_telefonoCliente varchar(32))
-		begin
-			update Clientes
-				set
-					correoCliente  = p_correoCliente,
-					contrasenaCliente = p_contrasenaCliente ,
-					telefonoCliente = p_telefonoCliente
-				where 
-					p_idCliente = idCliente;
-			
-		end$$
-	
-DELIMITER ;
-call sp_ActualizarCliente(1,'iossg8@gmail.com', 'Mlgdi3301','30071148');
-call sp_ListarClientes();
-
--- ELIMINAR
-DELIMITER $$
-	create procedure sp_EliminarCliente(in p_idCliente int)
-		begin
-			delete 
-			from Clientes
-				where idCliente = p_idClientes;
-		end$$
-	
-DELIMITER ;
-
-
-
-
 
 
 -- CRUD EMPLEADOS ---------------------------------------------------------------
@@ -242,6 +181,81 @@ DELIMITER $$
 		end$$
 	
 DELIMITER ;
+
+-- CRUD CLIENTES ---------------------------------------------------------------
+-- LISTAR
+DELIMITER $$
+	create procedure sp_ListarClientes()
+		begin
+			select 
+			idCliente as ID,
+			correoCliente as CORREO_CLIENTE,
+			contrasenaCliente as CONTRASEÑA,
+			telefonoCliente as TELEFONO,
+            idEmpleado as EMPLEADO
+			from Clientes;
+		end$$
+	
+DELIMITER ;
+call sp_ListarClientes();
+
+-- AGREGAR
+DELIMITER $$
+	create procedure sp_AgregarCliente(
+			in p_correoCliente varchar(256),
+			in p_contrasenaCliente varchar(256), 
+			in p_telefonoCliente varchar(32),
+            in p_idEmpleado int)
+		begin
+			insert into Clientes (correoCliente, contrasenaCliente, telefonoCliente, idEmpleado)
+				values(p_correoCliente, p_contrasenaCliente, p_telefonoCliente, p_idEmpleado);
+		end$$
+	
+DELIMITER ;
+call sp_AgregarCliente('iossg8@gmail.com', '12345','30071148',1);
+call sp_ListarClientes();
+
+-- ACTUALIZAR
+DELIMITER $$
+	create procedure sp_ActualizarCliente(
+			in p_idCliente int,
+			in p_correoCliente varchar(256),
+			in p_contrasenaCliente varchar(256), 
+			in p_telefonoCliente varchar(32),
+            in p_idEmpleado int)
+		begin
+			update Clientes
+				set
+					correoCliente  = p_correoCliente,
+					contrasenaCliente = p_contrasenaCliente ,
+					telefonoCliente = p_telefonoCliente,
+                    idEmpleado = p_idEmpleado
+				where 
+					p_idCliente = idCliente;
+			
+		end$$
+	
+DELIMITER ;
+call sp_ActualizarCliente(1,'iossg8@gmail.com', 'Mlgdi3301','30071148',1);
+call sp_ListarClientes();
+
+-- ELIMINAR
+DELIMITER $$
+	create procedure sp_EliminarCliente(in p_idCliente int)
+		begin
+			delete 
+			from Clientes
+				where idCliente = p_idClientes;
+		end$$
+	
+DELIMITER ;
+
+
+
+
+
+
+
 
 
 
@@ -397,7 +411,8 @@ DELIMITER $$
             precioProducto as PRECIO,
             stockProducto as STOCK,
             idCategoria as CATEGORIA,
-            idProveedor as PROVEEDOR
+            idProveedor as PROVEEDOR,
+            idEmpleado as EMPLEADO
 			from Productos;
 		end$$
 	
@@ -415,13 +430,14 @@ DELIMITER $$
 			in p_precioProducto double,
 			in p_stockProducto int,
 			in p_idCategoria int,
-			in p_idProveedor int)
+			in p_idProveedor int,
+            in p_idEmpleado int)
 		begin
-			insert into Productos(nombreProducto, descripcionProducto, tallaProducto, marcaProducto, precioProducto, stockProducto, idCategoria, idProveedor)
-				values(p_nombreProducto, p_descripcionProducto, p_tallaProducto, p_marcaProducto, p_precioProducto, p_stockProducto, p_idCategoria, p_idProveedor);
+			insert into Productos(nombreProducto, descripcionProducto, tallaProducto, marcaProducto, precioProducto, stockProducto, idCategoria, idProveedor, idEmpleado)
+				values(p_nombreProducto, p_descripcionProducto, p_tallaProducto, p_marcaProducto, p_precioProducto, p_stockProducto, p_idCategoria, p_idProveedor, p_idEmpleado);
 		end$$
 DELIMITER ;
-call sp_AgregarProducto('Zapatos', 'Calzado para su pie', '32', 'NIKE', 850, 40, 1, 1);
+call sp_AgregarProducto('Zapatos', 'Calzado para su pie', '32', 'NIKE', 850, 40, 1, 1,1);
 call sp_ListarProductos();
 
 -- ACTUALIZAR
@@ -435,7 +451,8 @@ DELIMITER $$
 				in p_precioProducto double,
 				in p_stockProducto int,
 				in p_idCategoria int,
-				in p_idProveedor int)
+				in p_idProveedor int,
+                in p_idEmpleado int)
 		begin
 			update Productos
 				set
@@ -446,13 +463,14 @@ DELIMITER $$
                     precioProducto = p_precioProducto,
                     stockProducto = p_stockProducto ,
                     idCategoria = p_idCategoria,
-                    idProveedor= p_idProveedor 
+                    idProveedor= p_idProveedor,
+                    idEmpleado = p_idEmpleado
 				where 
 					p_idProducto = idProducto;
 			
 		end$$
 DELIMITER ;
-call sp_ActualizarProducto(1,'Zapatos', 'Calzado para su pie', '32', 'ADIDAS', 850, 40, 1, 1);
+call sp_ActualizarProducto(1,'Zapatos', 'Calzado para su pie', '32', 'ADIDAS', 850, 40, 1, 1,1);
 call sp_ListarProductos();
 
 -- ELIMINAR
@@ -619,7 +637,7 @@ DELIMITER $$
 			idProducto as PRODUCTO,
 			cantidadProducto as CANTIDAD_PRODUCTO,
             subtotal as SUBTOTAL
-			from Carrito;
+			from Carritos;
 		end$$
 	
 DELIMITER ;
@@ -633,7 +651,7 @@ DELIMITER $$
 			in p_cantidadProducto int ,
 			in p_subtotal double)
 		begin
-			insert into Carrito(idCompra, idProducto, cantidadProducto, subtotal)
+			insert into Carritos(idCompra, idProducto, cantidadProducto, subtotal)
 				values(p_idCompra, p_idProducto, p_cantidadProducto, p_subtotal);
 		end$$
 DELIMITER ;
@@ -648,7 +666,7 @@ DELIMITER $$
 				in p_cantidadProducto int ,
 				in p_subtotal double)
 		begin
-			update Carrito
+			update Carritos
 				set
 					idCompra = p_idCompra ,
 					idProducto = p_idProducto,
@@ -668,7 +686,7 @@ DELIMITER $$
 	create procedure sp_EliminarCarrito(in p_idCompra int)
 		begin
 			delete 
-			from Carrito
+			from Carritos
 				where idCompra = p_idCompra;
 		end$$
 DELIMITER ;
