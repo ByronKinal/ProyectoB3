@@ -1,0 +1,173 @@
+ body {
+     font-family: Arial, sans-serif;
+     margin: 0;
+
+     background-color: #fff;
+ }
+
+ .barra-superior {
+
+     margin: auto;
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     gap: 15px;
+
+
+ }
+
+ .logo img {
+     height: 125px;
+ }
+
+ .espaciador {
+     flex: 1;
+ }
+
+
+ .iconos {
+     display: flex;
+     gap: 10px;
+     align-items: center;
+     cursor: pointer;
+ }
+
+ .buscador {
+     border: 1px solid #ccc;
+     display: flex;
+     align-items: center;
+     background-color: #f3f4f6;
+     border-radius: 3px;
+     padding: 5px 3px;
+ }
+
+ .buscador input {
+     border: none;
+     background: transparent;
+     outline: none;
+     padding: 5px;
+     font-size: 14px;
+ }
+
+ .iconos {
+     margin-right: 20px;
+     display: flex;
+     align-items: center;
+     gap: 15px;
+ }
+
+ .menu {
+     margin-left: 85px;
+     margin-right: 85px;
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+ }
+
+ .galeria {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 20px;
+     justify-content: center;
+     padding: 20px 0;
+ }
+
+ .producto {
+     border: 1px solid #000e;
+     border-radius: 5px;
+     width: 200px;
+     transition: transform 0.3s;
+     overflow: hidden;
+ }
+
+ .producto:hover {
+     transform: scale(1.03);
+ }
+
+ .producto img {
+     width: 100%;
+     height: auto;
+     display: block;
+ }
+
+ .info {
+     background-color: #fff;
+     padding: 10px;
+ }
+
+ .precio {
+     font-weight: bold;
+     color: #000;
+ }
+
+ .descripcion {
+     font-size: 14px;
+     color: #333;
+ }
+
+ .categoria {
+     font-size: 12px;
+     color: #777;
+ }
+
+ #ordenar {
+     padding: 5px;
+     border-radius: 5px;
+     border: 1px solid #ccc;
+     background-color: #f3f4f6;
+     color: #000;
+     font-size: 16px;
+     transition: 0.3s ease;
+ }
+
+ #ordenar:hover {
+     background-color: #e5e7eb;
+ }
+
+ #filtro {
+     padding: 5px;
+     border-radius: 5px;
+     border: 1px solid #ccc;
+     background-color: #f3f4f6;
+     color: #000;
+     font-size: 16px;
+     transition: 0.3s ease;
+ }
+
+ #filtro:hover {
+     background-color: #e5e7eb;
+ }
+ 
+ #btnBuscar {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  outline: none; /* quita el borde al hacer foco */
+  display: flex; /* para que el icono se centre bien */
+  align-items: center;
+  justify-content: center;
+}
+#btnSesion {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  outline: none; /* quita el borde al hacer foco */
+  display: flex; /* para que el icono se centre bien */
+  align-items: center;
+  justify-content: center;
+}
+#btnCarrito {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  outline: none; /* quita el borde al hacer foco */
+  display: flex; /* para que el icono se centre bien */
+  align-items: center;
+  justify-content: center;
+}
