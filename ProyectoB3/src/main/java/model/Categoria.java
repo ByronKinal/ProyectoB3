@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package model;
 
 import javax.persistence.Column;
@@ -15,95 +12,56 @@ import javax.persistence.Table;
  *
  * @author asosa
  */
-
 @Entity
 @Table(name = "Categorias")
 public class Categoria {
    
-    
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idCategoria")
+    private int idCategoria;
 
-    @Column(name = "idProveedor")
-    private int idProveedor;
+    @Column(name = "nombreCategoria")
+    private String nombreCategoria;
 
-    @Column(name = "nombreProveedor")
-    private int nombreProveedor;
-
-    @Column(name = "correoProveedor")
-    private int correoProveedor;
-
-    @Column(name = "telefonoProveedor")
-    private int telefonoProveedor;
-    
-      @Column(name = "direccionProveedor")
-    private int direccionProveedor;
+    @Column(name = "descripcionCategoria")
+    private String descripcionCategoria;
 
     public Categoria() {
     }
 
-    public Categoria(int idProveedor, int nombreProveedor, int correoProveedor, int telefonoProveedor, int direccionProveedor) {
-        this.idProveedor = idProveedor;
-        this.nombreProveedor = nombreProveedor;
-        this.correoProveedor = correoProveedor;
-        this.telefonoProveedor = telefonoProveedor;
-        this.direccionProveedor = direccionProveedor;
+    public Categoria(int idCategoria, String nombreCategoria, String descripcionCategoria) {
+        this.idCategoria = idCategoria;
+        this.nombreCategoria = nombreCategoria;
+        this.descripcionCategoria = descripcionCategoria;
     }
 
-    public Categoria(int nombreProveedor, int correoProveedor, int telefonoProveedor, int direccionProveedor) {
-        this.nombreProveedor = nombreProveedor;
-        this.correoProveedor = correoProveedor;
-        this.telefonoProveedor = telefonoProveedor;
-        this.direccionProveedor = direccionProveedor;
+    public Categoria(String nombreCategoria, String descripcionCategoria) {
+        this.nombreCategoria = nombreCategoria;
+        this.descripcionCategoria = descripcionCategoria;
     }
 
-    public int getIdProveedor() {
-        return idProveedor;
+    public int getIdCategoria() {
+        return idCategoria;
     }
 
-    public void setIdProveedor(int idProveedor) {
-        this.idProveedor = idProveedor;
+    public void setIdCategoria(int idCategoria) {
+        this.idCategoria = idCategoria;
     }
 
-    public int getNombreProveedor() {
-        return nombreProveedor;
+    public String getNombreCategoria() {
+        return nombreCategoria;
     }
 
-    public void setNombreProveedor(int nombreProveedor) {
-        this.nombreProveedor = nombreProveedor;
+    public void setNombreCategoria(String nombreCategoria) {
+        this.nombreCategoria = nombreCategoria;
     }
 
-    public int getCorreoProveedor() {
-        return correoProveedor;
+    public String getDescripcionCategoria() {
+        return descripcionCategoria;
     }
 
-    public void setCorreoProveedor(int correoProveedor) {
-        this.correoProveedor = correoProveedor;
+    public void setDescripcionCategoria(String descripcionCategoria) {
+        this.descripcionCategoria = descripcionCategoria;
     }
-
-    public int getTelefonoProveedor() {
-        return telefonoProveedor;
-    }
-
-    public void setTelefonoProveedor(int telefonoProveedor) {
-        this.telefonoProveedor = telefonoProveedor;
-    }
-
-    public int getDireccionProveedor() {
-        return direccionProveedor;
-    }
-
-    public void setDireccionProveedor(int direccionProveedor) {
-        this.direccionProveedor = direccionProveedor;
-    }
-
-   
-  
-
-
-
-    
-    
 }

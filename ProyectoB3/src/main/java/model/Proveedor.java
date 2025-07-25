@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package model;
 
 import javax.persistence.Column;
@@ -19,33 +16,27 @@ import javax.persistence.Table;
 @Table(name = "Proveedores")
 public class Proveedor {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     @Column(name = "idProveedor")
     private int idProveedor;
 
     @Column(name = "nombreProveedor")
-    private int nombreProveedor;
+    private String nombreProveedor;
 
     @Column(name = "correoProveedor")
-    private int correoProveedor;
+    private String correoProveedor;
 
     @Column(name = "telefonoProveedor")
-    private int telefonoProveedor;
+    private String telefonoProveedor;
 
     @Column(name = "direccionProveedor")
-    private int direccionProveedor;
+    private String direccionProveedor;
 
-    public Proveedor(int nombreProveedor, int correoProveedor, int telefonoProveedor, int direccionProveedor) {
-        this.nombreProveedor = nombreProveedor;
-        this.correoProveedor = correoProveedor;
-        this.telefonoProveedor = telefonoProveedor;
-        this.direccionProveedor = direccionProveedor;
+    public Proveedor() {
     }
 
-    public Proveedor(int idProveedor, int nombreProveedor, int correoProveedor, int telefonoProveedor, int direccionProveedor) {
+    public Proveedor(int idProveedor, String nombreProveedor, String correoProveedor, String telefonoProveedor, String direccionProveedor) {
         this.idProveedor = idProveedor;
         this.nombreProveedor = nombreProveedor;
         this.correoProveedor = correoProveedor;
@@ -53,7 +44,11 @@ public class Proveedor {
         this.direccionProveedor = direccionProveedor;
     }
 
-    public Proveedor() {
+    public Proveedor(String nombreProveedor, String correoProveedor, String telefonoProveedor, String direccionProveedor) {
+        this.nombreProveedor = nombreProveedor;
+        this.correoProveedor = correoProveedor;
+        this.telefonoProveedor = telefonoProveedor;
+        this.direccionProveedor = direccionProveedor;
     }
 
     public int getIdProveedor() {
@@ -64,38 +59,35 @@ public class Proveedor {
         this.idProveedor = idProveedor;
     }
 
-    public int getNombreProveedor() {
+    public String getNombreProveedor() {
         return nombreProveedor;
     }
 
-    public void setNombreProveedor(int nombreProveedor) {
+    public void setNombreProveedor(String nombreProveedor) {
         this.nombreProveedor = nombreProveedor;
     }
 
-    public int getCorreoProveedor() {
+    public String getCorreoProveedor() {
         return correoProveedor;
     }
 
-    public void setCorreoProveedor(int correoProveedor) {
+    public void setCorreoProveedor(String correoProveedor) {
         this.correoProveedor = correoProveedor;
     }
 
-    public int getTelefonoProveedor() {
+    public String getTelefonoProveedor() {
         return telefonoProveedor;
     }
 
-    public void setTelefonoProveedor(int telefonoProveedor) {
+    public void setTelefonoProveedor(String telefonoProveedor) {
         this.telefonoProveedor = telefonoProveedor;
     }
 
-    public int getDireccionProveedor() {
+    public String getDireccionProveedor() {
         return direccionProveedor;
     }
 
-    public void setDireccionProveedor(int direccionProveedor) {
+    public void setDireccionProveedor(String direccionProveedor) {
         this.direccionProveedor = direccionProveedor;
     }
-
-
-
 }

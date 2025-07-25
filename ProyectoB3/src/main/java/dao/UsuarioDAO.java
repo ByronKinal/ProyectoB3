@@ -1,9 +1,5 @@
 package dao;
 
-/**
- *
- * @author Wilson Florian
- */
 import model.Usuario;
 
 import javax.persistence.EntityManager;
@@ -11,6 +7,10 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
+/**
+ *
+ * @author Wilson Florian
+ */
 public class UsuarioDAO {
 
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("ZapateriaDonPepe");
