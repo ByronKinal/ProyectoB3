@@ -1,11 +1,10 @@
-
 package dao;
 
 /**
  *
- * @author Wilson Florian   
+ * @author Wilson Florian
  */
-import model.Cliente;
+import model.Usuario;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -16,29 +15,23 @@ public class UsuarioDAO {
 
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("ZapateriaDonPepe");
 
-    public Cliente buscarPorCorreo(String correoUsuario) {
+    public Usuario buscarPorCorreo(String correoUsuario) {
         EntityManager em = emf.createEntityManager();
-        Cliente cliente = null;
         try {
-            TypedQuery<Cliente> query = em.createQuery("SELECT c FROM Usuarios c WHERE c.correoUsuario = :correoUsuario", Cliente.class);
+            TypedQuery<Usuario> query = em.createQuery(
+                    "SELECT u FROM Usuario u WHERE u.correoUsuario = :correoUsuario",
+                    Usuario.class);
             query.setParameter("correoUsuario", correoUsuario);
-            cliente = query.getSingleResult();
+            return query.getSingleResult();
         } catch (Exception e) {
-            // No encontrado o error
-            cliente = null;
+            return null;
         } finally {
             em.close();
         }
-        return cliente;
     }
 
-    // Validar login
-    public boolean validarLogin(String correoUsuario, String contrasenaCliente) {
-        Cliente cliente = buscarPorCorreo(correoUsuario);
-        if (cliente != null) {
-            // Aquí se puede usar hash en producción
-            return cliente.getContrasenaCliente().equals(contrasenaCliente);
-        }
-        return false;
+    public boolean validarLogin(String correoUsuario, String contrasenaUsuario) {
+        Usuario usuario = buscarPorCorreo(correoUsuario);
+        return usuario != null && usuario.getContrasenaUsuario().equals(contrasenaUsuario);
     }
 }

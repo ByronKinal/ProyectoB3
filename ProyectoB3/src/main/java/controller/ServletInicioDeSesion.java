@@ -1,21 +1,20 @@
-
 package controller;
 
+import dao.UsuarioDAO;
+import model.Usuario;
+
+import java.io.IOException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.ServletException;
 
 /**
  *
  * @author Wilson Florian
  */
-import dao.UsuarioDAO;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
-import java.io.IOException;
-
 @WebServlet("/ServletInicioDeSesion")
 public class ServletInicioDeSesion extends HttpServlet {
 
@@ -23,24 +22,33 @@ public class ServletInicioDeSesion extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String username = req.getParameter("username");
-        String password = req.getParameter("password");
+        String correoUsuario = req.getParameter("correoUsuario");
+        String contrasenaUsuario = req.getParameter("contrasenaUsuario");
 
-        if (usuarioDAO.validarLogin(username, password)) {
-            // Login exitoso: crear sesión
-            HttpSession session = req.getSession();
-            session.setAttribute("username", username);
-            resp.sendRedirect("MenuPrincipal.jsp");
-        } else {
-            // Login fallido: redirigir a login con error
-            req.setAttribute("Error", "Usuario o contraseña incorrectos");
+        try {
+            if (usuarioDAO.validarLogin(correoUsuario, contrasenaUsuario)) {
+                HttpSession session = req.getSession();
+                Usuario usuario = usuarioDAO.buscarPorCorreo(correoUsuario);
+                session.setAttribute("usuario", usuario);
+
+                if ("Cliente".equals(usuario.getRolUsuario())) {
+                    resp.sendRedirect("MenuPrincipal.jsp");
+                } else if ("Empleado".equals(usuario.getRolUsuario())) {
+                    resp.sendRedirect("MenuPrincipal.jsp");
+                }
+            } else {
+                req.setAttribute("error", "ⓘ Usuario o contraseña incorrectos");
+                req.getRequestDispatcher("InicioDeSesion.jsp").forward(req, resp);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            req.setAttribute("error", "Error en el sistema. Intente nuevamente.");
             req.getRequestDispatcher("InicioDeSesion.jsp").forward(req, resp);
         }
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // Mostrar formulario de login (opcional)
         req.getRequestDispatcher("InicioDeSesion.jsp").forward(req, resp);
     }
 }

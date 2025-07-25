@@ -53,4 +53,13 @@ body {
     width: 100%;
 }
 
-
+.error-message {
+        color: #ff0000;
+        margin: 10px 0;
+        font-size: 14px;
+        text-align: center;
+    }
+    
+    input.error {
+        border: 1px solid #ff0000;
+    }

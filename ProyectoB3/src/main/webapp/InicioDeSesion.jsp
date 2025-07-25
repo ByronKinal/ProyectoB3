@@ -26,8 +26,18 @@
         <div class="card">
             <h1>Iniciar Sesión</h1>
             <form action="ServletInicioDeSesion" method="POST">
-                <input type="text" id="correoCliente" name="correoCliente" placeholder="Nombre de Usuario" required>
-                <input type="password" id="contrasenaCliente" name="contrasenaCliente" placeholder="Contraseña" required>
+                <input type="text" id="correoUsuario" name="correoUsuario" 
+                       placeholder="Correo electrónico" required
+                       class="<%= request.getAttribute("error") != null ? "error" : ""%>">
+
+                <input type="password" id="contrasenaUsuario" name="contrasenaUsuario" 
+                       placeholder="Contraseña" required
+                       class="<%= request.getAttribute("error") != null ? "error" : ""%>">
+                <% if (request.getAttribute("error") != null) {%>
+                <div class="error-message">
+                    <%= request.getAttribute("error")%>
+                </div>
+                <% }%>
                 <button type="submit">Iniciar Sesión</button>
             </form>
         </div>

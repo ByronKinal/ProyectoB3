@@ -5,7 +5,7 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
  
         <!-- Clase de entidad -->
-        <class>model.Cliente</class>
+        <class>model.Usuario</class>
  
         <!-- Configuración JDBC -->
         <properties>
