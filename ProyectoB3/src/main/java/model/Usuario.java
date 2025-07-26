@@ -1,6 +1,6 @@
 package model;
 
-import java.sql.Timestamp;
+import java.sql.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,7 +28,7 @@ public class Usuario {
     private String apellidoUsuario;
     
     @Column(name = "fechaNacimiento")
-    private Timestamp fechaNacimiento;
+    private Date fechaNacimiento;
     
     @Column(name = "generoUsuario")
     private String generoUsuario;
@@ -48,7 +48,7 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(int idUsuario, String nombreUsuario, String apellidoUsuario, Timestamp fechaNacimiento, String generoUsuario, String telefonoUsuario, String correoUsuario, String contrasenaUsuario, String rolUsuario) {
+    public Usuario(int idUsuario, String nombreUsuario, String apellidoUsuario, Date fechaNacimiento, String generoUsuario, String telefonoUsuario, String correoUsuario, String contrasenaUsuario, String rolUsuario) {
         this.idUsuario = idUsuario;
         this.nombreUsuario = nombreUsuario;
         this.apellidoUsuario = apellidoUsuario;
@@ -60,7 +60,7 @@ public class Usuario {
         this.rolUsuario = rolUsuario;
     }
 
-    public Usuario(String nombreUsuario, String apellidoUsuario, Timestamp fechaNacimiento, String generoUsuario, String telefonoUsuario, String correoUsuario, String contrasenaUsuario, String rolUsuario) {
+    public Usuario(String nombreUsuario, String apellidoUsuario, Date fechaNacimiento, String generoUsuario, String telefonoUsuario, String correoUsuario, String contrasenaUsuario, String rolUsuario) {
         this.nombreUsuario = nombreUsuario;
         this.apellidoUsuario = apellidoUsuario;
         this.fechaNacimiento = fechaNacimiento;
@@ -95,11 +95,11 @@ public class Usuario {
         this.apellidoUsuario = apellidoUsuario;
     }
 
-    public Timestamp getFechaNacimiento() {
+    public Date getFechaNacimiento() {
         return fechaNacimiento;
     }
 
-    public void setFechaNacimiento(Timestamp fechaNacimiento) {
+    public void setFechaNacimiento(Date fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
 

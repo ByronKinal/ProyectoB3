@@ -2,13 +2,11 @@ drop database if exists tiendaWebDB;
 create database tiendaWebDB;
 use tiendaWebDB;
 
-
-
 create table Usuarios(
 	idUsuario int auto_increment,
     nombreUsuario varchar(64),
     apellidoUsuario varchar(64),
-    fechaNacimiento timestamp,
+    fechaNacimiento date,
     generoUsuario enum('MASCULINO','FEMENINO'),
     telefonoUsuario varchar(32),
     correoUsuario varchar(256) unique,
@@ -132,14 +130,13 @@ DELIMITER $$
 		end$$
 	
 DELIMITER ;
-call sp_ListarUsuarios();
 
 -- AGREGAR
 DELIMITER $$
 	create procedure sp_AgregarUsuario(
 			in p_nombreUsuario varchar(64),
 			in p_apellidoUsuario varchar(64),
-			in p_fechaNacimiento timestamp,
+			in p_fechaNacimiento date,
 			in p_generoUsuario enum('MASCULINO','FEMENINO'),
 			in p_telefonoUsuario varchar(32),
 			in p_correoUsuario varchar(256) ,
@@ -151,7 +148,7 @@ DELIMITER $$
 		end$$
 	
 DELIMITER ;
-call sp_AgregarUsuario('Lucía','Ramírez','2000-04-10 00:00:00','FEMENINO',  '3214567890','lucia.ramirez@gmail.com','luciaSegura2025','Cliente');
+call sp_AgregarUsuario('Lucía','Ramírez','2000-04-10','FEMENINO',  '3214567890','a','a','Cliente');
 call sp_ListarUsuarios();
 
 -- ACTUALIZAR
@@ -160,7 +157,7 @@ DELIMITER $$
 			in p_idUsuario int,
 			in p_nombreUsuario varchar(64),
 			in p_apellidoUsuario varchar(64),
-			in p_fechaNacimiento timestamp,
+			in p_fechaNacimiento date,
 			in p_generoUsuario enum('MASCULINO','FEMENINO'),
 			in p_telefonoUsuario varchar(32),
 			in p_correoUsuario varchar(256) ,
@@ -183,8 +180,6 @@ DELIMITER $$
 		end$$
 	
 DELIMITER ;
-call sp_ActualizarUsuario(1,'Carlos', 'Méndez', '1995-05-20 00:00:00', 'MASCULINO', '45678912', 'carlos.mendez@gmail.com', 'claveSegura123', 'Empleado');
-call sp_ListarUsuarios();
 
 -- ELIMINAR
 DELIMITER $$
@@ -212,7 +207,6 @@ DELIMITER $$
 			from DetalleUsuarios;
 		end$$
 DELIMITER ;
-call sp_ListarDetalleUsuarios();
 
 -- AGREGAR
 DELIMITER $$
@@ -228,7 +222,6 @@ DELIMITER $$
 	
 DELIMITER ;
 call sp_AgregarDetalleUsuario('Zona 7 de capital', 'Administador',4200.00, 1);
-call sp_ListarDetalleUsuarios();
 
 -- ACTUALIZAR
 DELIMITER $$
@@ -251,8 +244,6 @@ DELIMITER $$
 		end$$
 	
 DELIMITER ;
-call sp_ActualizarDetalleUsuario(1,'Zona 8 de capital', 'Administador',4200.00, 1);
-call sp_ListarDetalleUsuarios();
 
 -- ELIMINAR
 DELIMITER $$
@@ -282,8 +273,6 @@ DELIMITER $$
 		end$$
 	
 DELIMITER ;
-call sp_ListarCompras();
-
 
 -- AGREGAR
 DELIMITER $$
@@ -298,7 +287,6 @@ DELIMITER $$
 		end$$
 DELIMITER ;
 call sp_AgregarCompra('Pendiente', 'Pendiente', current_timestamp(), 1);
-call sp_ListarCompras();
 
 -- ACTUALIZAR
 DELIMITER $$
@@ -320,8 +308,6 @@ DELIMITER $$
 			
 		end$$
 DELIMITER ;
-call sp_ActualizarCompra(1,'Pendiente', 'Pendiente', current_timestamp(), 1);
-call sp_ListarCompras();
 
 -- ELIMINAR
 DELIMITER $$
@@ -351,8 +337,6 @@ DELIMITER $$
 		end$$
 	
 DELIMITER ;
-call sp_ListarProveedores();
-
 
 -- AGREGAR
 DELIMITER $$
@@ -368,8 +352,6 @@ DELIMITER $$
         
 DELIMITER ;
 call sp_AgregarProveedor('Colgate','colgate@gmail.com', '12456789','Zona 7 Villa Nueva');
-call sp_ListarProveedores();
-
 
 -- ACTUALIZAR
 DELIMITER $$
@@ -391,9 +373,6 @@ DELIMITER $$
 			
 		end$$
 DELIMITER ;
-call sp_ActualizarProveedor(1,'Colgate','colgate@gmail.com', '12456789','Zona 8 Villa Nueva');
-call sp_ListarProveedores();
-
 
 -- ELIMINAR
 DELIMITER $$
@@ -422,8 +401,6 @@ DELIMITER $$
 		end$$
 	
 DELIMITER ;
-call sp_ListarCategorias();
-
 
 -- AGREGAR
 DELIMITER $$
@@ -436,7 +413,6 @@ DELIMITER $$
 		end$$
 DELIMITER ;
 call sp_AgregarCategoria('Limpieza','Dedicado a la limpieza de los animalitos de tu hogar');
-call sp_ListarCategorias();
 
 -- ACTUALIZAR
 DELIMITER $$
@@ -454,8 +430,6 @@ DELIMITER $$
 			
 		end$$
 DELIMITER ;
-call sp_ActualizarCategoria(1,'Limpieza','Dedicado a la higiendo de tus animalitos');
-call sp_ListarCategorias();
 
 -- ELIMINAR
 DELIMITER $$
@@ -493,8 +467,6 @@ DELIMITER $$
 		end$$
 	
 DELIMITER ;
-call sp_ListarProductos();
-
 
 -- AGREGAR
 DELIMITER $$
@@ -515,7 +487,6 @@ DELIMITER $$
 		end$$
 DELIMITER ;
 call sp_AgregarProducto('Zapatos', 'Calzado para su pie', '32', 'NIKE', 850, 40, '2006-12-08 12:00:00', '2006-12-07', 1, 1);
-call sp_ListarProductos();
 
 -- ACTUALIZAR
 DELIMITER $$
@@ -545,8 +516,6 @@ DELIMITER $$
 			
 		end$$
 DELIMITER ;
-call sp_ActualizarProducto(1,'Zapatos', 'Calzado para su pie', '42', 'ADIDAS', 850, 40, 1, 1);
-call sp_ListarProductos();
 
 -- ELIMINAR
 DELIMITER $$
@@ -582,8 +551,6 @@ DELIMITER $$
 		end$$
 	
 DELIMITER ;
-call sp_ListarPagos();
-
 
 -- AGREGAR
 DELIMITER $$
@@ -598,7 +565,6 @@ DELIMITER $$
 		end$$
 DELIMITER ;
 call sp_AgregarPago('2025-09-21 20:30:00', 'Tarjeta', 500.00, 1);
-call sp_ListarPagos();
 
 -- ACTUALIZAR
 DELIMITER $$
@@ -620,8 +586,6 @@ DELIMITER $$
 			
 		end$$
 DELIMITER ;
-call sp_ActualizarPago(1,'2025-10-21 20:30:00', 'Tarjeta', 500.00, 1);
-call sp_ListarPagos();
 
 -- ELIMINAR
 DELIMITER $$
@@ -651,7 +615,6 @@ DELIMITER $$
 		end$$
 	
 DELIMITER ;
-call sp_ListarCarritos();
 
 -- AGREGAR
 DELIMITER $$
@@ -666,7 +629,6 @@ DELIMITER $$
 		end$$
 DELIMITER ;
 call sp_AgregarCarrito(1,1,35,999);
-call sp_ListarCarritos();
 
 -- ACTUALIZAR
 DELIMITER $$
@@ -687,9 +649,6 @@ DELIMITER $$
 			
 		end$$
 DELIMITER ;
-call sp_ActualizarCarrito(1,1,35,654);
-call sp_ListarCarritos();
-
 
 -- ELIMINAR
 DELIMITER $$
@@ -720,7 +679,6 @@ DELIMITER $$
 		end$$
 	
 DELIMITER ;
-call sp_ListarFacturas();
 
 -- AGREGAR
 DELIMITER $$
@@ -735,7 +693,6 @@ DELIMITER $$
 		end$$
 DELIMITER ;
 call sp_AgregarFactura('2025-09-21 20:30:00',2306,'Tarjeta',1);
-call sp_ListarFacturas();
 
 -- ACTUALIZAR
 DELIMITER $$
@@ -757,9 +714,6 @@ DELIMITER $$
 			
 		end$$
 DELIMITER ;
-call sp_ActualizarFactura(1,'2025-09-21 20:30:00',210,'Tarjeta',1);
-call sp_ListarFacturas();
-
 
 -- ELIMINAR
 DELIMITER $$

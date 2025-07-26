@@ -34,4 +34,21 @@ public class UsuarioDAO {
         Usuario usuario = buscarPorCorreo(correoUsuario);
         return usuario != null && usuario.getContrasenaUsuario().equals(contrasenaUsuario);
     }
+
+    public boolean guardarUsuario(Usuario usuario) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(usuario);
+            em.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            return false;
+        } finally {
+            em.close();
+        }
+    }
 }

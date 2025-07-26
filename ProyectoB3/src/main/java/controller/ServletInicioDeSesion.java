@@ -21,29 +21,29 @@ public class ServletInicioDeSesion extends HttpServlet {
     private UsuarioDAO usuarioDAO = new UsuarioDAO();
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String correoUsuario = req.getParameter("correoUsuario");
-        String contrasenaUsuario = req.getParameter("contrasenaUsuario");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        String correoUsuario = request.getParameter("correoUsuario");
+        String contrasenaUsuario = request.getParameter("contrasenaUsuario");
 
         try {
             if (usuarioDAO.validarLogin(correoUsuario, contrasenaUsuario)) {
-                HttpSession session = req.getSession();
+                HttpSession session = request.getSession();
                 Usuario usuario = usuarioDAO.buscarPorCorreo(correoUsuario);
                 session.setAttribute("usuario", usuario);
 
                 if ("Cliente".equals(usuario.getRolUsuario())) {
-                    resp.sendRedirect("MenuPrincipal.jsp");
+                    response.sendRedirect("MenuPrincipal.jsp");
                 } else if ("Empleado".equals(usuario.getRolUsuario())) {
-                    resp.sendRedirect("MenuPrincipal.jsp");
+                    response.sendRedirect("MenuPrincipal.jsp");
                 }
             } else {
-                req.setAttribute("error", "ⓘ Usuario o contraseña incorrectos");
-                req.getRequestDispatcher("InicioDeSesion.jsp").forward(req, resp);
+                request.setAttribute("error", "ⓘ Usuario o contraseña incorrectos");
+                request.getRequestDispatcher("InicioDeSesion.jsp").forward(request, response);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            req.setAttribute("error", "Error en el sistema. Intente nuevamente.");
-            req.getRequestDispatcher("InicioDeSesion.jsp").forward(req, resp);
+            request.setAttribute("error", "Error en el sistema. Intente nuevamente.");
+            request.getRequestDispatcher("InicioDeSesion.jsp").forward(request, response);
         }
     }
 
