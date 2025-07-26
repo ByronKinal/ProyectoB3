@@ -2,28 +2,47 @@ drop database if exists tiendaWebDB;
 create database tiendaWebDB;
 use tiendaWebDB;
 
-create table Clientes(
-	idCliente int auto_increment,
-    correoCliente varchar(256) not null,
-    contrasenaCliente varchar(256) not null,
-    telefonoCliente varchar(32) not null,
-    constraint pk_clientes primary key (idCliente)
-);
 
 
-create table Empleados(
-	idEmpleado int auto_increment,
-    nombreEmpleado varchar(128) not null,
-    correoEmpleado varchar(256) not null,
-    contrasenaEmpleado varchar(256) not null,
-    tipoEmpleado ENUM('Administrador') default 'Administrador',
-    constraint pk_empleados primary key (idEmpleado)
+create table Usuarios(
+	idUsuario int auto_increment,
+    nombreUsuario varchar(64),
+    apellidoUsuario varchar(64),
+    fechaNacimiento timestamp,
+    generoUsuario enum('MASCULINO','FEMENINO'),
+    telefonoUsuario varchar(32),
+    correoUsuario varchar(256) unique,
+    contrasenaUsuario varchar(256),
+    rolUsuario ENUM('Empleado','Cliente') default 'Cliente',
+    constraint pk_usuarios primary key (idUsuario)
 );
+
+create table DetalleUsuarios(
+	idDetalleUsuario int auto_increment,
+    direccionUsuario varchar(256) not null,
+    puestoUsuario varchar(32) not null,
+    salarioUsuario double not null,
+    idUsuario int,
+    constraint pk_detalle_usuarios primary key (idDetalleUsuario),
+    constraint fk_detalle_usuarios_usuarios foreign key (idUsuario)
+		references Usuarios(idUsuario) on delete cascade
+);
+
+create table Compras(
+	idCompra int auto_increment,
+    estadoCompra enum('Pendiente','Completada','Cancelada') default 'Pendiente',
+    estadoPago enum('Pendiente', 'Pagado')default'Pendiente',
+    fechaCompra timestamp,
+    idUsuario int,
+    constraint pk_compras primary key (idCompra),
+    constraint fk_compras_usuarios foreign key (idUsuario)
+		references Usuarios(idUsuario) on delete cascade
+); 
 
 create table Proveedores(
 	idProveedor int auto_increment,
     nombreProveedor varchar(128) not null,
-    correoProveedor varchar(256) not null,
+    correoProveedor varchar(256) not null unique,
     telefonoProveedor varchar(16) not null,
     direccionProveedor varchar(256) not null,
     constraint pk_proveedores primary key (idProveedor)
@@ -44,6 +63,8 @@ create table Productos(
     marcaProducto varchar(64) not null,
 	precioProducto double not null,
 	stockProducto int not null,
+    fechaIngresoProducto timestamp,
+    fechaSalidaProducto timestamp,
     idCategoria int,
 	idProveedor int,
     constraint pk_productos primary key (idProducto),
@@ -53,20 +74,10 @@ create table Productos(
 		references Proveedores(idProveedor) on delete cascade
 );
 
-create table Compras(
-	idCompra int auto_increment,
-    estadoCompra enum('Pendiente','Completada','Cancelada') default 'Pendiente',
-    estadoPago enum('Pendiente', 'Pagado')default'Pendiente',
-    fechaCompra datetime default now(),
-    idCliente int,
-    constraint pk_compras primary key (idCompra),
-    constraint fk_compras_clientes foreign key (idCliente) 
-		references Clientes(idCliente) on delete cascade
-);
 
 create table Pagos(
 	idPago int auto_increment,
-    fechaPago datetime default now(),
+    fechaPago timestamp,
 	metodoPago enum('Tarjeta'),
 	cantidadPago double not null,
     idCompra int not null,
@@ -75,7 +86,7 @@ create table Pagos(
 		references Compras (idCompra) on delete cascade
 );
 
-create table Carrito( -- DetalleCompra 
+create table Carritos( -- DetalleCompra 
 	idCompra int not null,
     idProducto int not null,
     cantidadProducto int not null,
@@ -89,160 +100,238 @@ create table Carrito( -- DetalleCompra
 
 create table Facturas(
 	idFactura int auto_increment,
-    fechaFactura datetime default now(),
+    fechaFactura timestamp,
     total double not null,
     metodoPago enum('Tarjeta'),
-    idCliente int not null,
     idCompra int not null,
-    idPago int not null,
     constraint pk_facturas primary key (idFactura),
-
-	constraint fk_facturas_clientes foreign key (idCliente)
-		references Clientes(idCliente) on delete cascade,
 	constraint fk_facturas_compras foreign key (idCompra)
-		references Compras(idCompra) on delete cascade,
-	constraint fk_facturas_pagos foreign key (idPago)
-		references Pagos(idPago) on delete cascade
+		references Compras(idCompra) on delete cascade
 );
 
 
--- CRUD CLIENTES ---------------------------------------------------------------
+
+
+
+-- CRUD Usuarios ---------------------------------------------------------------
 -- LISTAR
 DELIMITER $$
-	create procedure sp_ListarClientes()
+	create procedure sp_ListarUsuarios()
 		begin
 			select 
-			idCliente as ID,
-			correoCliente as CORREO_CLIENTE,
-			contrasenaCliente as CONTRASEÑA,
-			telefonoCliente as TELEFONO
-			from Clientes;
+			idUsuario as ID,
+			nombreUsuario  as USUARIO,
+			apellidoUsuario as APELLIDO,
+			fechaNacimiento  as NACIMIENTO,
+			generoUsuario as GENERO,
+            telefonoUsuario as TELEFONO,
+			correoUsuario as CORREO,
+			contrasenaUsuario as CONTRASEÑA,
+			rolUsuario as ROL
+			from Usuarios;
 		end$$
 	
 DELIMITER ;
-call sp_ListarClientes();
+call sp_ListarUsuarios();
 
 -- AGREGAR
 DELIMITER $$
-	create procedure sp_AgregarCliente(
-			in p_correoCliente varchar(256),
-			in p_contrasenaCliente varchar(256), 
-			in p_telefonoCliente varchar(32))
+	create procedure sp_AgregarUsuario(
+			in p_nombreUsuario varchar(64),
+			in p_apellidoUsuario varchar(64),
+			in p_fechaNacimiento timestamp,
+			in p_generoUsuario enum('MASCULINO','FEMENINO'),
+			in p_telefonoUsuario varchar(32),
+			in p_correoUsuario varchar(256) ,
+			in p_contrasenaUsuario varchar(256),
+			in p_rolUsuario ENUM('Empleado','Cliente'))
 		begin
-			insert into Clientes (correoCliente, contrasenaCliente, telefonoCliente)
-				values(p_correoCliente, p_contrasenaCliente, p_telefonoCliente);
+			insert into Usuarios(nombreUsuario , apellidoUsuario , fechaNacimiento,  generoUsuario , telefonoUsuario, correoUsuario, contrasenaUsuario, rolUsuario)
+				values(p_nombreUsuario , p_apellidoUsuario , p_fechaNacimiento, p_generoUsuario, p_telefonoUsuario, p_correoUsuario, p_contrasenaUsuario, p_rolUsuario);
 		end$$
 	
 DELIMITER ;
-call sp_AgregarCliente('iossg8@gmail.com', '12345','30071148');
-call sp_ListarClientes();
+call sp_AgregarUsuario('Lucía','Ramírez','2000-04-10 00:00:00','FEMENINO',  '3214567890','lucia.ramirez@gmail.com','luciaSegura2025','Cliente');
+call sp_ListarUsuarios();
 
 -- ACTUALIZAR
 DELIMITER $$
-	create procedure sp_ActualizarCliente(
-			in p_idCliente int,
-			in p_correoCliente varchar(256),
-			in p_contrasenaCliente varchar(256), 
-			in p_telefonoCliente varchar(32))
+	create procedure sp_ActualizarUsuario(
+			in p_idUsuario int,
+			in p_nombreUsuario varchar(64),
+			in p_apellidoUsuario varchar(64),
+			in p_fechaNacimiento timestamp,
+			in p_generoUsuario enum('MASCULINO','FEMENINO'),
+			in p_telefonoUsuario varchar(32),
+			in p_correoUsuario varchar(256) ,
+			in p_contrasenaUsuario varchar(256),
+			in p_rolUsuario ENUM('Empleado','Cliente'))
 		begin
-			update Clientes
+			update Usuarios
 				set
-					correoCliente  = p_correoCliente,
-					contrasenaCliente = p_contrasenaCliente ,
-					telefonoCliente = p_telefonoCliente
+					nombreUsuario = p_nombreUsuario,
+					apellidoUsuario = p_apellidoUsuario ,
+					fechaNacimiento = p_fechaNacimiento,
+					generoUsuario = p_generoUsuario,
+                    telefonoUsuario = p_telefonoUsuario,
+                    correoUsuario = p_correoUsuario,
+                    contrasenaUsuario = p_contrasenaUsuario,
+                    rolUsuario = p_rolUsuario
 				where 
-					p_idCliente = idCliente;
+					p_idUsuario = idUsuario ;
 			
 		end$$
 	
 DELIMITER ;
-call sp_ActualizarCliente(1,'iossg8@gmail.com', 'Mlgdi3301','30071148');
-call sp_ListarClientes();
+call sp_ActualizarUsuario(1,'Carlos', 'Méndez', '1995-05-20 00:00:00', 'MASCULINO', '45678912', 'carlos.mendez@gmail.com', 'claveSegura123', 'Empleado');
+call sp_ListarUsuarios();
 
 -- ELIMINAR
 DELIMITER $$
-	create procedure sp_EliminarCliente(in p_idCliente int)
+	create procedure sp_EliminarUsuario(in p_idUsuario int)
 		begin
 			delete 
-			from Clientes
-				where idCliente = p_idClientes;
+			from Usuarios
+				where idUsuario  = p_idUsuario ;
 		end$$
-	
 DELIMITER ;
 
 
 
-
-
-
--- CRUD EMPLEADOS ---------------------------------------------------------------
+-- CRUD DetalleUsuarios ---------------------------------------------------------------
 -- LISTAR
 DELIMITER $$
-	create procedure sp_ListarEmpleados()
+	create procedure sp_ListarDetalleUsuarios()
 		begin
 			select 
-			idEmpleado as ID,
-			nombreEmpleado  as EMPLEADO,
-			correoEmpleado as CORREO,
-			contrasenaEmpleado  as CONTRASEÑA,
-			tipoEmpleado  as TIPO
-			from Empleados;
+			idDetalleUsuario as ID,
+			direccionUsuario as DIRECCION,
+			puestoUsuario as PUESTO,
+			salarioUsuario as SALARIO,
+			idUsuario as USUARIO
+			from DetalleUsuarios;
 		end$$
-	
 DELIMITER ;
-call sp_ListarEmpleados();
+call sp_ListarDetalleUsuarios();
 
 -- AGREGAR
 DELIMITER $$
-	create procedure sp_AgregarEmpleado(
-			in p_nombreEmpleado varchar(128),
-			in p_correoEmpleado varchar(256), 
-			in p_contrasenaEmpleado varchar(256),
-			in p_tipoEmpleado ENUM('Administrador'))
+	create procedure sp_AgregarDetalleUsuario(
+			in p_direccionUsuario varchar(256),
+			in p_puestoUsuario varchar(32),
+			in p_salarioUsuario double ,
+			in p_idUsuario int)
 		begin
-			insert into Empleados(nombreEmpleado , correoEmpleado , contrasenaEmpleado, tipoEmpleado  )
-				values(p_nombreEmpleado , p_correoEmpleado , p_contrasenaEmpleado, p_tipoEmpleado);
+			insert into DetalleUsuarios(direccionUsuario, puestoUsuario, salarioUsuario, idUsuario)
+				values(p_direccionUsuario, p_puestoUsuario, p_salarioUsuario,p_idUsuario);
 		end$$
 	
 DELIMITER ;
-call sp_AgregarEmpleado('is','is', '1234','Administrador');
-call sp_ListarEmpleados();
+call sp_AgregarDetalleUsuario('Zona 7 de capital', 'Administador',4200.00, 1);
+call sp_ListarDetalleUsuarios();
 
 -- ACTUALIZAR
 DELIMITER $$
-	create procedure sp_ActualizarEmpleado(
-			in p_idEmpleado int,
-			in p_nombreEmpleado varchar(128),
-			in p_correoEmpleado varchar(256), 
-			in p_contrasenaEmpleado varchar(256),
-			in p_tipoEmpleado ENUM('Administrador'))
+	create procedure sp_ActualizarDetalleUsuario(
+			in p_idDetalleUsuario int,
+			in p_direccionUsuario varchar(256),
+			in p_puestoUsuario varchar(32),
+			in p_salarioUsuario double ,
+			in p_idUsuario int)
 		begin
-			update Empleados
+			update DetalleUsuarios
 				set
-					nombreEmpleado = p_nombreEmpleado,
-					correoEmpleado = p_correoEmpleado ,
-					contrasenaEmpleado = p_contrasenaEmpleado,
-					tipoEmpleado = p_tipoEmpleado 
+					direccionUsuario  = p_direccionUsuario,
+					puestoUsuario = p_puestoUsuario ,
+					salarioUsuario = p_salarioUsuario,
+                    idUsuario = p_idUsuario
 				where 
-					p_idEmpleado = idEmpleado ;
+					p_idDetalleUsuario = idDetalleUsuario;
 			
 		end$$
 	
 DELIMITER ;
-call sp_ActualizarEmpleado(1,'is','is', '124','Administrador');
-call sp_ListarEmpleados();
+call sp_ActualizarDetalleUsuario(1,'Zona 8 de capital', 'Administador',4200.00, 1);
+call sp_ListarDetalleUsuarios();
 
 -- ELIMINAR
 DELIMITER $$
-	create procedure sp_EliminarEmpleado(in p_idEmpleado int)
+	create procedure sp_EliminarDetalleUsuario(in p_idDetalleUsuario int)
 		begin
 			delete 
-			from Empleados
-				where idEmpleado  = p_idEmpleado ;
+			from Usuarios
+				where idDetalleUsuario = p_idDetalleUsuario;
 		end$$
 	
 DELIMITER ;
 
+
+
+-- CRUD COMPRAS-------------------------------------------------------------
+-- LISTAR
+DELIMITER $$
+	create procedure sp_ListarCompras()
+		begin
+			select 
+			idCompra   as ID,
+			estadoCompra as ESTADO_COMPRA,
+			estadoPago as ESTADO_PAGO,
+            fechaCompra  as FECHA,
+            idUsuario as USUARIO
+			from Compras;
+		end$$
+	
+DELIMITER ;
+call sp_ListarCompras();
+
+
+-- AGREGAR
+DELIMITER $$
+	create procedure sp_AgregarCompra(
+			in p_estadoCompra enum('Pendiente','Completada','Cancelada'),
+			in p_estadoPago enum('Pendiente', 'Pagado'),
+			in p_fechaCompra timestamp,
+            in p_idUsuario int)
+		begin
+			insert into Compras(estadoCompra , estadoPago, fechaCompra, idUsuario)
+				values(p_estadoCompra , p_estadoPago, p_fechaCompra , p_idUsuario);
+		end$$
+DELIMITER ;
+call sp_AgregarCompra('Pendiente', 'Pendiente', current_timestamp(), 1);
+call sp_ListarCompras();
+
+-- ACTUALIZAR
+DELIMITER $$
+	create procedure sp_ActualizarCompra(
+				in p_idCompra int,
+				in p_estadoCompra enum('Pendiente','Completada','Cancelada'),
+				in p_estadoPago enum('Pendiente', 'Pagado'),
+				in p_fechaCompra timestamp ,
+				in p_idUsuario int)
+		begin
+			update Compras
+				set
+					estadoCompra = p_estadoCompra ,
+					estadoPago = p_estadoPago,
+                    fechaCompra = p_fechaCompra,
+                    idUsuario = p_idUsuario
+				where 
+					p_idCompra = idCompra;
+			
+		end$$
+DELIMITER ;
+call sp_ActualizarCompra(1,'Pendiente', 'Pendiente', current_timestamp(), 1);
+call sp_ListarCompras();
+
+-- ELIMINAR
+DELIMITER $$
+	create procedure sp_EliminarCompra (in p_idCompra int)
+		begin
+			delete 
+			from Compras
+				where idCompra = p_idCompra;
+		end$$
+DELIMITER ;
 
 
 
@@ -396,6 +485,8 @@ DELIMITER $$
             marcaProducto as MARCA,
             precioProducto as PRECIO,
             stockProducto as STOCK,
+            fechaIngresoProducto as FECHA_INGRESO,
+            fechaSalidaProducto as FECHA_SALIDA,
             idCategoria as CATEGORIA,
             idProveedor as PROVEEDOR
 			from Productos;
@@ -414,14 +505,16 @@ DELIMITER $$
 			in p_marcaProducto varchar(64),
 			in p_precioProducto double,
 			in p_stockProducto int,
+            in p_fechaIngresoProducto datetime,
+			in p_fechaSalidaProducto date,
 			in p_idCategoria int,
 			in p_idProveedor int)
 		begin
-			insert into Productos(nombreProducto, descripcionProducto, tallaProducto, marcaProducto, precioProducto, stockProducto, idCategoria, idProveedor)
-				values(p_nombreProducto, p_descripcionProducto, p_tallaProducto, p_marcaProducto, p_precioProducto, p_stockProducto, p_idCategoria, p_idProveedor);
+			insert into Productos(nombreProducto, descripcionProducto, tallaProducto, marcaProducto, precioProducto, stockProducto, fechaIngresoProducto, fechaSalidaProducto,idCategoria, idProveedor )
+				values(p_nombreProducto, p_descripcionProducto, p_tallaProducto, p_marcaProducto, p_precioProducto, p_stockProducto, p_fechaIngresoProducto, p_fechaSalidaProducto, p_idCategoria, p_idProveedor);
 		end$$
 DELIMITER ;
-call sp_AgregarProducto('Zapatos', 'Calzado para su pie', '32', 'NIKE', 850, 40, 1, 1);
+call sp_AgregarProducto('Zapatos', 'Calzado para su pie', '32', 'NIKE', 850, 40, '2006-12-08 12:00:00', '2006-12-07', 1, 1);
 call sp_ListarProductos();
 
 -- ACTUALIZAR
@@ -446,13 +539,13 @@ DELIMITER $$
                     precioProducto = p_precioProducto,
                     stockProducto = p_stockProducto ,
                     idCategoria = p_idCategoria,
-                    idProveedor= p_idProveedor 
+                    idProveedor= p_idProveedor
 				where 
 					p_idProducto = idProducto;
 			
 		end$$
 DELIMITER ;
-call sp_ActualizarProducto(1,'Zapatos', 'Calzado para su pie', '32', 'ADIDAS', 850, 40, 1, 1);
+call sp_ActualizarProducto(1,'Zapatos', 'Calzado para su pie', '42', 'ADIDAS', 850, 40, 1, 1);
 call sp_ListarProductos();
 
 -- ELIMINAR
@@ -469,71 +562,6 @@ DELIMITER ;
 
 
 
--- CRUD COMPRAS-------------------------------------------------------------
--- LISTAR
-DELIMITER $$
-	create procedure sp_ListarCompras()
-		begin
-			select 
-			idCompra   as ID,
-			estadoCompra as ESTADO_COMPRA,
-			estadoPago as ESTADO_PAGO,
-            fechaCompra  as FECHA,
-            idCliente as CLIENTE
-			from Compras;
-		end$$
-	
-DELIMITER ;
-call sp_ListarCompras();
-
-
--- AGREGAR
-DELIMITER $$
-	create procedure sp_AgregarCompra(
-			in p_estadoCompra enum('Pendiente','Completada','Cancelada'),
-			in p_estadoPago enum('Pendiente', 'Pagado'),
-			in p_fechaCompra datetime ,
-			in p_idCliente int)
-		begin
-			insert into Compras(estadoCompra , estadoPago, fechaCompra, idCliente)
-				values(p_estadoCompra , p_estadoPago, p_fechaCompra , p_idCliente);
-		end$$
-DELIMITER ;
-call sp_AgregarCompra('Pendiente', 'Pendiente', '2025-07-21 20:30:00', 1);
-call sp_ListarCompras();
-
--- ACTUALIZAR
-DELIMITER $$
-	create procedure sp_ActualizarCompra(
-				in p_idCompra int,
-				in p_estadoCompra enum('Pendiente','Completada','Cancelada'),
-				in p_estadoPago enum('Pendiente', 'Pagado'),
-				in p_fechaCompra datetime ,
-				in p_idCliente int)
-		begin
-			update Compras
-				set
-					estadoCompra = p_estadoCompra ,
-					estadoPago = p_estadoPago,
-                    fechaCompra = p_fechaCompra,
-                    idCliente = p_idCliente
-				where 
-					p_idCompra = idCompra;
-			
-		end$$
-DELIMITER ;
-call sp_ActualizarCompra(1,'Pendiente', 'Pendiente', '2025-09-21 20:30:00', 1);
-call sp_ListarCompras();
-
--- ELIMINAR
-DELIMITER $$
-	create procedure sp_EliminarCompra (in p_idCompra int)
-		begin
-			delete 
-			from Compras
-				where idCompra = p_idCompra;
-		end$$
-DELIMITER ;
 
 
 
@@ -619,7 +647,7 @@ DELIMITER $$
 			idProducto as PRODUCTO,
 			cantidadProducto as CANTIDAD_PRODUCTO,
             subtotal as SUBTOTAL
-			from Carrito;
+			from Carritos;
 		end$$
 	
 DELIMITER ;
@@ -633,7 +661,7 @@ DELIMITER $$
 			in p_cantidadProducto int ,
 			in p_subtotal double)
 		begin
-			insert into Carrito(idCompra, idProducto, cantidadProducto, subtotal)
+			insert into Carritos(idCompra, idProducto, cantidadProducto, subtotal)
 				values(p_idCompra, p_idProducto, p_cantidadProducto, p_subtotal);
 		end$$
 DELIMITER ;
@@ -648,7 +676,7 @@ DELIMITER $$
 				in p_cantidadProducto int ,
 				in p_subtotal double)
 		begin
-			update Carrito
+			update Carritos
 				set
 					idCompra = p_idCompra ,
 					idProducto = p_idProducto,
@@ -668,7 +696,7 @@ DELIMITER $$
 	create procedure sp_EliminarCarrito(in p_idCompra int)
 		begin
 			delete 
-			from Carrito
+			from Carritos
 				where idCompra = p_idCompra;
 		end$$
 DELIMITER ;
@@ -687,9 +715,7 @@ DELIMITER $$
 			fechaFactura as FECHA,
 			total as TOTAL,
             metodoPago as METODO_PAGO,
-            idCliente as CLIENTE,
-            idCompra as COMPRA,
-            idPago as PAGO
+            idCompra as COMPRA
 			from Facturas;
 		end$$
 	
@@ -702,15 +728,13 @@ DELIMITER $$
 			in p_fechaFactura datetime ,
 			in p_total double,
 			in p_metodoPago enum('Tarjeta'),
-			in p_idCliente int,
-            in p_idCompra int,
-            in p_idPago int)
+            in p_idCompra int)
 		begin
-			insert into Facturas(fechaFactura, total, metodoPago, idCliente, idCompra, idPago)
-				values(p_fechaFactura, p_total, p_metodoPago, p_idCliente, p_idCompra, p_idPago );
+			insert into Facturas(fechaFactura, total, metodoPago, idCompra )
+				values(p_fechaFactura, p_total, p_metodoPago, p_idCompra );
 		end$$
 DELIMITER ;
-call sp_AgregarFactura('2025-09-21 20:30:00',2306,'Tarjeta',1,1,1);
+call sp_AgregarFactura('2025-09-21 20:30:00',2306,'Tarjeta',1);
 call sp_ListarFacturas();
 
 -- ACTUALIZAR
@@ -720,24 +744,20 @@ DELIMITER $$
 				in p_fechaFactura datetime ,
 				in p_total double,
 				in p_metodoPago enum('Tarjeta'),
-				in p_idCliente int,
-				in p_idCompra int,
-				in p_idPago int)
+				in p_idCompra int)
 		begin
 			update Facturas
 				set
 					fechaFactura = p_fechaFactura,
 					total = p_total,
                     metodoPago = p_metodoPago,
-                    idCliente = p_idCliente,
-                    idCompra= p_idCompra,
-                    idPago= p_idPago
+                    idCompra= p_idCompra
 				where 
 					p_idFactura = idFactura;
 			
 		end$$
 DELIMITER ;
-call sp_ActualizarFactura(1,'2025-09-21 20:30:00',210,'Tarjeta',1,1,1);
+call sp_ActualizarFactura(1,'2025-09-21 20:30:00',210,'Tarjeta',1);
 call sp_ListarFacturas();
 
 
