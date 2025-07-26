@@ -22,7 +22,7 @@
 
         </style>
     </head>
-    <body>
+    <body style="background-color: #06244c">
         <div class="card">
             <h1>Iniciar Sesión</h1>
             <form action="ServletInicioDeSesion" method="POST">

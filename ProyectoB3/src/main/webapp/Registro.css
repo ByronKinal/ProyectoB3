@@ -1,0 +1,60 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #06244c;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  background-color: #eceeef;
+  border-radius: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  width: 450px;
+  text-align: center;
+  padding: 30px;
+}
+
+
+.card h1 {
+  margin: 10px 0 5px;
+  font-size: 30px;
+  color: #333;
+}
+
+.card p {
+  color: #777;
+  margin: 5px 0 20px;
+}
+
+.card input[type="text"],
+.card input[type="email"],
+.card input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.card button {
+  background-color: #54657a;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%;
+}
+
+h5 {
+  text-align: left;
+  color: #777;
+  margin: 0;
+  margin-left: 5px;
+}
