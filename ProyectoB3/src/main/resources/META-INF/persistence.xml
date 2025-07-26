@@ -1,7 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
     <!-- Define Persistence Unit -->
-    <persistence-unit name="my_persistence_unit">
-        
+    <persistence-unit name="ZapateriaDonPepe">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+ 
+        <!-- Clase de entidad -->
+        <class>model.Usuario</class>
+ 
+        <!-- Configuración JDBC -->
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://127.0.0.1:3306/tiendaWebDB?useSSL=false"/>
+            <property name="javax.persistence.jdbc.user" value="quintov"/>
+            <property name="javax.persistence.jdbc.password" value="admin"/>
+ 
+            <!-- Configuración de Hibernate -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+        </properties>
     </persistence-unit>
 </persistence>
