@@ -21,8 +21,11 @@ public class Categoria {
     @Column(name = "idCategoria")
     private int idCategoria;
 
-    @Column(name = "nombreCategoria")
-    private String nombreCategoria;
+    @Column(name = "nombreCategoriaTipo")
+    private String nombreCategoriaTipo;
+    
+    @Column(name = "nombreCategoriaG")
+    private String nombreCategoriaG;
 
     @Column(name = "descripcionCategoria")
     private String descripcionCategoria;
@@ -30,14 +33,16 @@ public class Categoria {
     public Categoria() {
     }
 
-    public Categoria(int idCategoria, String nombreCategoria, String descripcionCategoria) {
+    public Categoria(int idCategoria, String nombreCategoriaTipo, String nombreCategoriaG, String descripcionCategoria) {
         this.idCategoria = idCategoria;
-        this.nombreCategoria = nombreCategoria;
+        this.nombreCategoriaTipo = nombreCategoriaTipo;
+        this.nombreCategoriaG = nombreCategoriaG;
         this.descripcionCategoria = descripcionCategoria;
     }
 
-    public Categoria(String nombreCategoria, String descripcionCategoria) {
-        this.nombreCategoria = nombreCategoria;
+    public Categoria(String nombreCategoriaTipo, String nombreCategoriaG, String descripcionCategoria) {
+        this.nombreCategoriaTipo = nombreCategoriaTipo;
+        this.nombreCategoriaG = nombreCategoriaG;
         this.descripcionCategoria = descripcionCategoria;
     }
 
@@ -48,20 +53,28 @@ public class Categoria {
     public void setIdCategoria(int idCategoria) {
         this.idCategoria = idCategoria;
     }
-
-    public String getNombreCategoria() {
-        return nombreCategoria;
-    }
-
-    public void setNombreCategoria(String nombreCategoria) {
-        this.nombreCategoria = nombreCategoria;
-    }
-
+    
     public String getDescripcionCategoria() {
         return descripcionCategoria;
     }
 
     public void setDescripcionCategoria(String descripcionCategoria) {
         this.descripcionCategoria = descripcionCategoria;
+    }
+
+    public String getNombreCategoriaTipo() {
+        return nombreCategoriaTipo;
+    }
+
+    public void setNombreCategoriaTipo(String nombreCategoriaTipo) {
+        this.nombreCategoriaTipo = nombreCategoriaTipo;
+    }
+
+    public String getNombreCategoriaG() {
+        return nombreCategoriaG;
+    }
+
+    public void setNombreCategoriaG(String nombreCategoriaG) {
+        this.nombreCategoriaG = nombreCategoriaG;
     }
 }
