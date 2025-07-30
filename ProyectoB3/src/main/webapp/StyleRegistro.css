@@ -1,0 +1,111 @@
+/* Registro.css */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.card {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 40px 30px;
+    width: 350px;
+    text-align: center;
+}
+
+.card h1 {
+    font-family: 'Roboto', sans-serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 20px;
+    text-transform: uppercase;
+    margin-bottom: 25px;
+    color: #000;
+}
+
+.card h5 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 13px;
+    color: #333;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-weight: 400;
+}
+
+.card form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+}
+
+.card input[type="text"],
+.card input[type="email"],
+.card input[type="date"],
+.card input[type="password"] {
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    padding: 10px;
+    width: 100%;
+    border: 1px solid #000;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.card-label {
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    color: #000;
+    margin-right: 15px;
+    cursor: pointer;
+    align-items: center;
+    gap: 6px;
+}
+
+.card button[type="submit"] {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    padding: 10px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.card button[type="submit"]:hover {
+    background-color: #333;
+}
+
+.card2 {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    font-size: 14px;
+}
+
+.inicioSesion {
+    align-content: center;
+    margin-top: 10px;
+    display: inline-block;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    color: #000;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    width: 100%; 
+    text-align: center;
+}
+
+.inicioSesion:hover {
+    color: #555;
+}

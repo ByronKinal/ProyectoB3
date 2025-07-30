@@ -9,7 +9,8 @@
               rel="stylesheet" 
               integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" 
               crossorigin="anonymous">
-        <link rel="stylesheet" href="Registro.css">
+        <style></style>
+        <link rel="stylesheet" href="StyleRegistro.css">
     </head>
     <body>
         <div class="card">
@@ -48,14 +49,15 @@
                 <h5>Repita la contraseña</h5>
                 <input type="password" id="repeat-password" name="repeat-password" 
                        placeholder="Repita la contraseña" required>
-                
+
                 <% if (request.getAttribute("error") != null) {%>
                 <div class="alert alert-danger">
                     <%= request.getAttribute("error")%>
                 </div>
                 <% }%>
-                
+
                 <button type="submit">Crear cuenta</button>
+                <a class="inicioSesion" href="InicioDeSesion.jsp" target="_self">Iniciar Sesion</a>
             </form>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" 
