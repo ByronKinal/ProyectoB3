@@ -1,0 +1,115 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #fff;
+}
+
+
+
+.menu {
+
+    gap: 10px;
+    margin-left: 160px;
+    margin-right: 160px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid #f3f4f6;
+}
+
+.galeria {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.producto {
+    border-radius: 5px;
+    width: 300px;
+    transition: transform 0.3s;
+    overflow: hidden;
+    border: 1px solid transparent;
+}
+
+
+.producto img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.info {
+    background-color: #fff;
+    padding: 10px;
+    margin-left: 30px;
+}
+
+
+h1 {
+    font-family: 'Roboto', sans-serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 15px;
+    text-transform: uppercase;
+}
+
+
+
+.linea-superior {
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+}
+
+.space-vision {
+    height: 380px;
+    background-color: black;
+    color: white;
+    text-align: justify;
+}
+
+.titulo-vision {
+    padding-top: 50px;
+    text-align: center;
+    font-weight: 800;
+    font-size: 24px;
+}
+
+.titulo {
+    font-style: italic;
+    height: 10px;
+    font-size: 32px;
+}
+
+.parrafo-vision {
+    padding-left: 80px;
+    padding-right: 80px;
+    font-size: 16px;
+}
+
+.btnCambios {
+    background-color: #000;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    width: 40%;
+}
+
+.btnAgregar {
+    background-color: #000;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    cursor: pointer;
+
+}
