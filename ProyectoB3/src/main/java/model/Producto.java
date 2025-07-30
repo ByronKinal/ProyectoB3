@@ -27,6 +27,9 @@ public class Producto {
 
     @Column(name = "descripcionProducto")
     private String descripcionProducto;
+    
+    @Column(name = "urlImagen")
+    private String urlImagen;
 
     @Column(name = "tallaProducto")
     private String tallaProducto;
@@ -55,10 +58,11 @@ public class Producto {
     public Producto() {
     }
 
-    public Producto(int idProducto, String nombreProducto, String descripcionProducto, String tallaProducto, String marcaProducto, double precioProducto, int stockProducto, Timestamp fechaIngresoProducto, Timestamp fechaSalidaProducto, int idCategoria, int idProveedor) {
+    public Producto(int idProducto, String nombreProducto, String descripcionProducto, String urlImagen, String tallaProducto, String marcaProducto, double precioProducto, int stockProducto, Timestamp fechaIngresoProducto, Timestamp fechaSalidaProducto, int idCategoria, int idProveedor) {
         this.idProducto = idProducto;
         this.nombreProducto = nombreProducto;
         this.descripcionProducto = descripcionProducto;
+        this.urlImagen = urlImagen;
         this.tallaProducto = tallaProducto;
         this.marcaProducto = marcaProducto;
         this.precioProducto = precioProducto;
@@ -69,9 +73,10 @@ public class Producto {
         this.idProveedor = idProveedor;
     }
 
-    public Producto(String nombreProducto, String descripcionProducto, String tallaProducto, String marcaProducto, double precioProducto, int stockProducto, Timestamp fechaIngresoProducto, Timestamp fechaSalidaProducto, int idCategoria, int idProveedor) {
+    public Producto(String nombreProducto, String descripcionProducto, String urlImagen, String tallaProducto, String marcaProducto, double precioProducto, int stockProducto, Timestamp fechaIngresoProducto, Timestamp fechaSalidaProducto, int idCategoria, int idProveedor) {
         this.nombreProducto = nombreProducto;
         this.descripcionProducto = descripcionProducto;
+        this.urlImagen = urlImagen;
         this.tallaProducto = tallaProducto;
         this.marcaProducto = marcaProducto;
         this.precioProducto = precioProducto;
@@ -168,5 +173,13 @@ public class Producto {
 
     public void setIdProveedor(int idProveedor) {
         this.idProveedor = idProveedor;
+    }
+
+    public String getUrlImagen() {
+        return urlImagen;
+    }
+
+    public void setUrlImagen(String urlImagen) {
+        this.urlImagen = urlImagen;
     }
 }
