@@ -29,12 +29,12 @@
 
         <a class="regresar" href="MenuAdministrativo.jsp">Regresar</a>
 
-        <div class="card">
+        <div class="card" >
             <h1>Editar Producto</h1>
             <% if (request.getAttribute("error") != null) {%>
             <div class="error-message"><%= request.getAttribute("error")%></div>
             <% }%>
-            <form action="../ServletActualizarProducto" method="post">
+            <form action="ServletActualizarProducto" method="post">
                 <input type="hidden" name="idProducto" value="<%= producto.getIdProducto()%>">
 
                 <div class="form-group">
