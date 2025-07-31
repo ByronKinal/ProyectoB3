@@ -113,3 +113,29 @@ h1 {
     cursor: pointer;
 
 }
+
+.mensaje-vacio {
+    text-align: center;
+    padding: 20px;
+    font-size: 18px;
+    color: #666;
+    width: 100%;
+}
+
+.error-message {
+    color: #d9534f;
+    background-color: #f8d7da;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+}
+
+.producto .acciones a {
+    margin-right: 10px;
+    color: #337ab7;
+    text-decoration: none;
+}
+
+.producto .acciones a:hover {
+    text-decoration: underline;
+}

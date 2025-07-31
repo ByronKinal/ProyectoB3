@@ -79,3 +79,10 @@ body {
 .card a:hover {
     color: #555;
 }
+
+.error-message{
+    font-family: 'Roboto', sans-serif;
+    font-size: 12px;
+    color: #ff0033;
+    justify-content: center;
+}
