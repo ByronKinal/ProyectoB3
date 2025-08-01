@@ -1,4 +1,4 @@
- body {
+     body {
      font-family: Arial, sans-serif;
      margin: 0;
      background-color: #fff;
@@ -80,6 +80,7 @@
  .precio {
      font-weight: bold;
      color: #000;
+     margin: 0px;
  }
 
  .descripcion {
@@ -235,3 +236,4 @@
      padding-right: 80px;
      font-size: 16px;
  }
+ 

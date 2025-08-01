@@ -9,16 +9,16 @@
         <link rel="stylesheet" href="StyleRegistroProducto.css">
     </head>
     <body>
-        <div class="container mt-4">
-            <a class="btn btn-secondary mb-3" href="MenuAdministrativo.jsp">Regresar</a>
+        <div>
+            <a class="regresar" href="MenuAdministrativo.jsp">Regresar</a>
             
             <c:if test="${not empty error}">
                 <div class="alert alert-danger">${error}</div>
             </c:if>
 
             <div class="card">
-                <div class="card-header">
-                    <h1 class="text-center">Nuevo Producto</h1>
+                <div>
+                    <h1>NUEVO PRODUCTO</h1>
                 </div>
                 <div class="card-body">
                     <form action="ServletAgregarProducto" method="post">
@@ -67,10 +67,11 @@
                             <input type="number" class="form-control" id="stockProducto" name="stockProducto" required min="0">
                         </div>
                         
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">Guardar Producto</button>
-                        </div>
+                        
                     </form>
+                    <div class="d-grid">
+                            <button type="submit" class="buttonAgregar">Guardar Producto</button>
+                        </div>
                 </div>
             </div>
         </div>

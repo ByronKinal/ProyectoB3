@@ -86,19 +86,17 @@
                     <div class="mensaje-vacio">No se encontraron productos</div>
                 </c:when>
                 <c:otherwise>
-                    <div class="row">
+                    <div class="galeria">
                         <c:forEach items="${productos}" var="producto">
-                            <div class="col-md-4 mb-4">
+                            <div class="producto">
                                 <div class="card producto">
-                                    <img src="${producto.urlImagen}" class="card-img-top" alt="${producto.nombreProducto}">
-                                    <div class="card-body">
+                                    <img src="${producto.urlImagen}" class="logo" alt="${producto.nombreProducto}">
+                                    <div class="info">
                                         <h5 class="card-title">${producto.nombreProducto}</h5>
-                                        <p class="card-text">${producto.descripcionProducto}</p>
-                                        <p class="card-text"><strong>Q ${producto.precioProducto}</strong></p>
-                                        <p class="card-text">
-                                            <small class="text-muted">
+                                        <p  style="margin-bottom: 0px" class="precio">Q ${producto.precioProducto}</p>
+                                        <p  style="margin-bottom: 0px">${producto.descripcionProducto}</p>
+                                        <p>
                                                 ${producto.categoria.nombreCategoriaGenero} - ${producto.categoria.nombreCategoriaTipo}
-                                            </small>
                                         </p>
                                         <a href="#" class="btn btn-primary">Agregar al carrito</a>
                                     </div>
