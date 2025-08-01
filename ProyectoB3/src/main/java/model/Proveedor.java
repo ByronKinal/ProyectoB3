@@ -1,60 +1,63 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.io.Serializable;
+import java.util.List;
+import javax.persistence.*;
 
-/**
- *
- * @author asosa
- */
 @Entity
 @Table(name = "Proveedores")
-public class Proveedor {
-
+public class Proveedor implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     @Column(name = "idProveedor")
     private int idProveedor;
+    
+    @Column(name = "nombreProveedor", nullable = false, length = 128)
+    private String nombreProveedor;
+    
+    @Column(name = "correoProveedor", nullable = false, length = 256, unique = true)
+    private String correoProveedor;
+    
+    @Column(name = "telefonoProveedor", nullable = false, length = 16)
+    private String telefonoProveedor;
+    
+    @Column(name = "direccionProveedor", nullable = false, length = 256)
+    private String direccionProveedor;
+    
+        @Column(name = "estadoProveedor", nullable = false, length = 32)
+    private String estadoProveedor;
+    
+    @OneToMany(mappedBy = "proveedor", fetch = FetchType.LAZY)
+    private List<Producto> productos;
 
-    @Column(name = "nombreProveedor")
-    private int nombreProveedor;
-
-    @Column(name = "correoProveedor")
-    private int correoProveedor;
-
-    @Column(name = "telefonoProveedor")
-    private int telefonoProveedor;
-
-    @Column(name = "direccionProveedor")
-    private int direccionProveedor;
-
-    public Proveedor(int nombreProveedor, int correoProveedor, int telefonoProveedor, int direccionProveedor) {
-        this.nombreProveedor = nombreProveedor;
-        this.correoProveedor = correoProveedor;
-        this.telefonoProveedor = telefonoProveedor;
-        this.direccionProveedor = direccionProveedor;
+    public Proveedor() {
     }
 
-    public Proveedor(int idProveedor, int nombreProveedor, int correoProveedor, int telefonoProveedor, int direccionProveedor) {
+    public Proveedor(int idProveedor, String nombreProveedor, String correoProveedor, String telefonoProveedor, String direccionProveedor,String estadoProveedor) {
         this.idProveedor = idProveedor;
         this.nombreProveedor = nombreProveedor;
         this.correoProveedor = correoProveedor;
         this.telefonoProveedor = telefonoProveedor;
         this.direccionProveedor = direccionProveedor;
+        this.estadoProveedor = estadoProveedor;
     }
 
-    public Proveedor() {
+    public Proveedor(String nombreProveedor, String correoProveedor, String telefonoProveedor, String direccionProveedor ,String estadoProveedor) {
+        this.nombreProveedor = nombreProveedor;
+        this.correoProveedor = correoProveedor;
+        this.telefonoProveedor = telefonoProveedor;
+        this.direccionProveedor = direccionProveedor;
+        this.estadoProveedor = estadoProveedor;
     }
+
+    public Proveedor(String nombreProveedor, String correoProveedor, String telefonoProveedor, String direccionProveedor) {
+        this.nombreProveedor = nombreProveedor;
+        this.correoProveedor = correoProveedor;
+        this.telefonoProveedor = telefonoProveedor;
+        this.direccionProveedor = direccionProveedor;
+    }
+    
 
     public int getIdProveedor() {
         return idProveedor;
@@ -64,38 +67,44 @@ public class Proveedor {
         this.idProveedor = idProveedor;
     }
 
-    public int getNombreProveedor() {
+    public String getNombreProveedor() {
         return nombreProveedor;
     }
 
-    public void setNombreProveedor(int nombreProveedor) {
+    public void setNombreProveedor(String nombreProveedor) {
         this.nombreProveedor = nombreProveedor;
     }
 
-    public int getCorreoProveedor() {
+    public String getCorreoProveedor() {
         return correoProveedor;
     }
 
-    public void setCorreoProveedor(int correoProveedor) {
+    public void setCorreoProveedor(String correoProveedor) {
         this.correoProveedor = correoProveedor;
     }
 
-    public int getTelefonoProveedor() {
+    public String getTelefonoProveedor() {
         return telefonoProveedor;
     }
 
-    public void setTelefonoProveedor(int telefonoProveedor) {
+    public void setTelefonoProveedor(String telefonoProveedor) {
         this.telefonoProveedor = telefonoProveedor;
     }
 
-    public int getDireccionProveedor() {
+    public String getDireccionProveedor() {
         return direccionProveedor;
     }
 
-    public void setDireccionProveedor(int direccionProveedor) {
+    public void setDireccionProveedor(String direccionProveedor) {
         this.direccionProveedor = direccionProveedor;
     }
+    
+    
+     public String getEstadoProveedor() {
+        return direccionProveedor;
+    }
 
-
-
+    public void setEstadoProveedor(String estadoProveedor) {
+        this.estadoProveedor = estadoProveedor;
+    }
 }

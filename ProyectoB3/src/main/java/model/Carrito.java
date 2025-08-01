@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package model;
 
 import javax.persistence.Column;
@@ -15,14 +12,10 @@ import javax.persistence.Table;
  *
  * @author asosa
  */
-
-
 @Entity
 @Table(name = "Carritos")
 public class Carrito {
     
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
@@ -36,19 +29,14 @@ public class Carrito {
     private int cantidadProducto;
 
     @Column(name = "subtotal")
-    private int subtotal;
+    private double subtotal;
 
-    public Carrito(int idCompra, int idProducto, int cantidadProducto, int subtotal) {
-        this.idCompra = idCompra;
-        this.idProducto = idProducto;
-        this.cantidadProducto = cantidadProducto;
-        this.subtotal = subtotal;
-    }
 
     public Carrito() {
     }
-
-    public Carrito(int idProducto, int cantidadProducto, int subtotal) {
+    
+    public Carrito(int idCompra, int idProducto, int cantidadProducto, double subtotal) {
+        this.idCompra = idCompra;
         this.idProducto = idProducto;
         this.cantidadProducto = cantidadProducto;
         this.subtotal = subtotal;
@@ -78,14 +66,11 @@ public class Carrito {
         this.cantidadProducto = cantidadProducto;
     }
 
-    public int getSubtotal() {
+    public double getSubtotal() {
         return subtotal;
     }
 
-    public void setSubtotal(int subtotal) {
+    public void setSubtotal(double subtotal) {
         this.subtotal = subtotal;
     }
-
-  
-
 }

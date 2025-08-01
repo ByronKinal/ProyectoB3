@@ -1,0 +1,237 @@
+ body {
+     font-family: Arial, sans-serif;
+     margin: 0;
+     background-color: #fff;
+ }
+
+ .barra-superior {
+     margin: auto;
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     gap: 15px;
+
+ }
+
+ .logo img {
+     margin-top: 10px;
+     margin-left: 40px;
+     height: 70px;
+ }
+
+ .espaciador {
+     flex: 1;
+ }
+
+    .iconos {
+        font-size: 40px; 
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        cursor: pointer;
+    }
+
+
+
+ .menu {
+  
+     gap: 10px;
+     margin-left: 160px;
+     margin-right: 160px;
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     border-bottom: 3px solid #f3f4f6;
+ }
+
+ .galeria {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 20px;
+     justify-content: center;
+     padding: 20px 0;
+ }
+
+ .producto {
+     border-radius: 5px;
+     width: 300px;
+     transition: transform 0.3s;
+     overflow: hidden;
+      border: 1px solid transparent;
+ }
+
+ .producto:hover {
+     border: 1px solid #000e;
+     transform: scale(1.03);
+ }
+
+ .producto img {
+     width: 100%;
+     height: auto;
+     display: block;
+ }
+
+.info {
+     background-color: #fff;
+     padding: 10px;
+ }
+
+
+ .precio {
+     font-weight: bold;
+     color: #000;
+ }
+
+ .descripcion {
+     font-family: 'Roboto', sans-serif;
+     font-size: 14px;
+     color: #333;
+ }
+
+ .categoria {
+     font-family: 'Roboto', sans-serif;
+     font-size: 12px;
+     color: #777;
+ }
+
+ #ordenar {
+     padding: 5px;
+     border-radius: 5px;
+     border: 1px solid #ccc;
+     background-color: #f3f4f6;
+     color: #000;
+     font-size: 16px;
+     transition: 0.3s ease;
+ }
+
+ #ordenar:hover {
+     background-color: #e5e7eb;
+ }
+
+ #filtro {
+     padding: 5px;
+     border-radius: 5px;
+     border: 1px solid #ccc;
+     background-color: #f3f4f6;
+     color: #000;
+     font-size: 16px;
+     transition: 0.3s ease;
+ }
+
+ #filtro:hover {
+     background-color: #e5e7eb;
+ }
+
+ #btnBuscar {
+     background: none;
+     border: none;
+     padding: 0;
+     margin: 0;
+     cursor: pointer;
+     outline: none;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+ }
+
+ #btnSesion,
+ .btn-sesion {
+     background: none;
+     border: none;
+     padding: 0;
+     margin: 0;
+     cursor: pointer;
+     outline: none;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     text-decoration: none;
+     color: inherit;
+ }
+
+ #btnCarrito {
+     background: none;
+     border: none;
+     padding: 0;
+     margin: 0;
+     cursor: pointer;
+     outline: none;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     text-decoration: none;
+     color: inherit;
+ }
+
+ .icono-mediano1 {
+     font-size: 35px;
+ }
+
+ .icono-mediano2 {
+     font-size: 32px;
+ }
+
+ h1 {
+     font-family: 'Roboto', sans-serif;
+     font-style: italic;
+     font-weight: 400;
+     font-size: 15px;
+     text-transform: uppercase;
+ }
+
+ .tipos {
+     gap: 20px;
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+ }
+
+
+ .btnNavegacion {
+     text-decoration: none;
+     outline: none;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     text-decoration: none;
+     color: inherit;
+ }
+
+ .TipoDeZapato {
+     border-bottom: 3px solid transparent;
+     padding-bottom: 5px;
+     transition: border-color 0.3s;
+ }
+
+ .btnNavegacion:hover .TipoDeZapato {
+     border-bottom: 3px solid #000;
+ }
+
+ .linea-superior {
+     background-color: black;
+     color: white;
+     text-align: center;
+     padding: 10px 0;
+     font-weight: bold;
+     font-family: Arial, sans-serif;
+ }
+
+ .space-vision {
+     height: 380px;
+     background-color: black;
+     color: white;
+     text-align: justify;
+ }
+
+ .titulo-vision {
+     padding-top: 50px;
+     text-align: center;
+     font-weight: 800;
+     font-size: 24px;
+ }
+
+ .parrafo-vision {
+     padding-left: 80px;
+     padding-right: 80px;
+     font-size: 16px;
+ }

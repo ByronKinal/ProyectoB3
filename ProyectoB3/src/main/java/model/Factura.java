@@ -1,9 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package model;
 
+import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,55 +13,43 @@ import javax.persistence.Table;
  *
  * @author asosa
  */
-
 @Entity
 @Table(name = "Facturas")
 public class Factura {
-
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     @Column(name = "idFactura")
     private int idFactura;
 
     @Column(name = "fechaFactura")
-    private int fechaFactura;
+    private Timestamp fechaFactura;
 
     @Column(name = "total")
-    private int total;
+    private double total;
 
     @Column(name = "metodoPago")
-    private int metodoPago;
-
-    @Column(name = "idCliente")
-    private int idCliente;
+    private String metodoPago;
 
     @Column(name = "idCompra")
     private int idCompra;
-    @Column(name = "idPago")
-    private int idPago;
 
-    public Factura(int idFactura, int fechaFactura, int total, int metodoPago, int idCliente, int idCompra, int idPago) {
+    public Factura() {
+    }
+
+    public Factura(int idFactura, Timestamp fechaFactura, double total, String metodoPago, int idCompra) {
         this.idFactura = idFactura;
         this.fechaFactura = fechaFactura;
         this.total = total;
         this.metodoPago = metodoPago;
-        this.idCliente = idCliente;
         this.idCompra = idCompra;
-        this.idPago = idPago;
     }
 
-    public Factura(int fechaFactura, int total, int metodoPago, int idCliente, int idCompra, int idPago) {
+    public Factura(Timestamp fechaFactura, double total, String metodoPago, int idCompra) {
         this.fechaFactura = fechaFactura;
         this.total = total;
         this.metodoPago = metodoPago;
-        this.idCliente = idCliente;
         this.idCompra = idCompra;
-        this.idPago = idPago;
-    }
-
-    public Factura() {
     }
 
     public int getIdFactura() {
@@ -74,36 +60,28 @@ public class Factura {
         this.idFactura = idFactura;
     }
 
-    public int getFechaFactura() {
+    public Timestamp getFechaFactura() {
         return fechaFactura;
     }
 
-    public void setFechaFactura(int fechaFactura) {
+    public void setFechaFactura(Timestamp fechaFactura) {
         this.fechaFactura = fechaFactura;
     }
 
-    public int getTotal() {
+    public double getTotal() {
         return total;
     }
 
-    public void setTotal(int total) {
+    public void setTotal(double total) {
         this.total = total;
     }
 
-    public int getMetodoPago() {
+    public String getMetodoPago() {
         return metodoPago;
     }
 
-    public void setMetodoPago(int metodoPago) {
+    public void setMetodoPago(String metodoPago) {
         this.metodoPago = metodoPago;
-    }
-
-    public int getIdCliente() {
-        return idCliente;
-    }
-
-    public void setIdCliente(int idCliente) {
-        this.idCliente = idCliente;
     }
 
     public int getIdCompra() {
@@ -113,14 +91,4 @@ public class Factura {
     public void setIdCompra(int idCompra) {
         this.idCompra = idCompra;
     }
-
-    public int getIdPago() {
-        return idPago;
-    }
-
-    public void setIdPago(int idPago) {
-        this.idPago = idPago;
-    }
-
-  
 }

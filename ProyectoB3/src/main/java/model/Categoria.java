@@ -1,109 +1,75 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-/**
- *
- * @author asosa
- */
+import java.io.Serializable;
+import java.util.List;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "Categorias")
-public class Categoria {
-   
-    
-
+public class Categoria implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-    @Column(name = "idProveedor")
-    private int idProveedor;
-
-    @Column(name = "nombreProveedor")
-    private int nombreProveedor;
-
-    @Column(name = "correoProveedor")
-    private int correoProveedor;
-
-    @Column(name = "telefonoProveedor")
-    private int telefonoProveedor;
+    @Column(name = "idCategoria")
+    private int idCategoria;
     
-      @Column(name = "direccionProveedor")
-    private int direccionProveedor;
+    @Column(name = "nombreCategoriaTipo", nullable = false, length = 64)
+    private String nombreCategoriaTipo;
+    
+    @Column(name = "nombreCategoriaGenero", nullable = false, length = 64)
+    private String nombreCategoriaGenero;
+    
+    @Column(name = "descripcionCategoria", nullable = false, length = 256)
+    private String descripcionCategoria;
+    
+    @OneToMany(mappedBy = "categoria", fetch = FetchType.LAZY)
+    private List<Producto> productos;
 
     public Categoria() {
     }
 
-    public Categoria(int idProveedor, int nombreProveedor, int correoProveedor, int telefonoProveedor, int direccionProveedor) {
-        this.idProveedor = idProveedor;
-        this.nombreProveedor = nombreProveedor;
-        this.correoProveedor = correoProveedor;
-        this.telefonoProveedor = telefonoProveedor;
-        this.direccionProveedor = direccionProveedor;
+    public Categoria(int idCategoria, String nombreCategoriaTipo, String nombreCategoriaGenero, String descripcionCategoria) {
+        this.idCategoria = idCategoria;
+        this.nombreCategoriaTipo = nombreCategoriaTipo;
+        this.nombreCategoriaGenero = nombreCategoriaGenero;
+        this.descripcionCategoria = descripcionCategoria;
     }
 
-    public Categoria(int nombreProveedor, int correoProveedor, int telefonoProveedor, int direccionProveedor) {
-        this.nombreProveedor = nombreProveedor;
-        this.correoProveedor = correoProveedor;
-        this.telefonoProveedor = telefonoProveedor;
-        this.direccionProveedor = direccionProveedor;
+    public Categoria(String nombreCategoriaTipo, String nombreCategoriaG, String descripcionCategoria) {
+        this.nombreCategoriaTipo = nombreCategoriaTipo;
+        this.nombreCategoriaGenero = nombreCategoriaG;
+        this.descripcionCategoria = descripcionCategoria;
     }
 
-    public int getIdProveedor() {
-        return idProveedor;
+    public int getIdCategoria() {
+        return idCategoria;
     }
 
-    public void setIdProveedor(int idProveedor) {
-        this.idProveedor = idProveedor;
+    public void setIdCategoria(int idCategoria) {
+        this.idCategoria = idCategoria;
     }
-
-    public int getNombreProveedor() {
-        return nombreProveedor;
-    }
-
-    public void setNombreProveedor(int nombreProveedor) {
-        this.nombreProveedor = nombreProveedor;
-    }
-
-    public int getCorreoProveedor() {
-        return correoProveedor;
-    }
-
-    public void setCorreoProveedor(int correoProveedor) {
-        this.correoProveedor = correoProveedor;
-    }
-
-    public int getTelefonoProveedor() {
-        return telefonoProveedor;
-    }
-
-    public void setTelefonoProveedor(int telefonoProveedor) {
-        this.telefonoProveedor = telefonoProveedor;
-    }
-
-    public int getDireccionProveedor() {
-        return direccionProveedor;
-    }
-
-    public void setDireccionProveedor(int direccionProveedor) {
-        this.direccionProveedor = direccionProveedor;
-    }
-
-   
-  
-
-
-
     
-    
+    public String getDescripcionCategoria() {
+        return descripcionCategoria;
+    }
+
+    public void setDescripcionCategoria(String descripcionCategoria) {
+        this.descripcionCategoria = descripcionCategoria;
+    }
+
+    public String getNombreCategoriaTipo() {
+        return nombreCategoriaTipo;
+    }
+
+    public void setNombreCategoriaTipo(String nombreCategoriaTipo) {
+        this.nombreCategoriaTipo = nombreCategoriaTipo;
+    }
+
+    public String getNombreCategoriaGenero() {
+        return nombreCategoriaGenero;
+    }
+
+    public void setNombreCategoriaGenero(String nombreCategoriaG) {
+        this.nombreCategoriaGenero = nombreCategoriaG;
+    }
 }

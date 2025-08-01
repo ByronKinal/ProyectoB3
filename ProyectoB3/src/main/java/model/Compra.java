@@ -1,9 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
+import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,32 +12,31 @@ import javax.persistence.Table;
  *
  * @author asosa
  */
-
-   
 @Entity
 @Table(name = "Compras")
 public class Compra {
-    
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     @Column(name = "idCompra")
     private int idCompra;
 
     @Column(name = "estadoCompra")
-    private int estadoCompra;
+    private String estadoCompra;
 
     @Column(name = "estadoPago")
-    private int estadoPago;
+    private String estadoPago;
 
     @Column(name = "fechaCompra")
-    private int fechaCompra;
+    private Timestamp fechaCompra;
 
     @Column(name = "idCliente")
     private int idCliente;
 
-    public Compra(int idCompra, int estadoCompra, int estadoPago, int fechaCompra, int idCliente) {
+    public Compra() {
+    }
+
+    public Compra(int idCompra, String estadoCompra, String estadoPago, Timestamp fechaCompra, int idCliente) {
         this.idCompra = idCompra;
         this.estadoCompra = estadoCompra;
         this.estadoPago = estadoPago;
@@ -48,17 +44,11 @@ public class Compra {
         this.idCliente = idCliente;
     }
 
-    public Compra(int estadoCompra, int estadoPago, int fechaCompra, int idCliente) {
+    public Compra(String estadoCompra, String estadoPago, Timestamp fechaCompra, int idCliente) {
         this.estadoCompra = estadoCompra;
         this.estadoPago = estadoPago;
         this.fechaCompra = fechaCompra;
         this.idCliente = idCliente;
-    }
-
-    
-   
-
-    public Compra() {
     }
 
     public int getIdCompra() {
@@ -69,27 +59,27 @@ public class Compra {
         this.idCompra = idCompra;
     }
 
-    public int getEstadoCompra() {
+    public String getEstadoCompra() {
         return estadoCompra;
     }
 
-    public void setEstadoCompra(int estadoCompra) {
+    public void setEstadoCompra(String estadoCompra) {
         this.estadoCompra = estadoCompra;
     }
 
-    public int getEstadoPago() {
+    public String getEstadoPago() {
         return estadoPago;
     }
 
-    public void setEstadoPago(int estadoPago) {
+    public void setEstadoPago(String estadoPago) {
         this.estadoPago = estadoPago;
     }
 
-    public int getFechaCompra() {
+    public Timestamp getFechaCompra() {
         return fechaCompra;
     }
 
-    public void setFechaCompra(int fechaCompra) {
+    public void setFechaCompra(Timestamp fechaCompra) {
         this.fechaCompra = fechaCompra;
     }
 
@@ -100,7 +90,4 @@ public class Compra {
     public void setIdCliente(int idCliente) {
         this.idCliente = idCliente;
     }
-
-
-    
-    }
+}
