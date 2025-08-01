@@ -1,7 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.List" %>
 <%@page import="model.Proveedor" %>
-
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -22,6 +21,7 @@
                         <th>Correo</th>
                         <th>Teléfono</th>
                         <th>Dirección</th>
+                        <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -37,6 +37,7 @@
                         <td><%=p.getCorreoProveedor()%></td>
                         <td><%=p.getTelefonoProveedor()%></td>
                         <td><%=p.getDireccionProveedor()%></td>
+                        <td><%=p.getEstadoProveedor()%></td>
                         <td>
                             <a href="ServletEditarProveedor?accion=editar&id=<%=p.getIdProveedor()%>" class="btn btn-warning btn-sm">Editar</a>
                             <a href="ServletEliminarProveedor?id=<%=p.getIdProveedor()%>" class="btn btn-danger btn-sm"
@@ -48,7 +49,7 @@
                     } else {
                     %>
                     <tr>
-                        <td class="text-center" colspan="6">No hay proveedores registrados</td>
+                        <td class="text-center" colspan="7">No hay proveedores registrados</td>
                     </tr>
                     <%
                         }
