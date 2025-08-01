@@ -25,18 +25,30 @@ public class Proveedor implements Serializable {
     @Column(name = "direccionProveedor", nullable = false, length = 256)
     private String direccionProveedor;
     
+        @Column(name = "estadoProveedor", nullable = false, length = 32)
+    private String estadoProveedor;
+    
     @OneToMany(mappedBy = "proveedor", fetch = FetchType.LAZY)
     private List<Producto> productos;
 
     public Proveedor() {
     }
 
-    public Proveedor(int idProveedor, String nombreProveedor, String correoProveedor, String telefonoProveedor, String direccionProveedor) {
+    public Proveedor(int idProveedor, String nombreProveedor, String correoProveedor, String telefonoProveedor, String direccionProveedor,String estadoProveedor) {
         this.idProveedor = idProveedor;
         this.nombreProveedor = nombreProveedor;
         this.correoProveedor = correoProveedor;
         this.telefonoProveedor = telefonoProveedor;
         this.direccionProveedor = direccionProveedor;
+        this.estadoProveedor = estadoProveedor;
+    }
+
+    public Proveedor(String nombreProveedor, String correoProveedor, String telefonoProveedor, String direccionProveedor ,String estadoProveedor) {
+        this.nombreProveedor = nombreProveedor;
+        this.correoProveedor = correoProveedor;
+        this.telefonoProveedor = telefonoProveedor;
+        this.direccionProveedor = direccionProveedor;
+        this.estadoProveedor = estadoProveedor;
     }
 
     public Proveedor(String nombreProveedor, String correoProveedor, String telefonoProveedor, String direccionProveedor) {
@@ -45,6 +57,7 @@ public class Proveedor implements Serializable {
         this.telefonoProveedor = telefonoProveedor;
         this.direccionProveedor = direccionProveedor;
     }
+    
 
     public int getIdProveedor() {
         return idProveedor;
@@ -84,5 +97,14 @@ public class Proveedor implements Serializable {
 
     public void setDireccionProveedor(String direccionProveedor) {
         this.direccionProveedor = direccionProveedor;
+    }
+    
+    
+     public String getEstadoProveedor() {
+        return direccionProveedor;
+    }
+
+    public void setEstadoProveedor(String estadoProveedor) {
+        this.estadoProveedor = estadoProveedor;
     }
 }

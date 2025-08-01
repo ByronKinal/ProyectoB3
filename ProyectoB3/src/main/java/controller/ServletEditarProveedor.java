@@ -32,7 +32,6 @@ public class ServletEditarProveedor {
         request.getRequestDispatcher("EditarProveedor.jsp").forward(request, response);
     }
 
-    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
