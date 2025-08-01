@@ -7,14 +7,14 @@ body {
 
 
 .menu {
-
+    margin-top: 20px;
     gap: 10px;
     margin-left: 160px;
-    margin-right: 160px;
+    margin-right: 100px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 3px solid #f3f4f6;
+   
 }
 
 .galeria {
@@ -92,27 +92,6 @@ h1 {
     font-size: 16px;
 }
 
-.btnCambios {
-    background-color: #000;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 10px;
-    font-size: 14px;
-    cursor: pointer;
-    width: 40%;
-}
-
-.btnAgregar {
-    background-color: #000;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 10px;
-    font-size: 14px;
-    cursor: pointer;
-
-}
 
 .mensaje-vacio {
     text-align: center;
@@ -138,4 +117,40 @@ h1 {
 
 .producto .acciones a:hover {
     text-decoration: underline;
+}
+
+.btnCambios {
+    text-align: center;
+    display: inline-block;
+    text-decoration: none;
+    background-color: #000;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    width: 40%;
+    transition: transform 0.3s, background-color 0.3s, color 0.3s;
+}
+
+
+#agregar {
+    transition: transform 0.3s;
+    width: 9%;
+}
+
+#agregar:hover {
+    transform: scale(1.03);
+}
+
+#editar:hover {
+    transform: scale(1.03);
+    background-color: blue;
+}
+
+#eliminar:hover {
+    transform: scale(1.03);
+    background-color: red;
+    color: #000;
 }

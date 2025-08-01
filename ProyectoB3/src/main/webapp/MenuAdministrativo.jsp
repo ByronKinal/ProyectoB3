@@ -17,7 +17,7 @@
             <div class="tipos">
                 <p class="titulo">SHOESKI</p>
             </div>
-            <button class="btnAgregar" onclick="location.href = 'RegistroProductos.jsp'">AGREGAR</button>
+            <button class="btnCambios" id="agregar" onclick="location.href = 'RegistroProductos.jsp'">AGREGAR</button>
         </div>
 
         <%-- Mensajes de éxito o error --%>
@@ -68,9 +68,9 @@
                                         </p>
                                     </div>
                                     <div class="card-footer bg-transparent">
-                                        <a href="ServletEditarProducto?id=${producto.idProducto}" class="btn btn-warning btn-sm">Editar</a>
+                                        <a href="ServletEditarProducto?id=${producto.idProducto}" class="btnCambios" id="editar">Editar</a>
                                         <a href="ServletEliminarProducto?id=${producto.idProducto}" 
-                                           class="btn btn-danger btn-sm" 
+                                           class="btnCambios" id="eliminar"
                                            onclick="return confirm('¿Está seguro de eliminar este producto?')">Eliminar</a>
                                     </div>
                                 </div>
