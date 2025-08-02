@@ -1,37 +1,32 @@
-
 package model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.io.Serializable;
+import java.util.List;
+import javax.persistence.*;
 
-/**
- *
- * @author asosa
- */
 @Entity
 @Table(name = "Proveedores")
-public class Proveedor {
+public class Proveedor implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idProveedor")
     private int idProveedor;
-
-    @Column(name = "nombreProveedor")
+    
+    @Column(name = "nombreProveedor", nullable = false, length = 128)
     private String nombreProveedor;
-
-    @Column(name = "correoProveedor")
+    
+    @Column(name = "correoProveedor", nullable = false, length = 256, unique = true)
     private String correoProveedor;
-
-    @Column(name = "telefonoProveedor")
+    
+    @Column(name = "telefonoProveedor", nullable = false, length = 16)
     private String telefonoProveedor;
-
-    @Column(name = "direccionProveedor")
+    
+    @Column(name = "direccionProveedor", nullable = false, length = 256)
     private String direccionProveedor;
+    
+    @OneToMany(mappedBy = "proveedor", fetch = FetchType.LAZY)
+    private List<Producto> productos;
 
     public Proveedor() {
     }

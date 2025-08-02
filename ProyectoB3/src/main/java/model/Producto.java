@@ -1,87 +1,82 @@
-
 package model;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
-/**
- *
- * @author asosa
- */
 @Entity
 @Table(name = "Productos")
-public class Producto {
+@NamedQueries({
+    @NamedQuery(name = "Producto.findAll", query = "SELECT p FROM Producto p"),
+    @NamedQuery(name = "Producto.findByGenero", 
+                query = "SELECT p FROM Producto p JOIN p.categoria c WHERE c.nombreCategoriaGenero = :genero"),
+    @NamedQuery(name = "Producto.findById", 
+                query = "SELECT p FROM Producto p WHERE p.idProducto = :idProducto")
+})
+public class Producto implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idProducto")
     private int idProducto;
 
-    @Column(name = "nombreProducto")
+    @Column(name = "nombreProducto", nullable = false, length = 128)
     private String nombreProducto;
 
-    @Column(name = "descripcionProducto")
+    @Column(name = "descripcionProducto", nullable = false, length = 256)
     private String descripcionProducto;
 
-    @Column(name = "tallaProducto")
+    @Column(name = "url_imagen", nullable = false, length = 255)
+    private String urlImagen;
+
+    @Column(name = "tallaProducto", length = 8)
     private String tallaProducto;
 
-    @Column(name = "marcaProducto")
+    @Column(name = "marcaProducto", nullable = false, length = 64)
     private String marcaProducto;
-    
-    @Column(name = "precioProducto")
+
+    @Column(name = "precioProducto", nullable = false)
     private double precioProducto;
-    
-    @Column(name = "stockProducto")
+
+    @Column(name = "stockProducto", nullable = false)
     private int stockProducto;
-    
+
     @Column(name = "fechaIngresoProducto")
     private Timestamp fechaIngresoProducto;
-    
+
     @Column(name = "fechaSalidaProducto")
     private Timestamp fechaSalidaProducto;
-    
-    @Column(name = "idCategoria")
-    private int idCategoria;
-    
-    @Column(name = "idProveedor")
-    private int idProveedor;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idCategoria", referencedColumnName = "idCategoria", nullable = false)
+    private Categoria categoria;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idProveedor", referencedColumnName = "idProveedor", nullable = false)
+    private Proveedor proveedor;
+
+    // Constructores
     public Producto() {
     }
 
-    public Producto(int idProducto, String nombreProducto, String descripcionProducto, String tallaProducto, String marcaProducto, double precioProducto, int stockProducto, Timestamp fechaIngresoProducto, Timestamp fechaSalidaProducto, int idCategoria, int idProveedor) {
-        this.idProducto = idProducto;
+    public Producto(String nombreProducto, String descripcionProducto, String urlImagen, 
+                   String tallaProducto, String marcaProducto, double precioProducto, 
+                   int stockProducto, Categoria categoria, Proveedor proveedor) {
         this.nombreProducto = nombreProducto;
         this.descripcionProducto = descripcionProducto;
+        this.urlImagen = urlImagen;
         this.tallaProducto = tallaProducto;
         this.marcaProducto = marcaProducto;
         this.precioProducto = precioProducto;
         this.stockProducto = stockProducto;
-        this.fechaIngresoProducto = fechaIngresoProducto;
-        this.fechaSalidaProducto = fechaSalidaProducto;
-        this.idCategoria = idCategoria;
-        this.idProveedor = idProveedor;
+        this.categoria = categoria;
+        this.proveedor = proveedor;
+        this.fechaIngresoProducto = new Timestamp(System.currentTimeMillis());
     }
 
-    public Producto(String nombreProducto, String descripcionProducto, String tallaProducto, String marcaProducto, double precioProducto, int stockProducto, Timestamp fechaIngresoProducto, Timestamp fechaSalidaProducto, int idCategoria, int idProveedor) {
-        this.nombreProducto = nombreProducto;
-        this.descripcionProducto = descripcionProducto;
-        this.tallaProducto = tallaProducto;
-        this.marcaProducto = marcaProducto;
-        this.precioProducto = precioProducto;
-        this.stockProducto = stockProducto;
-        this.fechaIngresoProducto = fechaIngresoProducto;
-        this.fechaSalidaProducto = fechaSalidaProducto;
-        this.idCategoria = idCategoria;
-        this.idProveedor = idProveedor;
-    }
-
+    // Getters y Setters
     public int getIdProducto() {
         return idProducto;
     }
@@ -104,6 +99,14 @@ public class Producto {
 
     public void setDescripcionProducto(String descripcionProducto) {
         this.descripcionProducto = descripcionProducto;
+    }
+
+    public String getUrlImagen() {
+        return urlImagen;
+    }
+
+    public void setUrlImagen(String urlImagen) {
+        this.urlImagen = urlImagen;
     }
 
     public String getTallaProducto() {
@@ -154,19 +157,41 @@ public class Producto {
         this.fechaSalidaProducto = fechaSalidaProducto;
     }
 
-    public int getIdCategoria() {
-        return idCategoria;
+    public Categoria getCategoria() {
+        return categoria;
     }
 
-    public void setIdCategoria(int idCategoria) {
-        this.idCategoria = idCategoria;
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
     }
 
-    public int getIdProveedor() {
-        return idProveedor;
+    public Proveedor getProveedor() {
+        return proveedor;
     }
 
-    public void setIdProveedor(int idProveedor) {
-        this.idProveedor = idProveedor;
+    public void setProveedor(Proveedor proveedor) {
+        this.proveedor = proveedor;
+    }
+
+    // Métodos auxiliares
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (int) idProducto;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof Producto)) {
+            return false;
+        }
+        Producto other = (Producto) object;
+        return this.idProducto == other.idProducto;
+    }
+
+    @Override
+    public String toString() {
+        return "model.Producto[ id=" + idProducto + " ]";
     }
 }

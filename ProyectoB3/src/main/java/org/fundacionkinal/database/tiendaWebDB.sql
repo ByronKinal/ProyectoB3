@@ -48,7 +48,8 @@ create table Proveedores(
 
 create table Categorias(
 	idCategoria int auto_increment,
-    nombreCategoria varchar(64) not null,
+    nombreCategoriaTipo varchar(64) not null,
+    nombreCategoriaG varchar(64) not null,
     descripcionCategoria varchar(256) not null,
     constraint pk_categorias primary key (idCategoria)
 );
@@ -57,6 +58,7 @@ create table Productos(
 	idProducto int auto_increment,
 	nombreProducto varchar(128) not null,
 	descripcionProducto varchar(256) not null,
+    url_imagen varchar(255) not null,
     tallaProducto varchar(8),
     marcaProducto varchar(64) not null,
 	precioProducto double not null,
@@ -395,7 +397,8 @@ DELIMITER $$
 		begin
 			select 
 			idCategoria as ID,
-			nombreCategoria  as CATEGORIA,
+			nombreCategoriaTipo  as CATEGORIATIPO,
+			nombreCategoriaG  as CATEGORIAG,
 			descripcionCategoria as DESCRIPCION
 			from Categorias;
 		end$$
@@ -405,25 +408,28 @@ DELIMITER ;
 -- AGREGAR
 DELIMITER $$
 	create procedure sp_AgregarCategoria(
-			in p_nombreCategoria varchar(64),
+            in p_nombreCategoriaTipo varchar(64),
+			in p_nombreCategoriaG varchar(256),
 			in p_descripcionCategoria varchar(256))
 		begin
-			insert into Categorias(nombreCategoria, descripcionCategoria)
-				values(p_nombreCategoria, p_descripcionCategoria);
+			insert into Categorias( nombreCategoriaTipo,nombreCategoriaG,descripcionCategoria)
+			
+				values(p_nombreCategoriaTipo,p_nombreCategoriaG, p_descripcionCategoria);
 		end$$
 DELIMITER ;
-call sp_AgregarCategoria('Limpieza','Dedicado a la limpieza de los animalitos de tu hogar');
+call sp_AgregarCategoria('Limpieza',"Hombre",'Dedicado a la limpieza de los animalitos de tu hogar');
 
 -- ACTUALIZAR
 DELIMITER $$
 	create procedure sp_ActualizarCategoria(
 				in p_idCategoria  int,
-				in p_nombreCategoria varchar(64),
-				in p_descripcionCategoria  varchar(256))
+            in p_nombreCategoriaTipo varchar(64),
+			in p_nombreCategoriaG varchar(256),
+			in p_descripcionCategoria varchar(256))
 		begin
 			update Categorias
 				set
-					nombreCategoria  = p_nombreCategoria ,
+					nombreCategoriaG	=	p_nombreCategoriaG,
 					descripcionCategoria = p_descripcionCategoria
 				where 
 					p_idCategoria = idCategoria ;
@@ -455,6 +461,7 @@ DELIMITER $$
 			idProducto  as ID,
 			nombreProducto as PRODUCTO,
 			descripcionProducto  as DESCRIPCION,
+			url_imagen as IMAGEN,
             tallaProducto as TALLA,
             marcaProducto as MARCA,
             precioProducto as PRECIO,
@@ -473,6 +480,7 @@ DELIMITER $$
 	create procedure sp_AgregarProducto(
 			in p_nombreProducto varchar(128),
 			in p_descripcionProducto varchar(256),
+            in p_url_imagen varchar(255),
 			in p_tallaProducto varchar(8),
 			in p_marcaProducto varchar(64),
 			in p_precioProducto double,
@@ -482,11 +490,11 @@ DELIMITER $$
 			in p_idCategoria int,
 			in p_idProveedor int)
 		begin
-			insert into Productos(nombreProducto, descripcionProducto, tallaProducto, marcaProducto, precioProducto, stockProducto, fechaIngresoProducto, fechaSalidaProducto,idCategoria, idProveedor )
-				values(p_nombreProducto, p_descripcionProducto, p_tallaProducto, p_marcaProducto, p_precioProducto, p_stockProducto, p_fechaIngresoProducto, p_fechaSalidaProducto, p_idCategoria, p_idProveedor);
+			insert into Productos(nombreProducto, descripcionProducto,url_imagen, tallaProducto, marcaProducto, precioProducto, stockProducto, fechaIngresoProducto, fechaSalidaProducto,idCategoria, idProveedor )
+				values(p_nombreProducto, p_descripcionProducto ,p_url_imagen, p_tallaProducto, p_marcaProducto, p_precioProducto, p_stockProducto, p_fechaIngresoProducto, p_fechaSalidaProducto, p_idCategoria, p_idProveedor);
 		end$$
 DELIMITER ;
-call sp_AgregarProducto('Zapatos', 'Calzado para su pie', '32', 'NIKE', 850, 40, '2006-12-08 12:00:00', '2006-12-07', 1, 1);
+call sp_AgregarProducto('Zapatos', 'Calzado para su pie', "link",'32', 'NIKE', 850, 40, '2006-12-08 12:00:00', '2006-12-07', 1, 1);
 
 -- ACTUALIZAR
 DELIMITER $$
@@ -494,6 +502,7 @@ DELIMITER $$
 				in p_idProducto int,
 				in p_nombreProducto varchar(128),
 				in p_descripcionProducto varchar(256),
+				in p_url_imagen varchar(255),
 				in p_tallaProducto varchar(8),
 				in p_marcaProducto varchar(64),
 				in p_precioProducto double,
@@ -505,6 +514,7 @@ DELIMITER $$
 				set
 					nombreProducto= p_nombreProducto  ,
 					descripcionProducto  = p_descripcionProducto,
+                    url_imagen = p_url_imagen,
                     tallaProducto = p_tallaProducto,
                     marcaProducto =p_marcaProducto,
                     precioProducto = p_precioProducto,

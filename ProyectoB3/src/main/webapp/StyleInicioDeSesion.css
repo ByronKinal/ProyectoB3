@@ -1,0 +1,88 @@
+body {
+    
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgb(0 0 0 / 0.1);
+    padding: 40px 30px;
+    width: 320px;
+    text-align: center;
+}
+
+.card h1 {
+    font-family: 'Roboto', sans-serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 20px;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+    color: #000;
+}
+
+.card form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.card input[type="text"],
+.card input[type="password"] {
+    
+    font-size: 14px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: border-color 0.3s;
+}
+
+.card input[type="text"],
+.card input[type="password"] {
+    border-color: #000;
+    outline: none;
+}
+
+.card button[type="submit"] {
+    
+    font-size: 16px;
+    padding: 10px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.card button[type="submit"]:hover {
+    background-color: #333;
+}
+
+.card a {
+    margin-top: 10px;
+    display: inline-block;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    color: #000;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.card a:hover {
+    color: #555;
+}
+
+.error-message{
+    font-family: 'Roboto', sans-serif;
+    font-size: 12px;
+    color: #ff0033;
+    justify-content: center;
+}
