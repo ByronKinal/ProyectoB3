@@ -1,4 +1,4 @@
-drop database if exists tiendaWebDB;
+ drop database if exists tiendaWebDB;
 create database tiendaWebDB;
 use tiendaWebDB;
 
@@ -924,4 +924,3 @@ BEGIN
 END$$
 DELIMITER ;
 
-call sp_ListarProveedores;
