@@ -34,7 +34,7 @@ public class ServletInicioDeSesion extends HttpServlet {
                 if ("Cliente".equals(usuario.getRolUsuario())) {
                     response.sendRedirect("MenuPrincipal.jsp");
                 } else if ("Empleado".equals(usuario.getRolUsuario())) {
-                    response.sendRedirect("MenuAdministrativo.jsp");
+                    response.sendRedirect("OpcionesMenuAdministrador.jsp");
                 }
             } else {
                 request.setAttribute("error", "ⓘ Usuario o contraseña incorrectos");
