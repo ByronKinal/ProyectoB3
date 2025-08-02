@@ -1,6 +1,6 @@
 package controller;
 
-import dao.ProveedorDAO;
+import dao.UsuarioDAO;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "ServletEliminarProveedor", urlPatterns = {"/ServletEliminarProveedor"})
-public class ServletEliminarProveedor extends HttpServlet {
+@WebServlet(name = "ServletEliminarUsuario", urlPatterns = {"/ServletEliminarUsuario"})
+public class ServletEliminarUsuario extends HttpServlet {
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -27,28 +27,28 @@ public class ServletEliminarProveedor extends HttpServlet {
             throws ServletException, IOException {
         
         try {
-            int idProveedor = Integer.parseInt(request.getParameter("id"));
+            int idUsuario = Integer.parseInt(request.getParameter("id"));
             
-            ProveedorDAO proveedorDAO = new ProveedorDAO();
-            boolean eliminado = proveedorDAO.eliminarProveedor(idProveedor);
+            UsuarioDAO usuarioDAO = new UsuarioDAO();
+            boolean eliminado = usuarioDAO.eliminarUsuario(idUsuario);
             
             if (eliminado) {
-                request.getSession().setAttribute("mensaje", "Proveedor eliminado correctamente");
+                request.getSession().setAttribute("mensaje", "Usuario eliminado correctamente");
                 request.getSession().setAttribute("tipoMensaje", "success");
             } else {
-                request.getSession().setAttribute("mensaje", "Error al eliminar el proveedor");
+                request.getSession().setAttribute("mensaje", "Error al eliminar el usuario");
                 request.getSession().setAttribute("tipoMensaje", "danger");
             }
             
         } catch (NumberFormatException e) {
-            request.getSession().setAttribute("mensaje", "ID de proveedor inválido");
+            request.getSession().setAttribute("mensaje", "ID de usuario inválido");
             request.getSession().setAttribute("tipoMensaje", "danger");
         } catch (Exception e) {
-            request.getSession().setAttribute("mensaje", "Error al eliminar el proveedor: " + e.getMessage());
+            request.getSession().setAttribute("mensaje", "Error al eliminar el usuario: " + e.getMessage());
             request.getSession().setAttribute("tipoMensaje", "danger");
         }
         
-        // Redirigir a la lista de proveedores
-        response.sendRedirect("ServletListarProveedores");
+        // Redirigir a la lista de usuarios
+        response.sendRedirect("ServletListarUsuarios");
     }
 }

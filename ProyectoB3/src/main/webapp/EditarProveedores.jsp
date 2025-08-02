@@ -17,33 +17,38 @@
             <form action="ServletEditarProveedor" method="post">
                 <input type="hidden" name="accion" value="actualizar">
                 <input type="hidden" name="id" value="<%=proveedor.getIdProveedor()%>">
+
                 <div class="mb-3">
                     <label for="nombreProveedor" class="form-label">Nombre del Proveedor:</label>
                     <input type="text" id="nombreProveedor" name="nombreProveedor" class="form-control" 
                            value="<%=proveedor.getNombreProveedor()%>" required>
                 </div>
+
                 <div class="mb-3">
                     <label for="correoProveedor" class="form-label">Correo:</label>
                     <input type="email" id="correoProveedor" name="correoProveedor" class="form-control" 
                            value="<%=proveedor.getCorreoProveedor()%>" required>
                 </div>
+
                 <div class="mb-3">
                     <label for="telefonoProveedor" class="form-label">Teléfono:</label>
                     <input type="text" id="telefonoProveedor" name="telefonoProveedor" class="form-control" 
                            value="<%=proveedor.getTelefonoProveedor()%>" required>
                 </div>
+
                 <div class="mb-3">
                     <label for="direccionProveedor" class="form-label">Dirección:</label>
                     <textarea id="direccionProveedor" name="direccionProveedor" class="form-control" rows="3" required><%=proveedor.getDireccionProveedor()%></textarea>
                 </div>
+
                 <div class="mb-3">
                     <label for="estadoProveedor" class="form-label">Estado:</label>
                     <select id="estadoProveedor" name="estadoProveedor" class="form-select" required>
-                        <option value="">Seleccione un estado</option>
-                        <option value="ACTIVO" <%="ACTIVO".equals(proveedor.getEstadoProveedor()) ? "selected" : ""%>>ACTIVO</option>
-                        <option value="SUSPENDIDO" <%="SUSPENDIDO".equals(proveedor.getEstadoProveedor()) ? "selected" : ""%>>SUSPENDIDO</option>
+                        <option value="ACTIVO" <%= "ACTIVO".equals(proveedor.getEstadoProveedor()) ? "selected" : ""%>>Activo</option>
+                        <option value="SUSPENDIDO" <%= "SUSPENDIDO".equals(proveedor.getEstadoProveedor()) ? "selected" : ""%>>Suspendido</option>
                     </select>
                 </div>
+
                 <button type="submit" class="btn btn-primary">Actualizar</button>
                 <a href="ServletListarProveedores" class="btn btn-secondary">Cancelar</a>
             </form>

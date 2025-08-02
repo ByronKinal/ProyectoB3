@@ -1,4 +1,3 @@
-
 package dao;
 
 import java.util.List;
@@ -10,10 +9,6 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import model.Proveedor;
 
-/**
- *
- * @author informatica
- */
 public class ProveedorDAO {
 
     private final EntityManagerFactory emf;
@@ -38,10 +33,12 @@ public class ProveedorDAO {
         EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<Proveedor> query = em.createQuery(
-                    "SELECT p FROM Proveedor p  WHERE p.idProveedor = :id",
+                    "SELECT p FROM Proveedor p WHERE p.idProveedor = :id",
                     Proveedor.class);
             query.setParameter("id", idProveedor);
             return query.getSingleResult();
+        } catch (Exception e) {
+            return null;
         } finally {
             em.close();
         }
@@ -51,8 +48,8 @@ public class ProveedorDAO {
         EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<Proveedor> query = em.createQuery(
-                    "SELECT p FROM Proveedor p "
-                    + "WHERE p.estadoProveedor = :estadoProveedor", Proveedor.class);
+                    "SELECT p FROM Proveedor p WHERE p.estadoProveedor = :estadoProveedor", 
+                    Proveedor.class);
             query.setParameter("estadoProveedor", estadoProveedor);
             return query.getResultList();
         } finally {
@@ -64,23 +61,22 @@ public class ProveedorDAO {
         EntityManager em = emf.createEntityManager();
         try {
             Query query = em.createQuery(
-                    "SELECT p.estadoProveedor FROM Proveedor p "
-                    + "WHERE p.idProveedor = :idProveedor");
+                    "SELECT p.estadoProveedor FROM Proveedor p WHERE p.idProveedor = :idProveedor");
             query.setParameter("idProveedor", idProveedor);
             return (String) query.getSingleResult();
+        } catch (Exception e) {
+            return null;
         } finally {
             em.close();
         }
     }
 
-    // Modificar el método agregarProducto
     public void agregarProveedor(Proveedor proveedor) {
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = null;
         try {
             tx = em.getTransaction();
             tx.begin();
-
             em.persist(proveedor);
             tx.commit();
         } catch (Exception e) {
@@ -111,24 +107,43 @@ public class ProveedorDAO {
         }
     }
 
-    public void suspenderProveedor(int idProveedor) {
+    // Método corregido para eliminar proveedor
+    public boolean eliminarProveedor(int idProveedor) {
         EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = null;
         try {
-            em.getTransaction().begin();
+            tx = em.getTransaction();
+            tx.begin();
             Proveedor proveedor = em.find(Proveedor.class, idProveedor);
             if (proveedor != null) {
                 em.remove(proveedor);
+                tx.commit();
+                return true;
+            } else {
+                tx.rollback();
+                return false;
             }
-            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+            return false;
         } finally {
             em.close();
         }
+    }
+    
+    // Método existente renombrado para claridad
+    public void suspenderProveedor(int idProveedor) {
+        eliminarProveedor(idProveedor);
     }
     
     public Proveedor obtenerProveedorPorId(int idProveedor) {
         EntityManager em = emf.createEntityManager();
         try {
             return em.find(Proveedor.class, idProveedor);
+        } catch (Exception e) {
+            return null;
         } finally {
             em.close();
         }
