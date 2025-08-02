@@ -1,4 +1,11 @@
 
+<%-- 
+    Document   : EditarProducto
+    Created on : Jul 30, 2025
+    Author     : ft/denis
+--%>
+
+
 <%@page import="javax.persistence.Persistence"%>
 <%@page import="javax.persistence.EntityManager"%>
 <%@page import="javax.persistence.EntityManagerFactory"%>
@@ -80,5 +87,6 @@
     </div>
 
 </body>
+
 
 </html>

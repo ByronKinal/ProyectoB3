@@ -12,7 +12,24 @@
     <body>
         <div class="container mt-4">
             <h2 class="text-center mb-4">Listado de Proveedores</h2>
-            <a href="registroProveedor.jsp" class="btn btn-primary mb-3">Agregar Proveedor</a>
+            
+            <!-- Mostrar mensajes de éxito o error -->
+            <%
+                String mensaje = (String) session.getAttribute("mensaje");
+                String tipoMensaje = (String) session.getAttribute("tipoMensaje");
+                if (mensaje != null) {
+            %>
+            <div class="alert alert-<%=tipoMensaje%> alert-dismissible fade show" role="alert">
+                <%=mensaje%>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            <%
+                    session.removeAttribute("mensaje");
+                    session.removeAttribute("tipoMensaje");
+                }
+            %>
+            
+            <a href="ServletAgregarProveedor" class="btn btn-primary mb-3">Agregar Proveedor</a>
             <table class="table table-bordered table-striped">
                 <thead class="table-primary">
                     <tr>
@@ -37,7 +54,11 @@
                         <td><%=p.getCorreoProveedor()%></td>
                         <td><%=p.getTelefonoProveedor()%></td>
                         <td><%=p.getDireccionProveedor()%></td>
-                        <td><%=p.getEstadoProveedor()%></td>
+                        <td>
+                            <span class="badge <%= "ACTIVO".equals(p.getEstadoProveedor()) ? "bg-success" : "bg-danger" %>">
+                                <%=p.getEstadoProveedor()%>
+                            </span>
+                        </td>
                         <td>
                             <a href="ServletEditarProveedor?accion=editar&id=<%=p.getIdProveedor()%>" class="btn btn-warning btn-sm">Editar</a>
                             <a href="ServletEliminarProveedor?id=<%=p.getIdProveedor()%>" class="btn btn-danger btn-sm"
@@ -57,6 +78,4 @@
                 </tbody>
             </table>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-    </body>
-</html>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js
