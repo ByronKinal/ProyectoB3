@@ -1,0 +1,156 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #fff;
+}
+
+
+
+.menu {
+    margin-top: 20px;
+    gap: 10px;
+    margin-left: 160px;
+    margin-right: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+   
+}
+
+.galeria {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.producto {
+    border-radius: 5px;
+    width: 300px;
+    transition: transform 0.3s;
+    overflow: hidden;
+    border: 1px solid transparent;
+}
+
+
+.producto img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.info {
+    background-color: #fff;
+    padding: 10px;
+    margin-left: 30px;
+}
+
+
+h1 {
+    font-family: 'Roboto', sans-serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 15px;
+    text-transform: uppercase;
+}
+
+
+
+.linea-superior {
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+}
+
+.space-vision {
+    height: 380px;
+    background-color: black;
+    color: white;
+    text-align: justify;
+}
+
+.titulo-vision {
+    padding-top: 50px;
+    text-align: center;
+    font-weight: 800;
+    font-size: 24px;
+}
+
+.titulo {
+    font-style: italic;
+    height: 10px;
+    font-size: 32px;
+}
+
+.parrafo-vision {
+    padding-left: 80px;
+    padding-right: 80px;
+    font-size: 16px;
+}
+
+
+.mensaje-vacio {
+    text-align: center;
+    padding: 20px;
+    font-size: 18px;
+    color: #666;
+    width: 100%;
+}
+
+.error-message {
+    color: #d9534f;
+    background-color: #f8d7da;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+}
+
+.producto .acciones a {
+    margin-right: 10px;
+    color: #337ab7;
+    text-decoration: none;
+}
+
+.producto .acciones a:hover {
+    text-decoration: underline;
+}
+
+.btnCambios {
+    text-align: center;
+    display: inline-block;
+    text-decoration: none;
+    background-color: #000;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    width: 40%;
+    transition: transform 0.3s, background-color 0.3s, color 0.3s;
+}
+
+
+#agregar {
+    transition: transform 0.3s;
+    width: 9%;
+}
+
+#agregar:hover {
+    transform: scale(1.03);
+}
+
+#editar:hover {
+    transform: scale(1.03);
+    background-color: blue;
+}
+
+#eliminar:hover {
+    transform: scale(1.03);
+    background-color: red;
+    color: #000;
+}

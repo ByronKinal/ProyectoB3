@@ -1,47 +1,54 @@
-
 package model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.io.Serializable;
+import java.util.List;
+import javax.persistence.*;
 
-/**
- *
- * @author asosa
- */
 @Entity
 @Table(name = "Proveedores")
-public class Proveedor {
+public class Proveedor implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idProveedor")
     private int idProveedor;
-
-    @Column(name = "nombreProveedor")
+    
+    @Column(name = "nombreProveedor", nullable = false, length = 128)
     private String nombreProveedor;
-
-    @Column(name = "correoProveedor")
+    
+    @Column(name = "correoProveedor", nullable = false, length = 256, unique = true)
     private String correoProveedor;
-
-    @Column(name = "telefonoProveedor")
+    
+    @Column(name = "telefonoProveedor", nullable = false, length = 16)
     private String telefonoProveedor;
-
-    @Column(name = "direccionProveedor")
+    
+    @Column(name = "direccionProveedor", nullable = false, length = 256)
     private String direccionProveedor;
+    
+        @Column(name = "estadoProveedor", nullable = false, length = 32)
+    private String estadoProveedor;
+    
+    @OneToMany(mappedBy = "proveedor", fetch = FetchType.LAZY)
+    private List<Producto> productos;
 
     public Proveedor() {
     }
 
-    public Proveedor(int idProveedor, String nombreProveedor, String correoProveedor, String telefonoProveedor, String direccionProveedor) {
+    public Proveedor(int idProveedor, String nombreProveedor, String correoProveedor, String telefonoProveedor, String direccionProveedor,String estadoProveedor) {
         this.idProveedor = idProveedor;
         this.nombreProveedor = nombreProveedor;
         this.correoProveedor = correoProveedor;
         this.telefonoProveedor = telefonoProveedor;
         this.direccionProveedor = direccionProveedor;
+        this.estadoProveedor = estadoProveedor;
+    }
+
+    public Proveedor(String nombreProveedor, String correoProveedor, String telefonoProveedor, String direccionProveedor ,String estadoProveedor) {
+        this.nombreProveedor = nombreProveedor;
+        this.correoProveedor = correoProveedor;
+        this.telefonoProveedor = telefonoProveedor;
+        this.direccionProveedor = direccionProveedor;
+        this.estadoProveedor = estadoProveedor;
     }
 
     public Proveedor(String nombreProveedor, String correoProveedor, String telefonoProveedor, String direccionProveedor) {
@@ -50,6 +57,7 @@ public class Proveedor {
         this.telefonoProveedor = telefonoProveedor;
         this.direccionProveedor = direccionProveedor;
     }
+    
 
     public int getIdProveedor() {
         return idProveedor;
@@ -89,5 +97,14 @@ public class Proveedor {
 
     public void setDireccionProveedor(String direccionProveedor) {
         this.direccionProveedor = direccionProveedor;
+    }
+    
+    
+     public String getEstadoProveedor() {
+        return direccionProveedor;
+    }
+
+    public void setEstadoProveedor(String estadoProveedor) {
+        this.estadoProveedor = estadoProveedor;
     }
 }

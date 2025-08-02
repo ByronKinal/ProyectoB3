@@ -1,43 +1,43 @@
-
 package model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.io.Serializable;
+import java.util.List;
+import javax.persistence.*;
 
-/**
- *
- * @author asosa
- */
 @Entity
 @Table(name = "Categorias")
-public class Categoria {
-   
+public class Categoria implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idCategoria")
     private int idCategoria;
-
-    @Column(name = "nombreCategoria")
-    private String nombreCategoria;
-
-    @Column(name = "descripcionCategoria")
+    
+    @Column(name = "nombreCategoriaTipo", nullable = false, length = 64)
+    private String nombreCategoriaTipo;
+    
+    @Column(name = "nombreCategoriaGenero", nullable = false, length = 64)
+    private String nombreCategoriaGenero;
+    
+    @Column(name = "descripcionCategoria", nullable = false, length = 256)
     private String descripcionCategoria;
+    
+    @OneToMany(mappedBy = "categoria", fetch = FetchType.LAZY)
+    private List<Producto> productos;
 
     public Categoria() {
     }
 
-    public Categoria(int idCategoria, String nombreCategoria, String descripcionCategoria) {
+    public Categoria(int idCategoria, String nombreCategoriaTipo, String nombreCategoriaGenero, String descripcionCategoria) {
         this.idCategoria = idCategoria;
-        this.nombreCategoria = nombreCategoria;
+        this.nombreCategoriaTipo = nombreCategoriaTipo;
+        this.nombreCategoriaGenero = nombreCategoriaGenero;
         this.descripcionCategoria = descripcionCategoria;
     }
 
-    public Categoria(String nombreCategoria, String descripcionCategoria) {
-        this.nombreCategoria = nombreCategoria;
+    public Categoria(String nombreCategoriaTipo, String nombreCategoriaG, String descripcionCategoria) {
+        this.nombreCategoriaTipo = nombreCategoriaTipo;
+        this.nombreCategoriaGenero = nombreCategoriaG;
         this.descripcionCategoria = descripcionCategoria;
     }
 
@@ -48,20 +48,28 @@ public class Categoria {
     public void setIdCategoria(int idCategoria) {
         this.idCategoria = idCategoria;
     }
-
-    public String getNombreCategoria() {
-        return nombreCategoria;
-    }
-
-    public void setNombreCategoria(String nombreCategoria) {
-        this.nombreCategoria = nombreCategoria;
-    }
-
+    
     public String getDescripcionCategoria() {
         return descripcionCategoria;
     }
 
     public void setDescripcionCategoria(String descripcionCategoria) {
         this.descripcionCategoria = descripcionCategoria;
+    }
+
+    public String getNombreCategoriaTipo() {
+        return nombreCategoriaTipo;
+    }
+
+    public void setNombreCategoriaTipo(String nombreCategoriaTipo) {
+        this.nombreCategoriaTipo = nombreCategoriaTipo;
+    }
+
+    public String getNombreCategoriaGenero() {
+        return nombreCategoriaGenero;
+    }
+
+    public void setNombreCategoriaGenero(String nombreCategoriaG) {
+        this.nombreCategoriaGenero = nombreCategoriaG;
     }
 }

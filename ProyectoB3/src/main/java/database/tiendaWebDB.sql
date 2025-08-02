@@ -1,4 +1,4 @@
-drop database if exists tiendaWebDB;
+ drop database if exists tiendaWebDB;
 create database tiendaWebDB;
 use tiendaWebDB;
 
@@ -43,12 +43,14 @@ create table Proveedores(
     correoProveedor varchar(256) not null unique,
     telefonoProveedor varchar(16) not null,
     direccionProveedor varchar(256) not null,
+    estadoProveedor enum('ACTIVO','SUSPENDIDO') default 'ACTIVO',
     constraint pk_proveedores primary key (idProveedor)
 );
 
 create table Categorias(
 	idCategoria int auto_increment,
-    nombreCategoria varchar(64) not null,
+    nombreCategoriaTipo varchar(64) not null,
+    nombreCategoriaGenero varchar(64) not null,
     descripcionCategoria varchar(256) not null,
     constraint pk_categorias primary key (idCategoria)
 );
@@ -57,6 +59,7 @@ create table Productos(
 	idProducto int auto_increment,
 	nombreProducto varchar(128) not null,
 	descripcionProducto varchar(256) not null,
+    url_imagen varchar(255) not null,
     tallaProducto varchar(8),
     marcaProducto varchar(64) not null,
 	precioProducto double not null,
@@ -332,7 +335,8 @@ DELIMITER $$
 			nombreProveedor  as PROVEEDOR,
 			correoProveedor as CORREO,
 			telefonoProveedor  as TELEFONO,
-			direccionProveedor  as DIRECCION
+			direccionProveedor  as DIRECCION,
+            estadoProveedor as ESTADO
 			from Proveedores;
 		end$$
 	
@@ -351,7 +355,6 @@ DELIMITER $$
 		end$$
         
 DELIMITER ;
-call sp_AgregarProveedor('Colgate','colgate@gmail.com', '12456789','Zona 7 Villa Nueva');
 
 -- ACTUALIZAR
 DELIMITER $$
@@ -360,14 +363,16 @@ DELIMITER $$
 				in p_nombreProveedor varchar(128),
 				in p_correoProveedor varchar(256), 
 				in p_telefonoProveedor varchar(16),
-				in p_direccionProveedor varchar(256))
+				in p_direccionProveedor varchar(256),
+                in p_estadoProveedor varchar (32))
 		begin
 			update Proveedores
 				set
 					nombreProveedor = p_nombreProveedor,
 					correoProveedor = p_correoProveedor,
 					telefonoProveedor = p_telefonoProveedor,
-					direccionProveedor = p_direccionProveedor
+					direccionProveedor = p_direccionProveedor,
+                    estadoProveedor = p_estadoProveedor
 				where 
 					p_idProveedor = idProveedor;
 			
@@ -395,7 +400,8 @@ DELIMITER $$
 		begin
 			select 
 			idCategoria as ID,
-			nombreCategoria  as CATEGORIA,
+			nombreCategoriaTipo  as CATEGORIATIPO,
+			nombreCategoriaGenero  as CATEGORIAG,
 			descripcionCategoria as DESCRIPCION
 			from Categorias;
 		end$$
@@ -405,25 +411,27 @@ DELIMITER ;
 -- AGREGAR
 DELIMITER $$
 	create procedure sp_AgregarCategoria(
-			in p_nombreCategoria varchar(64),
+            in p_nombreCategoriaTipo varchar(64),
+			in p_nombreCategoriaGenero varchar(256),
 			in p_descripcionCategoria varchar(256))
 		begin
-			insert into Categorias(nombreCategoria, descripcionCategoria)
-				values(p_nombreCategoria, p_descripcionCategoria);
+			insert into Categorias( nombreCategoriaTipo,nombreCategoriaGenero,descripcionCategoria)
+			
+				values(p_nombreCategoriaTipo,p_nombreCategoriaGenero, p_descripcionCategoria);
 		end$$
 DELIMITER ;
-call sp_AgregarCategoria('Limpieza','Dedicado a la limpieza de los animalitos de tu hogar');
 
 -- ACTUALIZAR
 DELIMITER $$
 	create procedure sp_ActualizarCategoria(
 				in p_idCategoria  int,
-				in p_nombreCategoria varchar(64),
-				in p_descripcionCategoria  varchar(256))
+            in p_nombreCategoriaTipo varchar(64),
+			in p_nombreCategoriaGenero varchar(256),
+			in p_descripcionCategoria varchar(256))
 		begin
 			update Categorias
 				set
-					nombreCategoria  = p_nombreCategoria ,
+					nombreCategoriaGenero	=	p_nombreCategoriaGenero,
 					descripcionCategoria = p_descripcionCategoria
 				where 
 					p_idCategoria = idCategoria ;
@@ -455,6 +463,7 @@ DELIMITER $$
 			idProducto  as ID,
 			nombreProducto as PRODUCTO,
 			descripcionProducto  as DESCRIPCION,
+			url_imagen as IMAGEN,
             tallaProducto as TALLA,
             marcaProducto as MARCA,
             precioProducto as PRECIO,
@@ -473,6 +482,7 @@ DELIMITER $$
 	create procedure sp_AgregarProducto(
 			in p_nombreProducto varchar(128),
 			in p_descripcionProducto varchar(256),
+            in p_url_imagen varchar(255),
 			in p_tallaProducto varchar(8),
 			in p_marcaProducto varchar(64),
 			in p_precioProducto double,
@@ -482,11 +492,10 @@ DELIMITER $$
 			in p_idCategoria int,
 			in p_idProveedor int)
 		begin
-			insert into Productos(nombreProducto, descripcionProducto, tallaProducto, marcaProducto, precioProducto, stockProducto, fechaIngresoProducto, fechaSalidaProducto,idCategoria, idProveedor )
-				values(p_nombreProducto, p_descripcionProducto, p_tallaProducto, p_marcaProducto, p_precioProducto, p_stockProducto, p_fechaIngresoProducto, p_fechaSalidaProducto, p_idCategoria, p_idProveedor);
+			insert into Productos(nombreProducto, descripcionProducto,url_imagen, tallaProducto, marcaProducto, precioProducto, stockProducto, fechaIngresoProducto, fechaSalidaProducto,idCategoria, idProveedor )
+				values(p_nombreProducto, p_descripcionProducto ,p_url_imagen, p_tallaProducto, p_marcaProducto, p_precioProducto, p_stockProducto, p_fechaIngresoProducto, p_fechaSalidaProducto, p_idCategoria, p_idProveedor);
 		end$$
 DELIMITER ;
-call sp_AgregarProducto('Zapatos', 'Calzado para su pie', '32', 'NIKE', 850, 40, '2006-12-08 12:00:00', '2006-12-07', 1, 1);
 
 -- ACTUALIZAR
 DELIMITER $$
@@ -494,6 +503,7 @@ DELIMITER $$
 				in p_idProducto int,
 				in p_nombreProducto varchar(128),
 				in p_descripcionProducto varchar(256),
+				in p_url_imagen varchar(255),
 				in p_tallaProducto varchar(8),
 				in p_marcaProducto varchar(64),
 				in p_precioProducto double,
@@ -505,6 +515,7 @@ DELIMITER $$
 				set
 					nombreProducto= p_nombreProducto  ,
 					descripcionProducto  = p_descripcionProducto,
+                    url_imagen = p_url_imagen,
                     tallaProducto = p_tallaProducto,
                     marcaProducto =p_marcaProducto,
                     precioProducto = p_precioProducto,
@@ -628,7 +639,6 @@ DELIMITER $$
 				values(p_idCompra, p_idProducto, p_cantidadProducto, p_subtotal);
 		end$$
 DELIMITER ;
-call sp_AgregarCarrito(1,1,35,999);
 
 -- ACTUALIZAR
 DELIMITER $$
@@ -724,3 +734,193 @@ DELIMITER $$
 				where idFactura = p_idFactura;
 		end$$
 DELIMITER ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- Insertar categorías
+DELIMITER $$
+CREATE PROCEDURE sp_InsertarCategoriasIniciales()
+BEGIN
+    -- Categorías para Hombre
+    INSERT INTO Categorias(nombreCategoriaTipo, nombreCategoriaGenero, descripcionCategoria) 
+    VALUES ('casual', 'Hombre', 'Calzado casual para hombre');
+    
+    INSERT INTO Categorias(nombreCategoriaTipo, nombreCategoriaGenero, descripcionCategoria) 
+    VALUES ('deportivo', 'Hombre', 'Calzado deportivo para hombre');
+    
+    -- Categorías para Mujer
+    INSERT INTO Categorias(nombreCategoriaTipo, nombreCategoriaGenero, descripcionCategoria) 
+    VALUES ('casual', 'Mujer', 'Calzado casual para mujer');
+    
+    INSERT INTO Categorias(nombreCategoriaTipo, nombreCategoriaGenero, descripcionCategoria) 
+    VALUES ('deportivo', 'Mujer', 'Calzado deportivo para mujer');
+    
+    -- Categorías Unisex
+    INSERT INTO Categorias(nombreCategoriaTipo, nombreCategoriaGenero, descripcionCategoria) 
+    VALUES ('casual', 'Unisex', 'Calzado casual unisex');
+    
+    INSERT INTO Categorias(nombreCategoriaTipo, nombreCategoriaGenero, descripcionCategoria) 
+    VALUES ('deportivo', 'Unisex', 'Calzado deportivo unisex');
+END$$
+DELIMITER ;
+
+-- Insertar proveedores
+DELIMITER $$
+CREATE PROCEDURE sp_InsertarProveedoresIniciales()
+BEGIN
+    INSERT INTO Proveedores(nombreProveedor, correoProveedor, telefonoProveedor, direccionProveedor)
+    VALUES ('Nike', 'contacto@nike.com', '1234567890', 'Oregon, USA');
+    
+    INSERT INTO Proveedores(nombreProveedor, correoProveedor, telefonoProveedor, direccionProveedor)
+    VALUES ('Adidas', 'contacto@adidas.com', '0987654321', 'Herzogenaurach, Alemania');
+    
+    INSERT INTO Proveedores(nombreProveedor, correoProveedor, telefonoProveedor, direccionProveedor)
+    VALUES ('Puma', 'contacto@puma.com', '1122334455', 'Herzogenaurach, Alemania');
+END$$
+DELIMITER ;
+
+-- Insertar productos iniciales
+DELIMITER $$
+CREATE PROCEDURE sp_InsertarProductosIniciales()
+BEGIN
+    -- Obtener IDs de categorías y proveedores
+    DECLARE cat_hombre_casual INT;
+    DECLARE cat_hombre_deportivo INT;
+    DECLARE cat_mujer_casual INT;
+    DECLARE cat_mujer_deportivo INT;
+    DECLARE cat_unisex_casual INT;
+    DECLARE cat_unisex_deportivo INT;
+    
+    DECLARE prov_nike INT;
+    DECLARE prov_adidas INT;
+    DECLARE prov_puma INT;
+    
+    SELECT idCategoria INTO cat_hombre_casual FROM Categorias 
+    WHERE nombreCategoriaTipo = 'casual' AND nombreCategoriaGenero = 'Hombre' LIMIT 1;
+    
+    SELECT idCategoria INTO cat_hombre_deportivo FROM Categorias 
+    WHERE nombreCategoriaTipo = 'deportivo' AND nombreCategoriaGenero = 'Hombre' LIMIT 1;
+    
+    SELECT idCategoria INTO cat_mujer_casual FROM Categorias 
+    WHERE nombreCategoriaTipo = 'casual' AND nombreCategoriaGenero = 'Mujer' LIMIT 1;
+    
+    SELECT idCategoria INTO cat_mujer_deportivo FROM Categorias 
+    WHERE nombreCategoriaTipo = 'deportivo' AND nombreCategoriaGenero = 'Mujer' LIMIT 1;
+    
+    SELECT idCategoria INTO cat_unisex_casual FROM Categorias 
+    WHERE nombreCategoriaTipo = 'casual' AND nombreCategoriaGenero = 'Unisex' LIMIT 1;
+    
+    SELECT idCategoria INTO cat_unisex_deportivo FROM Categorias 
+    WHERE nombreCategoriaTipo = 'deportivo' AND nombreCategoriaGenero = 'Unisex' LIMIT 1;
+    
+    SELECT idProveedor INTO prov_nike FROM Proveedores WHERE nombreProveedor = 'Nike' LIMIT 1;
+    SELECT idProveedor INTO prov_adidas FROM Proveedores WHERE nombreProveedor = 'Adidas' LIMIT 1;
+    SELECT idProveedor INTO prov_puma FROM Proveedores WHERE nombreProveedor = 'Puma' LIMIT 1;
+    
+    -- Insertar productos
+    -- Producto 1
+    INSERT INTO Productos(nombreProducto, descripcionProducto, url_imagen, tallaProducto, marcaProducto, precioProducto, stockProducto, fechaIngresoProducto, idCategoria, idProveedor)
+    VALUES ('Handball Spezial', 'Tenis de running Supernova Rise 2', 'https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/1fa18f47b66e4f4980ba74d48de04ecc_9366/Handball_Spezial_Shoes_Blue_IF7087_01_standard.jpg', '42', 'Adidas', 1325.00, 50, NOW(), cat_hombre_deportivo, prov_adidas);
+    
+    -- Producto 2
+    INSERT INTO Productos(nombreProducto, descripcionProducto, url_imagen, tallaProducto, marcaProducto, precioProducto, stockProducto, fechaIngresoProducto, idCategoria, idProveedor)
+    VALUES ('Campus 00s', 'Tenis Supernova Rise 2 Running', 'https://assets.adidas.com/images/h_2000,f_auto,q_auto,fl_lossy,c_fill,g_auto/4659ee058ba34bd2a5d0af500104c17d_9366/Campus_00s_Shoes_Black_HQ8708_01_standard.jpg', '40', 'Adidas', 1340.00, 45, NOW(), cat_hombre_casual, prov_adidas);
+    
+    -- Producto 3
+    INSERT INTO Productos(nombreProducto, descripcionProducto, url_imagen, tallaProducto, marcaProducto, precioProducto, stockProducto, fechaIngresoProducto, idCategoria, idProveedor)
+    VALUES ('Air Jordan 4 Retro', 'Tenis Supernova Ease', 'https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/540653a2-a2aa-4e3a-8c33-6451f258946c/AIR+JORDAN+4+RETRO.png', '41', 'Nike', 960.00, 60, NOW(), cat_hombre_casual, prov_nike);
+    
+    -- Continuar con los demás productos...
+    -- Producto 4
+    INSERT INTO Productos(nombreProducto, descripcionProducto, url_imagen, tallaProducto, marcaProducto, precioProducto, stockProducto, fechaIngresoProducto, idCategoria, idProveedor)
+    VALUES ('Air Force 1', 'Tenis Supernova Ease', 'https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/4f37fca8-6bce-43e7-ad07-f57ae3c13142/AIR+FORCE+1+%2707.png', '39', 'Nike', 960.00, 55, NOW(), cat_hombre_casual, prov_nike);
+    
+    -- Producto 5
+    INSERT INTO Productos(nombreProducto, descripcionProducto, url_imagen, tallaProducto, marcaProducto, precioProducto, stockProducto, fechaIngresoProducto, idCategoria, idProveedor)
+    VALUES ('Nike Dunk Low Retro', 'Supernova Rise 2 W', 'https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/0f76f73e-2578-4d62-abab-c5563ea4f78c/NIKE+DUNK+LOW+RETRO.png', '38', 'Nike', 1340.00, 40, NOW(), cat_mujer_casual, prov_nike);
+    
+    -- Producto 6
+    INSERT INTO Productos(nombreProducto, descripcionProducto, url_imagen, tallaProducto, marcaProducto, precioProducto, stockProducto, fechaIngresoProducto, idCategoria, idProveedor)
+    VALUES ('Nike Ava Rover', 'Tenis Supernova Surge', 'https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/fe01cb61-0753-4143-accd-b7c654600021/NIKE+AVA+ROVER.png', '37', 'Nike', 1055.00, 65, NOW(), cat_mujer_deportivo, prov_nike);
+    
+    -- Continuar con el resto de productos...
+END$$
+DELIMITER ;
+
+-- Ejecutar los procedimientos para insertar datos iniciales
+CALL sp_InsertarCategoriasIniciales();
+CALL sp_InsertarProveedoresIniciales();
+CALL sp_InsertarProductosIniciales();
+
+
+-- Obtener todos los productos para menú principal
+DELIMITER $$
+CREATE PROCEDURE sp_ObtenerProductosParaMenuPrincipal()
+BEGIN
+    SELECT 
+        p.idProducto,
+        p.nombreProducto,
+        p.descripcionProducto,
+        p.url_imagen,
+        p.precioProducto,
+        c.nombreCategoriaGenero AS genero
+    FROM Productos p
+    JOIN Categorias c ON p.idCategoria = c.idCategoria
+    ORDER BY p.nombreProducto;
+END$$
+DELIMITER ;
+
+-- Obtener productos para menú administrativo
+DELIMITER $$
+CREATE PROCEDURE sp_ObtenerProductosParaMenuAdministrativo()
+BEGIN
+    SELECT 
+        p.idProducto,
+        p.nombreProducto,
+        p.descripcionProducto,
+        p.url_imagen,
+        p.precioProducto,
+        p.stockProducto,
+        c.nombreCategoriaGenero AS genero,
+        c.nombreCategoriaTipo AS tipo,
+        pr.nombreProveedor
+    FROM Productos p
+    JOIN Categorias c ON p.idCategoria = c.idCategoria
+    JOIN Proveedores pr ON p.idProveedor = pr.idProveedor
+    ORDER BY p.nombreProducto;
+END$$
+DELIMITER ;
+
