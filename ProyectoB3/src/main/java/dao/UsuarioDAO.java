@@ -51,4 +51,18 @@ public class UsuarioDAO {
             em.close();
         }
     }
+    
+     public void eliminarUsuario(int idUsuario) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Usuario usuario = em.find(Usuario.class, idUsuario);
+            if (usuario != null) {
+                em.remove(usuario);
+            }
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
 }
