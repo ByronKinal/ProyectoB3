@@ -1,0 +1,58 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #eceeef; /* Fondo más suave */
+}
+
+.button-container {
+    display: flex;
+    gap: 30px;
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 8px 24px rgba(4, 5, 5, 0.08); /* Sombra más suave */
+}
+
+.menu-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 200px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(6, 36, 76, 0.1); /* Sombra azulada sutil */
+    text-decoration: none;
+    color: #06244c; /* Texto azul oscuro */
+    transition: all 0.3s ease;
+    border: 1px solid rgba(84, 101, 122, 0.1); /* Borde sutil */
+}
+
+.menu-button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(225, 28, 58, 0.15); /* Sombra rojiza al hover */
+    color: #e11c3a; /* Texto rojo al hover */
+    border-color: rgba(225, 28, 58, 0.2); /* Borde rojizo al hover */
+}
+
+.material-symbols-outlined {
+    font-size: 64px;
+    margin-bottom: 15px;
+    color: #54657a; /* Color azul grisáceo para los íconos */
+    transition: color 0.3s ease;
+}
+
+.menu-button:hover .material-symbols-outlined {
+    color: #e11c3a; /* Rojo al hover */
+}
+
+.button-text {
+    font-size: 20px;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
