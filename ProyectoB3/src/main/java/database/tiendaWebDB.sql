@@ -1,4 +1,4 @@
- drop database if exists tiendaWebDB;
+drop database if exists tiendaWebDB;
 create database tiendaWebDB;
 use tiendaWebDB;
 
@@ -12,6 +12,7 @@ create table Usuarios(
     correoUsuario varchar(256) unique,
     contrasenaUsuario varchar(256),
     rolUsuario ENUM('Empleado','Cliente') default 'Cliente',
+	estadoUsuario enum('ACTIVO','SUSPENDIDO') default 'ACTIVO',
     constraint pk_usuarios primary key (idUsuario)
 );
 
@@ -66,6 +67,7 @@ create table Productos(
 	stockProducto int not null,
     fechaIngresoProducto timestamp,
     fechaSalidaProducto timestamp,
+	estadoProdducto enum('ACTIVO','SUSPENDIDO') default 'ACTIVO',
     idCategoria int,
 	idProveedor int,
     constraint pk_productos primary key (idProducto),
@@ -128,7 +130,8 @@ DELIMITER $$
             telefonoUsuario as TELEFONO,
 			correoUsuario as CORREO,
 			contrasenaUsuario as CONTRASEÑA,
-			rolUsuario as ROL
+			rolUsuario as ROL,
+			estadoUsuario as ESTADO
 			from Usuarios;
 		end$$
 	
@@ -144,14 +147,15 @@ DELIMITER $$
 			in p_telefonoUsuario varchar(32),
 			in p_correoUsuario varchar(256) ,
 			in p_contrasenaUsuario varchar(256),
-			in p_rolUsuario ENUM('Empleado','Cliente'))
+			in p_rolUsuario ENUM('Empleado','Cliente'),
+			in p_estadoUsuario enum('ACTIVO','SUSPENDIDO') )
 		begin
-			insert into Usuarios(nombreUsuario , apellidoUsuario , fechaNacimiento,  generoUsuario , telefonoUsuario, correoUsuario, contrasenaUsuario, rolUsuario)
-				values(p_nombreUsuario , p_apellidoUsuario , p_fechaNacimiento, p_generoUsuario, p_telefonoUsuario, p_correoUsuario, p_contrasenaUsuario, p_rolUsuario);
+			insert into Usuarios(nombreUsuario , apellidoUsuario , fechaNacimiento,  generoUsuario , telefonoUsuario, correoUsuario, contrasenaUsuario, rolUsuario, estadoUsuario)
+				values(p_nombreUsuario , p_apellidoUsuario , p_fechaNacimiento, p_generoUsuario, p_telefonoUsuario, p_correoUsuario, p_contrasenaUsuario, p_rolUsuario, p_estadoUsuario);
 		end$$
 	
 DELIMITER ;
-call sp_AgregarUsuario('Lucía','Ramírez','2000-04-10','FEMENINO',  '3214567890','a','a','Cliente');
+call sp_AgregarUsuario('Lucía','Ramírez','2000-04-10','FEMENINO',  '3214567890','a','a','Cliente','ACTIVO');
 call sp_ListarUsuarios();
 
 -- ACTUALIZAR
@@ -165,7 +169,8 @@ DELIMITER $$
 			in p_telefonoUsuario varchar(32),
 			in p_correoUsuario varchar(256) ,
 			in p_contrasenaUsuario varchar(256),
-			in p_rolUsuario ENUM('Empleado','Cliente'))
+			in p_rolUsuario ENUM('Empleado','Cliente'),
+            in p_estadoUsuario enum('ACTIVO','SUSPENDIDO'))
 		begin
 			update Usuarios
 				set
@@ -176,7 +181,8 @@ DELIMITER $$
                     telefonoUsuario = p_telefonoUsuario,
                     correoUsuario = p_correoUsuario,
                     contrasenaUsuario = p_contrasenaUsuario,
-                    rolUsuario = p_rolUsuario
+                    rolUsuario = p_rolUsuario,
+                    estadoUsuario = p_estadoUsuario
 				where 
 					p_idUsuario = idUsuario ;
 			
@@ -470,6 +476,7 @@ DELIMITER $$
             stockProducto as STOCK,
             fechaIngresoProducto as FECHA_INGRESO,
             fechaSalidaProducto as FECHA_SALIDA,
+            estadoProducto as ESTADO,
             idCategoria as CATEGORIA,
             idProveedor as PROVEEDOR
 			from Productos;
@@ -489,11 +496,12 @@ DELIMITER $$
 			in p_stockProducto int,
             in p_fechaIngresoProducto datetime,
 			in p_fechaSalidaProducto date,
+            in p_estadoProducto enum('ACTIVO','SUSPENDIDO'),
 			in p_idCategoria int,
 			in p_idProveedor int)
 		begin
-			insert into Productos(nombreProducto, descripcionProducto,url_imagen, tallaProducto, marcaProducto, precioProducto, stockProducto, fechaIngresoProducto, fechaSalidaProducto,idCategoria, idProveedor )
-				values(p_nombreProducto, p_descripcionProducto ,p_url_imagen, p_tallaProducto, p_marcaProducto, p_precioProducto, p_stockProducto, p_fechaIngresoProducto, p_fechaSalidaProducto, p_idCategoria, p_idProveedor);
+			insert into Productos(nombreProducto, descripcionProducto,url_imagen, tallaProducto, marcaProducto, precioProducto, stockProducto, fechaIngresoProducto, fechaSalidaProducto, estadoProducto, idCategoria, idProveedor )
+				values(p_nombreProducto, p_descripcionProducto ,p_url_imagen, p_tallaProducto, p_marcaProducto, p_precioProducto, p_stockProducto, p_fechaIngresoProducto, p_fechaSalidaProducto, p_estadoProducto, p_idCategoria, p_idProveedor);
 		end$$
 DELIMITER ;
 
@@ -508,6 +516,7 @@ DELIMITER $$
 				in p_marcaProducto varchar(64),
 				in p_precioProducto double,
 				in p_stockProducto int,
+				in p_estadoProducto enum('ACTIVO','SUSPENDIDO'),
 				in p_idCategoria int,
 				in p_idProveedor int)
 		begin
@@ -520,6 +529,7 @@ DELIMITER $$
                     marcaProducto =p_marcaProducto,
                     precioProducto = p_precioProducto,
                     stockProducto = p_stockProducto ,
+                    estadoProducto =p_estadoProducto,
                     idCategoria = p_idCategoria,
                     idProveedor= p_idProveedor
 				where 
@@ -922,5 +932,4 @@ BEGIN
     JOIN Proveedores pr ON p.idProveedor = pr.idProveedor
     ORDER BY p.nombreProducto;
 END$$
-DELIMITER ;
-
+DELIMITER ;  

@@ -24,31 +24,26 @@ public class Compra {
     @Column(name = "estadoCompra")
     private String estadoCompra;
 
-    @Column(name = "estadoPago")
-    private String estadoPago;
-
     @Column(name = "fechaCompra")
     private Timestamp fechaCompra;
 
-    @Column(name = "idCliente")
-    private int idCliente;
+    @Column(name = "idUsuario")
+    private int idUsuario;
 
     public Compra() {
     }
 
-    public Compra(int idCompra, String estadoCompra, String estadoPago, Timestamp fechaCompra, int idCliente) {
+    public Compra(int idCompra, String estadoCompra, Timestamp fechaCompra, int idUsuario) {
         this.idCompra = idCompra;
         this.estadoCompra = estadoCompra;
-        this.estadoPago = estadoPago;
         this.fechaCompra = fechaCompra;
-        this.idCliente = idCliente;
+        this.idUsuario = idUsuario;
     }
 
-    public Compra(String estadoCompra, String estadoPago, Timestamp fechaCompra, int idCliente) {
+    public Compra(String estadoCompra, Timestamp fechaCompra, int idUsuario) {
         this.estadoCompra = estadoCompra;
-        this.estadoPago = estadoPago;
         this.fechaCompra = fechaCompra;
-        this.idCliente = idCliente;
+        this.idUsuario = idUsuario;
     }
 
     public int getIdCompra() {
@@ -67,13 +62,6 @@ public class Compra {
         this.estadoCompra = estadoCompra;
     }
 
-    public String getEstadoPago() {
-        return estadoPago;
-    }
-
-    public void setEstadoPago(String estadoPago) {
-        this.estadoPago = estadoPago;
-    }
 
     public Timestamp getFechaCompra() {
         return fechaCompra;
@@ -83,11 +71,11 @@ public class Compra {
         this.fechaCompra = fechaCompra;
     }
 
-    public int getIdCliente() {
-        return idCliente;
+    public int getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setIdCliente(int idCliente) {
-        this.idCliente = idCliente;
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 }
