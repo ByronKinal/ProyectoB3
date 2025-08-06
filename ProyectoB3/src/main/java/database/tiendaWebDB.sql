@@ -12,6 +12,7 @@ create table Usuarios(
     correoUsuario varchar(256) unique,
     contrasenaUsuario varchar(256),
     rolUsuario ENUM('Empleado','Cliente') default 'Cliente',
+	estadoUsuario enum('ACTIVO','SUSPENDIDO') default 'ACTIVO',
     constraint pk_usuarios primary key (idUsuario)
 );
 
@@ -65,6 +66,7 @@ create table Productos(
 	stockProducto int not null,
     fechaIngresoProducto timestamp,
     fechaSalidaProducto timestamp,
+	estadoProdducto enum('ACTIVO','SUSPENDIDO') default 'ACTIVO',
     idCategoria int,
 	idProveedor int,
     constraint pk_productos primary key (idProducto),
@@ -90,7 +92,7 @@ create table Carritos( -- DetalleCompra
 	idCompra int not null,
     idProducto int not null,
     cantidadProducto int not null,
-    subtotal double not null,
+    subtotal double,
     constraint pk_detallecompras primary key (idCompra, idProducto),
     constraint fk_detalle_compras_compras foreign key (idCompra)
 		references Compras(idCompra) on delete cascade,
@@ -123,7 +125,8 @@ DELIMITER $$
             telefonoUsuario as TELEFONO,
 			correoUsuario as CORREO,
 			contrasenaUsuario as CONTRASEÑA,
-			rolUsuario as ROL
+			rolUsuario as ROL,
+			estadoUsuario as ESTADO
 			from Usuarios;
 		end$$
 	
@@ -139,13 +142,14 @@ DELIMITER $$
 			in p_telefonoUsuario varchar(32),
 			in p_correoUsuario varchar(256) ,
 			in p_contrasenaUsuario varchar(256),
-			in p_rolUsuario ENUM('Empleado','Cliente'))
+			in p_rolUsuario ENUM('Empleado','Cliente'),
+			in p_estadoUsuario enum('ACTIVO','SUSPENDIDO') )
 		begin
-			insert into Usuarios(nombreUsuario , apellidoUsuario , fechaNacimiento,  generoUsuario , telefonoUsuario, correoUsuario, contrasenaUsuario, rolUsuario)
-				values(p_nombreUsuario , p_apellidoUsuario , p_fechaNacimiento, p_generoUsuario, p_telefonoUsuario, p_correoUsuario, p_contrasenaUsuario, p_rolUsuario);
+			insert into Usuarios(nombreUsuario , apellidoUsuario , fechaNacimiento,  generoUsuario , telefonoUsuario, correoUsuario, contrasenaUsuario, rolUsuario, estadoUsuario)
+				values(p_nombreUsuario , p_apellidoUsuario , p_fechaNacimiento, p_generoUsuario, p_telefonoUsuario, p_correoUsuario, p_contrasenaUsuario, p_rolUsuario, p_estadoUsuario);
 		end$$
 DELIMITER ;
-call sp_AgregarUsuario('Lucía','Ramírez','2000-04-10','FEMENINO',  '3214567890','a','a','Cliente');
+call sp_AgregarUsuario('Lucía','Ramírez','2000-04-10','FEMENINO',  '3214567890','a','a','Cliente','ACTIVO');
 call sp_ListarUsuarios();
 
 -- ACTUALIZAR
@@ -159,7 +163,8 @@ DELIMITER $$
 			in p_telefonoUsuario varchar(32),
 			in p_correoUsuario varchar(256) ,
 			in p_contrasenaUsuario varchar(256),
-			in p_rolUsuario ENUM('Empleado','Cliente'))
+			in p_rolUsuario ENUM('Empleado','Cliente'),
+            in p_estadoUsuario enum('ACTIVO','SUSPENDIDO'))
 		begin
 			update Usuarios
 				set
@@ -170,7 +175,8 @@ DELIMITER $$
                     telefonoUsuario = p_telefonoUsuario,
                     correoUsuario = p_correoUsuario,
                     contrasenaUsuario = p_contrasenaUsuario,
-                    rolUsuario = p_rolUsuario
+                    rolUsuario = p_rolUsuario,
+                    estadoUsuario = p_estadoUsuario
 				where 
 					p_idUsuario = idUsuario ;
 			
@@ -440,6 +446,7 @@ DELIMITER $$
             stockProducto as STOCK,
             fechaIngresoProducto as FECHA_INGRESO,
             fechaSalidaProducto as FECHA_SALIDA,
+            estadoProdducto as ESTADO,
             idCategoria as CATEGORIA,
             idProveedor as PROVEEDOR
 			from Productos;
@@ -459,11 +466,12 @@ DELIMITER $$
 			in p_stockProducto int,
             in p_fechaIngresoProducto datetime,
 			in p_fechaSalidaProducto date,
+            in p_estadoProducto enum('ACTIVO','SUSPENDIDO'),
 			in p_idCategoria int,
 			in p_idProveedor int)
 		begin
-			insert into Productos(nombreProducto, descripcionProducto,url_imagen, tallaProducto, marcaProducto, precioProducto, stockProducto, fechaIngresoProducto, fechaSalidaProducto,idCategoria, idProveedor )
-				values(p_nombreProducto, p_descripcionProducto ,p_url_imagen, p_tallaProducto, p_marcaProducto, p_precioProducto, p_stockProducto, p_fechaIngresoProducto, p_fechaSalidaProducto, p_idCategoria, p_idProveedor);
+			insert into Productos(nombreProducto, descripcionProducto,url_imagen, tallaProducto, marcaProducto, precioProducto, stockProducto, fechaIngresoProducto, fechaSalidaProducto, estadoProdducto, idCategoria, idProveedor )
+				values(p_nombreProducto, p_descripcionProducto ,p_url_imagen, p_tallaProducto, p_marcaProducto, p_precioProducto, p_stockProducto, p_fechaIngresoProducto, p_fechaSalidaProducto, p_estadoProducto, p_idCategoria, p_idProveedor);
 		end$$
 DELIMITER ;
 
@@ -478,6 +486,7 @@ DELIMITER $$
 				in p_marcaProducto varchar(64),
 				in p_precioProducto double,
 				in p_stockProducto int,
+				in p_estadoProducto enum('ACTIVO','SUSPENDIDO'),
 				in p_idCategoria int,
 				in p_idProveedor int)
 		begin
@@ -489,12 +498,27 @@ DELIMITER $$
                     tallaProducto = p_tallaProducto,
                     marcaProducto =p_marcaProducto,
                     precioProducto = p_precioProducto,
-                    stockProducto = p_stockProducto ,
+                    stockProducto = p_stockProducto,
                     idCategoria = p_idCategoria,
                     idProveedor= p_idProveedor
 				where 
 					p_idProducto = idProducto;
-			
+		end$$
+DELIMITER ;
+
+-- ACTUALIZAR SALIDA PRODUCTO
+DELIMITER $$
+	create procedure sp_ActualizarProductoSalida(
+				in p_id int,
+				in p_salida timestamp,
+                in p_estado varchar(16))
+		begin
+			update Productos
+				set
+					fechaSalidaProducto = p_Salida,
+                    estadoProdducto =  p_estado
+				where 
+					p_id = idProducto;
 		end$$
 DELIMITER ;
 
@@ -587,11 +611,10 @@ DELIMITER $$
 	create procedure sp_AgregarCarrito(
 			in p_idCompra int,
 			in p_idProducto int,
-			in p_cantidadProducto int ,
-			in p_subtotal double)
+			in p_cantidadProducto int)
 		begin
-			insert into Carritos(idCompra, idProducto, cantidadProducto, subtotal)
-				values(p_idCompra, p_idProducto, p_cantidadProducto, p_subtotal);
+			insert into Carritos(idCompra, idProducto, cantidadProducto)
+				values(p_idCompra, p_idProducto, p_cantidadProducto);
 		end$$
 DELIMITER ;
 
@@ -841,3 +864,136 @@ BEGIN
     ORDER BY p.nombreProducto;
 END$$
 DELIMITER ;
+
+CALL sp_AgregarProveedor('Nike', '@nike.com', '+50212345678', 'Av. Reforma 123, Ciudad de Guatemala');
+CALL sp_AgregarProveedor('Timberland', 'info@timberland.com', '+50223456789', 'Calle Principal 456, Zona 10');
+CALL sp_AgregarProveedor('Crocs', 'ventas@crocs.com', '+50234567890', 'Boulevard Los Próceres 789, Zona 14');
+CALL sp_AgregarProveedor('Clarks', 'soporte@clarks.com', '+50245678901', '5ta Avenida 101, Mixco');
+
+
+
+-- ------------------------------------- TRIGGERS -----------------------------------------
+-- ROGER VALLADARES
+
+-- Agregar Subtotal
+delimiter $$
+	create trigger tr_CalcularSubtotal_Before_Insert
+	before insert
+	on carritos
+	for each row
+	begin
+		declare v_precio double;
+		select precioProducto into v_precio
+		from productos
+		where idProducto = new.idProducto;
+		set new.subtotal = new.cantidadProducto * v_precio;
+	end $$
+delimiter ;
+
+-- Actualización Stock
+delimiter $$
+	create trigger tr_RestarStock_After_Insert
+    after insert
+    on carritos
+    for each row
+		begin
+			declare stock int;
+            select P.stockProducto into stock
+            from Productos P where P.idProducto = new.idProducto;
+			if (new.cantidadProducto > stock) then
+				signal sqlstate '45000'
+                set message_text = 'No hay suficientes productos';
+            else
+				update Productos P
+					set P.stockProducto = stock - new.cantidadProducto
+					where P.idProducto = new.idProducto;
+			end if;
+        end $$
+delimiter ;
+
+-- Devolver Stock 
+delimiter $$
+	create trigger tr_sumarstock_after_update
+	after update on compras
+	for each row
+		begin
+			declare done int default false;
+			declare v_idproducto int;
+			declare v_cantidadproducto int;
+			declare cur cursor for
+				select idproducto, cantidadproducto
+				from carritos
+				where idcompra = new.idcompra;
+			declare continue handler for not found set done = true;
+            
+			if new.estadocompra = 'Cancelada' then
+				open cur;
+				read_loop: loop
+					fetch cur into v_idproducto, v_cantidadproducto;
+					if done then
+						leave read_loop;
+					end if;
+					update productos
+					set stockproducto = stockproducto + v_cantidadproducto
+					where idproducto = v_idproducto;
+				end loop;
+				close cur;
+			end if;
+		end$$
+delimiter ;
+
+-- Cambiar Fecha de Ingreso
+delimiter $$
+	create trigger tr_CambioFechaIngreso_Before_Update
+	before update
+	on productos
+	for each row
+		begin
+			if old.stockProducto != new.stockProducto then
+				set new.fechaIngresoProducto = now();
+			end if;
+		end $$
+delimiter ;
+
+-- Cuando se complete un pago Completar una compra
+delimiter $$
+	create trigger tr_actualizarEstadoCompra_After_Insert
+	after insert 
+	on pagos
+	for each row
+	begin
+		if new.estadoPago = 'Pagado' then
+			update compras
+			set estadoCompra = 'Completada'
+			where idCompra = new.idCompra;
+		end if;
+	end $$
+delimiter ;
+
+-- Actualizar la fecha de salida
+delimiter $$
+	create trigger tr_actualizarFechaSalida_Before_Update
+	before update on productos
+	for each row
+	begin
+		if new.stockProducto = 0 and old.fechaSalidaProducto is null then
+			set new.fechaSalidaProducto = now();
+		end if;
+	end $$
+delimiter ;
+
+-- Generacion de Factura
+delimiter $$
+	create trigger tr_crear_factura_after_pago
+	after insert on pagos
+	for each row
+	begin
+		declare v_total double;
+		if (new.estadoPago = 'Pagado') then
+			select sum(subtotal) into v_total
+			from carritos
+			where idCompra = new.idCompra;
+			call sp_AgregarFactura(now(), v_total, new.metodoPago, new.idCompra);
+		end if;
+	end $$
+delimiter ;
