@@ -27,10 +27,10 @@
             <div class="espaciador"></div>
 
             <div class="iconos">
-                <a href="InicioDeSesion.jsp" id="btnSesion" class="btn-sesion">
+                <a href="detalleUsuario.jsp" id="btnSesion" class="btn-sesion">
                     <img class="iconos" src="https://i.postimg.cc/4dv7Qhxn/person-40dp-000000-FILL0-wght400-GRAD0-opsz40.png" alt="login"/>
                 </a>
-                <a href="" id="btnCarrito" class="btn-carrito">
+                <a href="Carrito.jsp" id="btnCarrito" class="btn-carrito">
                     <img style=" margin-right: 40px "class="iconos" src="https://i.postimg.cc/XJxNvKvK/shopping-cart-35dp-000000-FILL0-wght400-GRAD0-opsz40.png "  alt="carrito"/>
                 </a>
             </div>
@@ -68,6 +68,7 @@
         </div>
 
         <div class="galeria">
+
             <%
                 ProductoDAO productoDAO = new ProductoDAO();
                 String genero = request.getParameter("genero");

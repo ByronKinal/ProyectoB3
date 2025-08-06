@@ -1,5 +1,6 @@
 package controller;
 
+import dao.CompraDAO;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -19,7 +20,7 @@ public class ServletListarCompra {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        List<Compra> listarCompras = compraDao.listarTodos();  // ← Asegúrate que este método existe
+        List<Compra> listarCompras = compraDao.listarCompras();  // ← Asegúrate que este método existe
         request.setAttribute("Clientes", listarCompras);
         request.getRequestDispatcher("listarCompras.jsp").forward(request, response);
     }

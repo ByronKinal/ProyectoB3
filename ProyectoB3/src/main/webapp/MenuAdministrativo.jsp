@@ -9,6 +9,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Menú Administrativo</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
         <link rel="stylesheet" href="StyleAdministrativo.css">
     </head>
     <body>
@@ -25,6 +26,7 @@
             <div class="alert alert-${tipoMensaje} alert-dismissible fade show" role="alert">
                 ${mensaje}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
             </div>
         </c:if>
 

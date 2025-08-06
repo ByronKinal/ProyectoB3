@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dao.CompraDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -11,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Compra;
 
 /**
  *
@@ -24,7 +26,7 @@ public class ServletEditarCompra extends HttpServlet {
         int idCompra = Integer.parseInt(request.getParameter("id"));
         
         CompraDAO productoDAO = new CompraDAO();
-        Compra compra = productoDAO.obtenerCompraCompletoPorId(idCompra);
+        Compra compra = productoDAO.obtenerCompraPorId(idCompra);
         
         if (compra == null) {
             request.getSession().setAttribute("mensaje", "Compra no encontrado");

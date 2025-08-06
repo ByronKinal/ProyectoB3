@@ -1,5 +1,6 @@
 package controller;
 
+import dao.CategoriaDAO;
 import dao.ProveedorDAO;
 import java.io.IOException;
 import javax.servlet.ServletException;

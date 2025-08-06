@@ -1,0 +1,219 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    background-color: #fff;
+}
+
+
+.linea-superior {
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 8px 0;
+    font-weight: bold;
+
+}
+
+#btnSesion {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: inherit;
+}
+
+.barra-superior {
+    text-decoration: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.logo img {
+    height: 50px;
+}
+
+.espaciador {
+    flex: 1;
+}
+
+.buscador {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+.buscador input {
+    border: none;
+    outline: none;
+    padding: 5px;
+}
+
+.iconos {
+    display: flex;
+    gap: 15px;
+}
+
+.iconos button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* Breadcrumb */
+.breadcrumb-nav {
+    margin-left: 20px;
+    padding: 15px 20px;
+    font-size: 14px;
+    color: #666;
+}
+
+.breadcrumb-nav a {
+    color: #666;
+    text-decoration: none;
+}
+
+/* Control básico de imágenes */
+.imagen-principal img {
+    max-width: 400px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.imagen-mini {
+    width: 60px;
+    height: 60px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.imagen-mini img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.imagen-mini.active {
+    border-color: #000;
+}
+
+.producto-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+/* Layout básico */
+.producto-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.imagenes-mini {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.productos-relacionados {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.productos-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.producto-card {
+    border: 1px solid #eee;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.card-info {
+    padding: 10px;
+}
+
+/* Selectores de talla y cantidad básicos */
+.tallas-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin: 10px 0;
+   
+}
+
+.talla-option {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.talla-option.selected {
+    background-color: #000;
+    color: #fff;
+}
+
+.talla-option.agotada {
+    background-color: #f5f5f5;
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+
+
+.cantidad-input {
+    width: 50px;
+    text-align: center;
+    border: 1px solid #ddd;
+    padding: 5px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+}
+
+/* Botones básicos */
+.btn-agregar-carrito {
+    width: 100%;
+    padding: 12px;
+    margin: 5px 0;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-agregar-carrito {
+    background-color: #000;
+    color: #fff;
+    border: none;
+    font-size: 16px;
+   margin-bottom: 20px;
+}
+
+
+
+.talla-option:hover{
+    color: #fff;
+    background-color: #000;
+}

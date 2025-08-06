@@ -32,7 +32,7 @@ public class CategoriaDAO {
         }
     }
     
-    public Categoria obtenerCategoriaPorId(int idCategoria) {
+    public Categoria obtenerProveedorPorId(int idCategoria) {
         EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<Categoria> query = em.createQuery(

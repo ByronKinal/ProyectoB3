@@ -54,7 +54,7 @@ public class Producto implements Serializable {
     private Categoria categoria;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idProveedor", referenc  edColumnName = "idProveedor", nullable = false)
+    @JoinColumn(name = "idProveedor", referencedColumnName = "idProveedor", nullable = false)
     private Proveedor proveedor;
 
     // Constructores

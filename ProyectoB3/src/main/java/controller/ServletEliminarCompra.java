@@ -1,5 +1,6 @@
 package controller;
 
+import dao.CompraDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -20,7 +21,7 @@ public class ServletEliminarCompra extends HttpServlet {
         int idCompra = Integer.parseInt(request.getParameter("id"));
         
         CompraDAO compraDAO = new CompraDAO();
-        compraDAO.eliminarProducto(idCompra);
+        compraDAO.eliminarCompra(idCompra);
         
         response.sendRedirect("MenuAdministrativo.jsp");
     }

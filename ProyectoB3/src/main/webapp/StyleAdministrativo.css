@@ -43,7 +43,8 @@ body {
 .info {
     background-color: #fff;
     padding: 10px;
-    margin-left: 30px;
+    text-align: center;
+    height: 40px;
 }
 
 
@@ -130,6 +131,11 @@ h1 {
     border-radius: 10px;
     font-size: 14px;
     cursor: pointer;
+    width: 25%;
+    transition: transform 0.3s, background-color 0.3s, color 0.3s;
+}
+
+#eliminar {
     width: 40%;
     transition: transform 0.3s, background-color 0.3s, color 0.3s;
 }
@@ -139,6 +145,7 @@ h1 {
     transition: transform 0.3s;
     width: 9%;
 }
+
 
 #agregar:hover {
     transform: scale(1.03);
