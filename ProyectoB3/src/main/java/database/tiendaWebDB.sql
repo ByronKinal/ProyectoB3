@@ -30,7 +30,6 @@ create table DetalleUsuarios(
 create table Compras(
 	idCompra int auto_increment,
     estadoCompra enum('Pendiente','Completada','Cancelada') default 'Pendiente',
-    estadoPago enum('Pendiente', 'Pagado')default'Pendiente',
     fechaCompra timestamp,
     idUsuario int,
     constraint pk_compras primary key (idCompra),
@@ -81,8 +80,8 @@ create table Productos(
 create table Pagos(
 	idPago int auto_increment,
     fechaPago timestamp,
+    estadoPago enum('Pendiente', 'Pagado')default'Pendiente',
 	metodoPago enum('Tarjeta'),
-	cantidadPago double not null,
     idCompra int not null,
     constraint pk_pagos primary key (idPago),
     constraint fk_pagos_compras foreign key (idCompra) 
@@ -111,10 +110,6 @@ create table Facturas(
 	constraint fk_facturas_compras foreign key (idCompra)
 		references Compras(idCompra) on delete cascade
 );
-
-
-
-
 
 -- CRUD Usuarios ---------------------------------------------------------------
 -- LISTAR
@@ -153,7 +148,6 @@ DELIMITER $$
 			insert into Usuarios(nombreUsuario , apellidoUsuario , fechaNacimiento,  generoUsuario , telefonoUsuario, correoUsuario, contrasenaUsuario, rolUsuario, estadoUsuario)
 				values(p_nombreUsuario , p_apellidoUsuario , p_fechaNacimiento, p_generoUsuario, p_telefonoUsuario, p_correoUsuario, p_contrasenaUsuario, p_rolUsuario, p_estadoUsuario);
 		end$$
-	
 DELIMITER ;
 call sp_AgregarUsuario('Lucía','Ramírez','2000-04-10','FEMENINO',  '3214567890','a','a','Cliente','ACTIVO');
 call sp_ListarUsuarios();
@@ -187,7 +181,6 @@ DELIMITER $$
 					p_idUsuario = idUsuario ;
 			
 		end$$
-	
 DELIMITER ;
 
 -- ELIMINAR
@@ -199,8 +192,6 @@ DELIMITER $$
 				where idUsuario  = p_idUsuario ;
 		end$$
 DELIMITER ;
-
-
 
 -- CRUD DetalleUsuarios ---------------------------------------------------------------
 -- LISTAR
@@ -228,7 +219,6 @@ DELIMITER $$
 			insert into DetalleUsuarios(direccionUsuario, puestoUsuario, salarioUsuario, idUsuario)
 				values(p_direccionUsuario, p_puestoUsuario, p_salarioUsuario,p_idUsuario);
 		end$$
-	
 DELIMITER ;
 call sp_AgregarDetalleUsuario('Zona 7 de capital', 'Administador',4200.00, 1);
 
@@ -265,8 +255,6 @@ DELIMITER $$
 	
 DELIMITER ;
 
-
-
 -- CRUD COMPRAS-------------------------------------------------------------
 -- LISTAR
 DELIMITER $$
@@ -275,41 +263,36 @@ DELIMITER $$
 			select 
 			idCompra   as ID,
 			estadoCompra as ESTADO_COMPRA,
-			estadoPago as ESTADO_PAGO,
             fechaCompra  as FECHA,
             idUsuario as USUARIO
 			from Compras;
 		end$$
-	
 DELIMITER ;
 
 -- AGREGAR
 DELIMITER $$
 	create procedure sp_AgregarCompra(
 			in p_estadoCompra enum('Pendiente','Completada','Cancelada'),
-			in p_estadoPago enum('Pendiente', 'Pagado'),
 			in p_fechaCompra timestamp,
             in p_idUsuario int)
 		begin
-			insert into Compras(estadoCompra , estadoPago, fechaCompra, idUsuario)
-				values(p_estadoCompra , p_estadoPago, p_fechaCompra , p_idUsuario);
+			insert into Compras(estadoCompra , fechaCompra, idUsuario)
+				values(p_estadoCompra , p_fechaCompra , p_idUsuario);
 		end$$
 DELIMITER ;
-call sp_AgregarCompra('Pendiente', 'Pendiente', current_timestamp(), 1);
+call sp_AgregarCompra('Pendiente', current_timestamp(), 1);
 
 -- ACTUALIZAR
 DELIMITER $$
 	create procedure sp_ActualizarCompra(
 				in p_idCompra int,
 				in p_estadoCompra enum('Pendiente','Completada','Cancelada'),
-				in p_estadoPago enum('Pendiente', 'Pagado'),
 				in p_fechaCompra timestamp ,
 				in p_idUsuario int)
 		begin
 			update Compras
 				set
 					estadoCompra = p_estadoCompra ,
-					estadoPago = p_estadoPago,
                     fechaCompra = p_fechaCompra,
                     idUsuario = p_idUsuario
 				where 
@@ -328,9 +311,6 @@ DELIMITER $$
 		end$$
 DELIMITER ;
 
-
-
-
 -- CRUD PROVEEDORES -------------------------------------------------------------
 -- LISTAR
 DELIMITER $$
@@ -345,7 +325,6 @@ DELIMITER $$
             estadoProveedor as ESTADO
 			from Proveedores;
 		end$$
-	
 DELIMITER ;
 
 -- AGREGAR
@@ -394,10 +373,6 @@ DELIMITER $$
 				where idProveedor = p_idProveedor;
 		end$$
 DELIMITER ;
-
-
-
-
 
 -- CRUD CATEGORIAS-------------------------------------------------------------
 -- LISTAR
@@ -454,11 +429,6 @@ DELIMITER $$
 				where idCategoria = p_idCategoria;
 		end$$
 DELIMITER ;
-
-
-
-
-
 
 -- CRUD PRODUCTOS-------------------------------------------------------------
 -- LISTAR
@@ -548,15 +518,6 @@ DELIMITER $$
 		end$$
 DELIMITER ;
 
-
-
-
-
-
-
-
-
-
 -- CRUD PAGOS-------------------------------------------------------------
 -- LISTAR
 DELIMITER $$
@@ -565,8 +526,8 @@ DELIMITER $$
 			select 
 			idPago    as ID,
 			fechaPago  as FECHA,
+            estadoPago as ESTADO_PAGO,
 			metodoPago  as METODO_PAGO,
-            cantidadPago  as CANTIDAD,
             idCompra as COMPRA
 			from Pagos;
 		end$$
@@ -578,29 +539,28 @@ DELIMITER $$
 	create procedure sp_AgregarPago(
 			in p_fechaPago datetime ,
 			in p_metodoPago enum('Tarjeta'),
-			in p_cantidadPago double ,
 			in p_idCompra int )
 		begin
-			insert into Pagos(fechaPago, metodoPago, cantidadPago, idCompra)
-				values(p_fechaPago, p_metodoPago, p_cantidadPago, p_idCompra);
+			insert into Pagos(fechaPago, metodoPago, idCompra)
+				values(p_fechaPago, p_metodoPago, p_idCompra);
 		end$$
 DELIMITER ;
-call sp_AgregarPago('2025-09-21 20:30:00', 'Tarjeta', 500.00, 1);
+ call sp_AgregarPago('2025-09-21 20:30:00', 'Tarjeta', 1);
 
 -- ACTUALIZAR
 DELIMITER $$
 	create procedure sp_ActualizarPago(
 				in p_idPago int,
 				in p_fechaPago datetime ,
+                in p_estadoPago enum('Pendiente', 'Pagado'),
 				in p_metodoPago enum('Tarjeta'),
-				in p_cantidadPago double ,
 				in p_idCompra int )
 		begin
 			update Pagos
 				set
 					fechaPago  = p_fechaPago ,
+                    estadoPago = p_estadoPago,
 					metodoPago = p_metodoPago,
-                    cantidadPago = p_cantidadPago,
                     idCompra = p_idCompra
 				where 
 					p_idPago = idPago ;
@@ -618,10 +578,6 @@ DELIMITER $$
 		end$$
 DELIMITER ;
 
-
-
-
-
 -- CRUD CARRITOS-------------------------------------------------------------
 -- LISTAR
 DELIMITER $$
@@ -634,7 +590,6 @@ DELIMITER $$
             subtotal as SUBTOTAL
 			from Carritos;
 		end$$
-	
 DELIMITER ;
 
 -- AGREGAR
@@ -679,10 +634,6 @@ DELIMITER $$
 				where idCompra = p_idCompra;
 		end$$
 DELIMITER ;
-
-
-
-
 
 -- CRUD FACTURAS-------------------------------------------------------------
 -- LISTAR
@@ -745,40 +696,7 @@ DELIMITER $$
 		end$$
 DELIMITER ;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 -- ------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 -- Insertar categorías
 DELIMITER $$
@@ -932,4 +850,4 @@ BEGIN
     JOIN Proveedores pr ON p.idProveedor = pr.idProveedor
     ORDER BY p.nombreProducto;
 END$$
-DELIMITER ;  
+DELIMITER ;
