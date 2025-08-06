@@ -92,7 +92,7 @@ create table Carritos( -- DetalleCompra
 	idCompra int not null,
     idProducto int not null,
     cantidadProducto int not null,
-    subtotal double not null,
+    subtotal double,
     constraint pk_detallecompras primary key (idCompra, idProducto),
     constraint fk_detalle_compras_compras foreign key (idCompra)
 		references Compras(idCompra) on delete cascade,
@@ -504,7 +504,22 @@ DELIMITER $$
                     idProveedor= p_idProveedor
 				where 
 					p_idProducto = idProducto;
-			
+		end$$
+DELIMITER ;
+
+-- ACTUALIZAR SALIDA PRODUCTO
+DELIMITER $$
+	create procedure sp_ActualizarProductoSalida(
+				in p_id int,
+				in p_salida timestamp,
+                in p_estado varchar(16))
+		begin
+			update Productos
+				set
+					fechaSalidaProducto = p_Salida,
+                    estadoProdducto =  p_estado
+				where 
+					p_id = idProducto;
 		end$$
 DELIMITER ;
 
@@ -597,11 +612,10 @@ DELIMITER $$
 	create procedure sp_AgregarCarrito(
 			in p_idCompra int,
 			in p_idProducto int,
-			in p_cantidadProducto int ,
-			in p_subtotal double)
+			in p_cantidadProducto int)
 		begin
-			insert into Carritos(idCompra, idProducto, cantidadProducto, subtotal)
-				values(p_idCompra, p_idProducto, p_cantidadProducto, p_subtotal);
+			insert into Carritos(idCompra, idProducto, cantidadProducto)
+				values(p_idCompra, p_idProducto, p_cantidadProducto);
 		end$$
 DELIMITER ;
 
@@ -851,3 +865,137 @@ BEGIN
     ORDER BY p.nombreProducto;
 END$$
 DELIMITER ;
+
+
+CALL sp_AgregarProveedor('Nike', '@nike.com', '+50212345678', 'Av. Reforma 123, Ciudad de Guatemala');
+CALL sp_AgregarProveedor('Timberland', 'info@timberland.com', '+50223456789', 'Calle Principal 456, Zona 10');
+CALL sp_AgregarProveedor('Crocs', 'ventas@crocs.com', '+50234567890', 'Boulevard Los Próceres 789, Zona 14');
+CALL sp_AgregarProveedor('Clarks', 'soporte@clarks.com', '+50245678901', '5ta Avenida 101, Mixco');
+
+
+
+-- ------------------------------------- TRIGGERS -----------------------------------------
+-- ROGER VALLADARES
+
+-- Agregar Subtotal
+delimiter $$
+	create trigger tr_CalcularSubtotal_Before_Insert
+	before insert
+	on carritos
+	for each row
+	begin
+		declare v_precio double;
+		select precioProducto into v_precio
+		from productos
+		where idProducto = new.idProducto;
+		set new.subtotal = new.cantidadProducto * v_precio;
+	end $$
+delimiter ;
+
+-- Actualización Stock
+delimiter $$
+	create trigger tr_RestarStock_After_Insert
+    after insert
+    on carritos
+    for each row
+		begin
+			declare stock int;
+            select P.stockProducto into stock
+            from Productos P where P.idProducto = new.idProducto;
+			if (new.cantidadProducto > stock) then
+				signal sqlstate '45000'
+                set message_text = 'No hay suficientes productos';
+            else
+				update Productos P
+					set P.stockProducto = stock - new.cantidadProducto
+					where P.idProducto = new.idProducto;
+			end if;
+        end $$
+delimiter ;
+
+-- Devolver Stock 
+delimiter $$
+	create trigger tr_sumarstock_after_update
+	after update on compras
+	for each row
+		begin
+			declare done int default false;
+			declare v_idproducto int;
+			declare v_cantidadproducto int;
+			declare cur cursor for
+				select idproducto, cantidadproducto
+				from carritos
+				where idcompra = new.idcompra;
+			declare continue handler for not found set done = true;
+            
+			if new.estadocompra = 'Cancelada' then
+				open cur;
+				read_loop: loop
+					fetch cur into v_idproducto, v_cantidadproducto;
+					if done then
+						leave read_loop;
+					end if;
+					update productos
+					set stockproducto = stockproducto + v_cantidadproducto
+					where idproducto = v_idproducto;
+				end loop;
+				close cur;
+			end if;
+		end$$
+delimiter ;
+
+-- Cambiar Fecha de Ingreso
+delimiter $$
+	create trigger tr_CambioFechaIngreso_Before_Update
+	before update
+	on productos
+	for each row
+		begin
+			if old.stockProducto != new.stockProducto then
+				set new.fechaIngresoProducto = now();
+			end if;
+		end $$
+delimiter ;
+
+-- Cuando se complete un pago Completar una compra
+delimiter $$
+	create trigger tr_actualizarEstadoCompra_After_Insert
+	after insert 
+	on pagos
+	for each row
+	begin
+		if new.estadoPago = 'Pagado' then
+			update compras
+			set estadoCompra = 'Completada'
+			where idCompra = new.idCompra;
+		end if;
+	end $$
+delimiter ;
+
+-- Actualizar la fecha de salida
+delimiter $$
+	create trigger tr_actualizarFechaSalida_Before_Update
+	before update on productos
+	for each row
+	begin
+		if new.stockProducto = 0 and old.fechaSalidaProducto is null then
+			set new.fechaSalidaProducto = now();
+		end if;
+	end $$
+delimiter ;
+
+-- Generacion de Factura
+delimiter $$
+	create trigger tr_crear_factura_after_pago
+	after insert on pagos
+	for each row
+	begin
+		declare v_total double;
+		if (new.estadoPago = 'Pagado') then
+			select sum(subtotal) into v_total
+			from carritos
+			where idCompra = new.idCompra;
+			call sp_AgregarFactura(now(), v_total, new.metodoPago, new.idCompra);
+		end if;
+	end $$
+delimiter ;

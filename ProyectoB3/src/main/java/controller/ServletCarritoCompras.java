@@ -21,7 +21,7 @@ import java.util.List;
  * @author asosa
  */
 @WebServlet(name = "ServletCarrito", urlPatterns = {"/ServletCarrito"})
-public class ServletCarrito extends HttpServlet {
+public class ServletCarritoCompras extends HttpServlet {
     
     private CarritoDAO carritoDAO;
     private ProductoDAO productoDAO;
