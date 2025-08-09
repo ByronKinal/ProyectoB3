@@ -12,6 +12,10 @@
         <class>model.Producto</class>
         <class>model.Categoria</class>
         <class>model.Proveedor</class>
+        <class>model.Compra</class>
+        <class>model.Carrito</class>
+        <class>model.CarritoId</class>
+        <class>model.Pago</class>
         
         <properties>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>

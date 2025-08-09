@@ -7,6 +7,7 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import java.util.List;
 import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 /**
@@ -25,22 +26,24 @@ public class ProductoDAO {
         EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<Producto> query = em.createQuery(
-                "SELECT p FROM Producto p LEFT JOIN FETCH p.categoria LEFT JOIN FETCH p.proveedor", 
-                Producto.class);
+                    "SELECT p FROM Producto p LEFT JOIN FETCH p.categoria LEFT JOIN FETCH p.proveedor",
+                    Producto.class);
             return query.getResultList();
         } finally {
             em.close();
         }
     }
-    
+
     public Producto obtenerProductoCompletoPorId(int idProducto) {
         EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<Producto> query = em.createQuery(
-                "SELECT p FROM Producto p LEFT JOIN FETCH p.categoria LEFT JOIN FETCH p.proveedor WHERE p.idProducto = :id", 
-                Producto.class);
+                    "SELECT p FROM Producto p LEFT JOIN FETCH p.categoria LEFT JOIN FETCH p.proveedor WHERE p.idProducto = :id",
+                    Producto.class);
             query.setParameter("id", idProducto);
             return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
         } finally {
             em.close();
         }
@@ -49,9 +52,13 @@ public class ProductoDAO {
     public List<Producto> listarProductosPorGenero(String genero) {
         EntityManager em = emf.createEntityManager();
         try {
-            TypedQuery<Producto> query = em.createQuery(
-                    "SELECT p FROM Producto p JOIN p.categoria c "
-                    + "WHERE c.nombreCategoriaGenero = :genero", Producto.class);
+            // Cargar todas las relaciones necesarias
+            String jpql = "SELECT DISTINCT p FROM Producto p "
+                    + "LEFT JOIN FETCH p.categoria c "
+                    + "LEFT JOIN FETCH p.proveedor "
+                    + "WHERE c.nombreCategoriaGenero = :genero";
+
+            TypedQuery<Producto> query = em.createQuery(jpql, Producto.class);
             query.setParameter("genero", genero);
             return query.getResultList();
         } finally {
@@ -79,7 +86,7 @@ public class ProductoDAO {
         try {
             tx = em.getTransaction();
             tx.begin();
-            
+
             // Asegurarse de que las entidades relacionadas estén gestionadas
             if (producto.getCategoria() != null && producto.getCategoria().getIdCategoria() != 0) {
                 producto.setCategoria(em.merge(producto.getCategoria()));
@@ -87,7 +94,7 @@ public class ProductoDAO {
             if (producto.getProveedor() != null && producto.getProveedor().getIdProveedor() != 0) {
                 producto.setProveedor(em.merge(producto.getProveedor()));
             }
-            
+
             em.persist(producto);
             tx.commit();
         } catch (Exception e) {

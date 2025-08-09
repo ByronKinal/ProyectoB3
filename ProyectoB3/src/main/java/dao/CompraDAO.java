@@ -1,4 +1,3 @@
-
 package dao;
 
 import java.util.List;
@@ -8,11 +7,8 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 import model.Compra;
+import model.Usuario;
 
-/**
- *
- * @author asosa
- */
 public class CompraDAO {
     private final EntityManagerFactory emf;
 
@@ -24,9 +20,22 @@ public class CompraDAO {
         EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<Compra> query = em.createQuery(
-                "SELECT p FROM Compra p", 
+                "SELECT c FROM Compra c", 
                 Compra.class);
             return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+    
+    public Compra buscarCompraPendiente(int idUsuario) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Compra> query = em.createQuery(
+                "SELECT c FROM Compra c WHERE c.usuario.idUsuario = :idUsuario AND c.estadoCompra = 'Pendiente'", 
+                Compra.class);
+            query.setParameter("idUsuario", idUsuario);
+            return query.getResultList().stream().findFirst().orElse(null);
         } finally {
             em.close();
         }
@@ -35,11 +44,7 @@ public class CompraDAO {
     public Compra obtenerCompraPorId(int idCompra) {
         EntityManager em = emf.createEntityManager();
         try {
-            TypedQuery<Compra> query = em.createQuery(
-                "SELECT p FROM Compra p WHERE p.idCompra = :id", 
-                Compra.class);
-            query.setParameter("id", idCompra);
-            return query.getSingleResult();
+            return em.find(Compra.class, idCompra);
         } finally {
             em.close();
         }
@@ -83,13 +88,20 @@ public class CompraDAO {
 
     public void eliminarCompra(int idCompra) {
         EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = null;
         try {
-            em.getTransaction().begin();
-            Compra producto = em.find(Compra.class, idCompra);
-            if (producto != null) {
-                em.remove(producto);
+            tx = em.getTransaction();
+            tx.begin();
+            Compra compra = em.find(Compra.class, idCompra);
+            if (compra != null) {
+                em.remove(compra);
             }
-            em.getTransaction().commit();
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+            throw new RuntimeException("Error al eliminar compra", e);
         } finally {
             em.close();
         }

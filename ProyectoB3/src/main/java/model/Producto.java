@@ -2,16 +2,18 @@ package model;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.*;
 
 @Entity
 @Table(name = "Productos")
 @NamedQueries({
     @NamedQuery(name = "Producto.findAll", query = "SELECT p FROM Producto p"),
-    @NamedQuery(name = "Producto.findByGenero", 
-                query = "SELECT p FROM Producto p JOIN p.categoria c WHERE c.nombreCategoriaGenero = :genero"),
-    @NamedQuery(name = "Producto.findById", 
-                query = "SELECT p FROM Producto p WHERE p.idProducto = :idProducto")
+    @NamedQuery(name = "Producto.findByGenero",
+            query = "SELECT p FROM Producto p JOIN p.categoria c WHERE c.nombreCategoriaGenero = :genero"),
+    @NamedQuery(name = "Producto.findById",
+            query = "SELECT p FROM Producto p WHERE p.idProducto = :idProducto")
 })
 public class Producto implements Serializable {
 
@@ -49,21 +51,24 @@ public class Producto implements Serializable {
     @Column(name = "fechaSalidaProducto")
     private Timestamp fechaSalidaProducto;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idCategoria", referencedColumnName = "idCategoria", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER) // Cambiado a EAGER para categoría
+    @JoinColumn(name = "idCategoria")
     private Categoria categoria;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idProveedor", referencedColumnName = "idProveedor", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY) // Proveedor puede quedarse LAZY
+    @JoinColumn(name = "idProveedor")
     private Proveedor proveedor;
+
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Carrito> carritos = new ArrayList<>();
 
     // Constructores
     public Producto() {
     }
 
-    public Producto(String nombreProducto, String descripcionProducto, String urlImagen, 
-                   String tallaProducto, String marcaProducto, double precioProducto, 
-                   int stockProducto, Categoria categoria, Proveedor proveedor) {
+    public Producto(String nombreProducto, String descripcionProducto, String urlImagen,
+            String tallaProducto, String marcaProducto, double precioProducto,
+            int stockProducto, Categoria categoria, Proveedor proveedor) {
         this.nombreProducto = nombreProducto;
         this.descripcionProducto = descripcionProducto;
         this.urlImagen = urlImagen;
@@ -171,6 +176,14 @@ public class Producto implements Serializable {
 
     public void setProveedor(Proveedor proveedor) {
         this.proveedor = proveedor;
+    }
+
+    public List<Carrito> getCarritos() {
+        return carritos;
+    }
+
+    public void setCarritos(List<Carrito> carritos) {
+        this.carritos = carritos;
     }
 
     // Métodos auxiliares

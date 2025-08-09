@@ -1,61 +1,63 @@
-
 package model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
-/**
- *
- * @author asosa
- */
 @Entity
 @Table(name = "Carritos")
 public class Carrito {
+    @EmbeddedId
+    private CarritoId id;
     
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-    @Column(name = "idCompra")
-    private int idCompra;
-
-    @Column(name = "idProducto")
-    private int idProducto;
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("idCompra")
+    @JoinColumn(name = "idCompra", referencedColumnName = "idCompra")
+    private Compra compra;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("idProducto")
+    @JoinColumn(name = "idProducto", referencedColumnName = "idProducto")
+    private Producto producto;
+    
     @Column(name = "cantidadProducto")
     private int cantidadProducto;
-
+    
     @Column(name = "subtotal")
     private double subtotal;
 
-
     public Carrito() {
     }
-    
-    public Carrito(int idCompra, int idProducto, int cantidadProducto, double subtotal) {
-        this.idCompra = idCompra;
-        this.idProducto = idProducto;
+
+    public Carrito(Compra compra, Producto producto, int cantidadProducto, double subtotal) {
+        this.id = new CarritoId(compra.getIdCompra(), producto.getIdProducto());
+        this.compra = compra;
+        this.producto = producto;
         this.cantidadProducto = cantidadProducto;
         this.subtotal = subtotal;
     }
 
-    public int getIdCompra() {
-        return idCompra;
+    // Getters y Setters
+    public CarritoId getId() {
+        return id;
     }
 
-    public void setIdCompra(int idCompra) {
-        this.idCompra = idCompra;
+    public void setId(CarritoId id) {
+        this.id = id;
     }
 
-    public int getIdProducto() {
-        return idProducto;
+    public Compra getCompra() {
+        return compra;
     }
 
-    public void setIdProducto(int idProducto) {
-        this.idProducto = idProducto;
+    public void setCompra(Compra compra) {
+        this.compra = compra;
+    }
+
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
     }
 
     public int getCantidadProducto() {

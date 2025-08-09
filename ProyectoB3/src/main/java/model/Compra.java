@@ -1,17 +1,10 @@
 package model;
 
 import java.sql.Timestamp;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.*;
 
-/**
- *
- * @author asosa
- */
 @Entity
 @Table(name = "Compras")
 public class Compra {
@@ -27,25 +20,26 @@ public class Compra {
     @Column(name = "fechaCompra")
     private Timestamp fechaCompra;
 
-    @Column(name = "idUsuario")
-    private int idUsuario;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idUsuario", referencedColumnName = "idUsuario")
+    private Usuario usuario;
+
+    @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Carrito> carritos = new ArrayList<>();
+
+    @OneToOne(mappedBy = "compra", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Pago pago;
 
     public Compra() {
     }
 
-    public Compra(int idCompra, String estadoCompra, Timestamp fechaCompra, int idUsuario) {
-        this.idCompra = idCompra;
+    public Compra(String estadoCompra, Timestamp fechaCompra, Usuario usuario) {
         this.estadoCompra = estadoCompra;
         this.fechaCompra = fechaCompra;
-        this.idUsuario = idUsuario;
+        this.usuario = usuario;
     }
 
-    public Compra(String estadoCompra, Timestamp fechaCompra, int idUsuario) {
-        this.estadoCompra = estadoCompra;
-        this.fechaCompra = fechaCompra;
-        this.idUsuario = idUsuario;
-    }
-
+    // Getters y Setters
     public int getIdCompra() {
         return idCompra;
     }
@@ -62,7 +56,6 @@ public class Compra {
         this.estadoCompra = estadoCompra;
     }
 
-
     public Timestamp getFechaCompra() {
         return fechaCompra;
     }
@@ -71,11 +64,27 @@ public class Compra {
         this.fechaCompra = fechaCompra;
     }
 
-    public int getIdUsuario() {
-        return idUsuario;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setIdUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public List<Carrito> getCarritos() {
+        return carritos;
+    }
+
+    public void setCarritos(List<Carrito> carritos) {
+        this.carritos = carritos;
+    }
+
+    public Pago getPago() {
+        return pago;
+    }
+
+    public void setPago(Pago pago) {
+        this.pago = pago;
     }
 }

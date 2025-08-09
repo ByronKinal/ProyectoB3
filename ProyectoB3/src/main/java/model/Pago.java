@@ -1,57 +1,40 @@
-
 package model;
 
 import java.sql.Timestamp;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
-/**
- *
- * @author asosa
- */
 @Entity
 @Table(name = "Pagos")
 public class Pago {
-    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idPago")
     private int idPago;
-
+    
     @Column(name = "fechaPago")
     private Timestamp fechaPago;
-
+    
+    @Column(name = "estadoPago")
+    private String estadoPago;
+    
     @Column(name = "metodoPago")
     private String metodoPago;
-
-    @Column(name = "cantidadPago")
-    private double cantidadPago;
-
-    @Column(name = "idCompra")
-    private int idCompra;
+    
+    @OneToOne
+    @JoinColumn(name = "idCompra", referencedColumnName = "idCompra")
+    private Compra compra;
 
     public Pago() {
     }
 
-    public Pago(int idPago, Timestamp fechaPago, String metodoPago, double cantidadPago, int idCompra) {
-        this.idPago = idPago;
+    public Pago(Timestamp fechaPago, String estadoPago, String metodoPago, Compra compra) {
         this.fechaPago = fechaPago;
+        this.estadoPago = estadoPago;
         this.metodoPago = metodoPago;
-        this.cantidadPago = cantidadPago;
-        this.idCompra = idCompra;
+        this.compra = compra;
     }
 
-    public Pago(Timestamp fechaPago, String metodoPago, double cantidadPago, int idCompra) {
-        this.fechaPago = fechaPago;
-        this.metodoPago = metodoPago;
-        this.cantidadPago = cantidadPago;
-        this.idCompra = idCompra;
-    }
-
+    // Getters y Setters
     public int getIdPago() {
         return idPago;
     }
@@ -68,6 +51,14 @@ public class Pago {
         this.fechaPago = fechaPago;
     }
 
+    public String getEstadoPago() {
+        return estadoPago;
+    }
+
+    public void setEstadoPago(String estadoPago) {
+        this.estadoPago = estadoPago;
+    }
+
     public String getMetodoPago() {
         return metodoPago;
     }
@@ -76,19 +67,11 @@ public class Pago {
         this.metodoPago = metodoPago;
     }
 
-    public double getCantidadPago() {
-        return cantidadPago;
+    public Compra getCompra() {
+        return compra;
     }
 
-    public void setCantidadPago(double cantidadPago) {
-        this.cantidadPago = cantidadPago;
-    }
-
-    public int getIdCompra() {
-        return idCompra;
-    }
-
-    public void setIdCompra(int idCompra) {
-        this.idCompra = idCompra;
+    public void setCompra(Compra compra) {
+        this.compra = compra;
     }
 }

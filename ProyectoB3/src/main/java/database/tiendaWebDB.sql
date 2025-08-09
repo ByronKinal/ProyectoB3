@@ -280,7 +280,6 @@ DELIMITER $$
 				values(p_estadoCompra , p_fechaCompra , p_idUsuario);
 		end$$
 DELIMITER ;
-call sp_AgregarCompra('Pendiente', current_timestamp(), 1);
 
 -- ACTUALIZAR
 DELIMITER $$
@@ -560,7 +559,6 @@ DELIMITER $$
 				values(p_fechaPago, p_metodoPago, p_idCompra);
 		end$$
 DELIMITER ;
- call sp_AgregarPago('2025-09-21 20:30:00', 'Tarjeta', 1);
 
 -- ACTUALIZAR
 DELIMITER $$
@@ -677,7 +675,6 @@ DELIMITER $$
 				values(p_fechaFactura, p_total, p_metodoPago, p_idCompra );
 		end$$
 DELIMITER ;
-call sp_AgregarFactura('2025-09-21 20:30:00',2306,'Tarjeta',1);
 
 -- ACTUALIZAR
 DELIMITER $$
@@ -999,3 +996,6 @@ delimiter $$
 		end if;
 	end $$
 delimiter ;
+
+call sp_ListarCompras();
+-- call sp_ListarCarritos();

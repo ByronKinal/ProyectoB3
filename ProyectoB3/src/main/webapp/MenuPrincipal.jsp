@@ -1,3 +1,6 @@
+<%@page import="javax.persistence.TypedQuery"%>
+<%@page import="javax.persistence.Persistence"%>
+<%@page import="javax.persistence.EntityManager"%>
 <%@page import="java.util.List"%>
 <%@page import="model.Producto"%>
 <%@page import="dao.ProductoDAO"%>
@@ -19,6 +22,38 @@
         <link rel="stylesheet" href="StyleMenuPrincipal.css">
     </head>
     <body>
+        <!-- Mostrar mensajes -->
+        <c:if test="${not empty mensaje}">
+            <div class="alert alert-success alert-dismissible fade show fixed-top" style="margin-top: 60px; margin-left: auto; margin-right: auto; width: 50%; z-index: 1000;">
+                ${mensaje}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <script>
+                // Ocultar el mensaje después de 3 segundos
+                setTimeout(function () {
+                    document.querySelector('.alert').style.display = 'none';
+                }, 3000);
+            </script>
+            <% session.removeAttribute("mensaje"); %>
+        </c:if>
+
+        <c:if test="${not empty error}">
+            <div class="alert alert-danger alert-dismissible fade show fixed-top" style="margin-top: 60px; margin-left: auto; margin-right: auto; width: 50%; z-index: 1000;">
+                ${error}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <script>
+                // Ocultar el mensaje después de 5 segundos
+                setTimeout(function () {
+                    document.querySelector('.alert').style.display = 'none';
+                }, 5000);
+            </script>
+            <% session.removeAttribute("error"); %>
+        </c:if>
         <div class="linea-superior">CALZADO BIEN HECHO</div>
         <div class="barra-superior">
             <div class="logo">
@@ -31,7 +66,7 @@
                     <img class="iconos" src="https://i.postimg.cc/4dv7Qhxn/person-40dp-000000-FILL0-wght400-GRAD0-opsz40.png" alt="login"/>
                 </a>
                 <a href="Carrito.jsp" id="btnCarrito" class="btn-carrito">
-                    <img style=" margin-right: 40px "class="iconos" src="https://i.postimg.cc/XJxNvKvK/shopping-cart-35dp-000000-FILL0-wght400-GRAD0-opsz40.png "  alt="carrito"/>
+                    <img style=" margin-right: 40px "class="iconos" src="https://i.postimg.cc/XJxNvKvK/shopping-cart-35dp-000000-FILL0-wght400-GRAD0-opsz40.png" alt="carrito"/>
                 </a>
             </div>
         </div>
@@ -68,16 +103,38 @@
         </div>
 
         <div class="galeria">
-
             <%
                 ProductoDAO productoDAO = new ProductoDAO();
                 String genero = request.getParameter("genero");
                 List<Producto> productos;
 
                 if (genero != null && !genero.isEmpty()) {
-                    productos = productoDAO.listarProductosPorGenero(genero);
+                    // Cargar productos por género con todas las relaciones
+                    EntityManager em = Persistence.createEntityManagerFactory("ZapateriaDonPepe").createEntityManager();
+                    try {
+                        String jpql = "SELECT DISTINCT p FROM Producto p "
+                                + "LEFT JOIN FETCH p.categoria c "
+                                + "LEFT JOIN FETCH p.proveedor "
+                                + "WHERE c.nombreCategoriaGenero = :genero";
+
+                        TypedQuery<Producto> query = em.createQuery(jpql, Producto.class);
+                        query.setParameter("genero", genero);
+                        productos = query.getResultList();
+                    } finally {
+                        em.close();
+                    }
                 } else {
-                    productos = productoDAO.listarProductosCompletos();
+                    // Cargar todos los productos con relaciones
+                    EntityManager em = Persistence.createEntityManagerFactory("ZapateriaDonPepe").createEntityManager();
+                    try {
+                        String jpql = "SELECT DISTINCT p FROM Producto p "
+                                + "LEFT JOIN FETCH p.categoria "
+                                + "LEFT JOIN FETCH p.proveedor";
+
+                        productos = em.createQuery(jpql, Producto.class).getResultList();
+                    } finally {
+                        em.close();
+                    }
                 }
                 request.setAttribute("productos", productos);
             %>
@@ -94,12 +151,16 @@
                                     <img src="${producto.urlImagen}" class="logo" alt="${producto.nombreProducto}">
                                     <div class="info">
                                         <h5 class="card-title">${producto.nombreProducto}</h5>
-                                        <p  style="margin-bottom: 0px" class="precio">Q ${producto.precioProducto}</p>
-                                        <p  style="margin-bottom: 0px">${producto.descripcionProducto}</p>
+                                        <p style="margin-bottom: 0px" class="precio">Q ${producto.precioProducto}</p>
+                                        <p style="margin-bottom: 0px">${producto.descripcionProducto}</p>
                                         <p>
-                                                ${producto.categoria.nombreCategoriaGenero} - ${producto.categoria.nombreCategoriaTipo}
+                                            ${producto.categoria.nombreCategoriaGenero} - ${producto.categoria.nombreCategoriaTipo}
                                         </p>
-                                        <a href="#" class="btn btn-primary">Agregar al carrito</a>
+                                        <form action="ServletCarrito" method="POST">
+                                            <input type="hidden" name="action" value="agregar">
+                                            <input type="hidden" name="idProducto" value="${producto.idProducto}">
+                                            <button type="submit" class="btn btn-primary">Agregar al carrito</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>

@@ -12,16 +12,16 @@ public class Categoria implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idCategoria")
     private int idCategoria;
-    
+
     @Column(name = "nombreCategoriaTipo", nullable = false, length = 64)
     private String nombreCategoriaTipo;
-    
+
     @Column(name = "nombreCategoriaGenero", nullable = false, length = 64)
     private String nombreCategoriaGenero;
-    
+
     @Column(name = "descripcionCategoria", nullable = false, length = 256)
     private String descripcionCategoria;
-    
+
     @OneToMany(mappedBy = "categoria", fetch = FetchType.LAZY)
     private List<Producto> productos;
 
@@ -48,7 +48,7 @@ public class Categoria implements Serializable {
     public void setIdCategoria(int idCategoria) {
         this.idCategoria = idCategoria;
     }
-    
+
     public String getDescripcionCategoria() {
         return descripcionCategoria;
     }
