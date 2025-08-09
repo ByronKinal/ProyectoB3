@@ -11,7 +11,7 @@
     <body>
         <div>
             <a class="regresar" href="MenuAdministrativo.jsp">Regresar</a>
-            
+
             <c:if test="${not empty error}">
                 <div class="alert alert-danger">${error}</div>
             </c:if>
@@ -41,41 +41,42 @@
                             <label for="tallaProducto" class="form-label">Talla</label>
                             <input type="text" class="form-control" id="tallaProducto" name="tallaProducto">
                         </div>
-                        
+
                         <div class="mb-3">
                             <label for="marcaProducto" class="form-label">Marca</label>
                             <input type="text" class="form-control" id="marcaProducto" name="marcaProducto" required>
                         </div>
-                        
+
                         <div class="mb-3">
                             <label for="precioProducto" class="form-label">Precio (Q)</label>
                             <input type="number" step="0.01" class="form-control" id="precioProducto" name="precioProducto" required min="0">
                         </div>
-                        
+
                         <div class="mb-3">
                             <label for="idProveedor" class="form-label">ID Proveedor</label>
                             <input type="number" class="form-control" id="idProveedor" name="idProveedor" required min="1">
                         </div>
-                        
+
                         <div class="mb-3">
                             <label for="idCategoria" class="form-label">ID Categoría</label>
                             <input type="number" class="form-control" id="idCategoria" name="idCategoria" required min="1">
                         </div>
-                        
+
                         <div class="mb-3">
                             <label for="stockProducto" class="form-label">Stock</label>
                             <input type="number" class="form-control" id="stockProducto" name="stockProducto" required min="0">
                         </div>
-                        
-                        
-                    </form>
-                    <div class="d-grid">
+
+
+
+                        <div class="d-grid">
                             <button type="submit" class="buttonAgregar">Guardar Producto</button>
                         </div>
+                    </form>
                 </div>
             </div>
         </div>
-        
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

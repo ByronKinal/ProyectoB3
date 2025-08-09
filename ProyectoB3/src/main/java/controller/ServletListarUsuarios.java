@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "ServletListarUsuarios", urlPatterns = {"/ServletListarUsuarios"})
+@WebServlet("/ServletListarUsuarios")
 public class ServletListarUsuarios extends HttpServlet {
     
     @Override

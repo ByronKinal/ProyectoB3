@@ -10,19 +10,23 @@ import javax.persistence.TypedQuery;
 import model.Proveedor;
 
 public class ProveedorDAO {
-
-    private final EntityManagerFactory emf;
-
-    public ProveedorDAO() {
-        this.emf = Persistence.createEntityManagerFactory("ZapateriaDonPepe");
+    private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("ZapateriaDonPepe");
+    
+    // Método para limpiar caché
+    public void limpiarCache() {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getEntityManagerFactory().getCache().evictAll();
+        } finally {
+            em.close();
+        }
     }
-
-    public List<Proveedor> listarProveedores() {
+    
+    public List<Proveedor> listarTodos() {
         EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<Proveedor> query = em.createQuery(
-                    "SELECT p FROM Proveedor p",
-                    Proveedor.class);
+                "SELECT p FROM Proveedor p ORDER BY p.nombreProveedor", Proveedor.class);
             return query.getResultList();
         } finally {
             em.close();
@@ -48,7 +52,7 @@ public class ProveedorDAO {
         EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<Proveedor> query = em.createQuery(
-                    "SELECT p FROM Proveedor p WHERE p.estadoProveedor = :estadoProveedor", 
+                    "SELECT p FROM Proveedor p WHERE p.estadoProveedor = :estadoProveedor",
                     Proveedor.class);
             query.setParameter("estadoProveedor", estadoProveedor);
             return query.getResultList();
@@ -132,12 +136,12 @@ public class ProveedorDAO {
             em.close();
         }
     }
-    
+
     // Método existente renombrado para claridad
     public void suspenderProveedor(int idProveedor) {
         eliminarProveedor(idProveedor);
     }
-    
+
     public Proveedor obtenerProveedorPorId(int idProveedor) {
         EntityManager em = emf.createEntityManager();
         try {

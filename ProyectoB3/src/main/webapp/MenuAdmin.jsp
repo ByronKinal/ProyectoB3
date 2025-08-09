@@ -20,12 +20,12 @@
              <p>PRODUCTOS</p>
         </div>
         <div class="rol">
-            <a href="MenuAdministrativo.jsp"><img class="imagen"
+            <a href="ServletListarProveedores"><img class="imagen"
                     src="https://static.vecteezy.com/system/resources/previews/035/772/805/non_2x/supplier-icon-line-outline-sign-symbol-graphic-illustration-vector.jpg" alt=""></a>
             <p>PROVEEDORES</p>
         </div>
         <div class="rol">
-            <a href="MenuAdministrativo.jsp"><img class="imagen"
+            <a href="ServletListarUsuarios"><img class="imagen"
                     src="https://cdn-icons-png.flaticon.com/512/6522/6522581.png    " alt=""></a>
            <p>USUARIOS</p>
         </div>
