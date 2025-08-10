@@ -1,6 +1,3 @@
-<%@page import="model.Proveedor"%>
-<%@page import="java.util.List"%>
-<%@page import="dao.ProveedorDAO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
@@ -13,7 +10,7 @@
     </head>
     <body>
         <div>
-            <a class="regresar" href="ListarProductos.jsp">Regresar</a>
+            <a class="regresar" href="MenuAdministrativo.jsp">Regresar</a>
 
             <c:if test="${not empty error}">
                 <div class="alert alert-danger">${error}</div>
@@ -55,19 +52,9 @@
                             <input type="number" step="0.01" class="form-control" id="precioProducto" name="precioProducto" required min="0">
                         </div>
 
-                        <!-- Reemplazar el input por un select -->
                         <div class="mb-3">
-                            <label for="idProveedor" class="form-label">Proveedor:</label>
-                            <select id="idProveedor" name="idProveedor" class="form-select" required>
-                                <option value="">Seleccione un proveedor</option>
-                                <%
-                                    ProveedorDAO proveedorDAO = new ProveedorDAO();
-                                    List<Proveedor> proveedores = proveedorDAO.listarProveedoresActivos();
-                                    for (Proveedor p : proveedores) {
-                                %>
-                                <option value="<%= p.getIdProveedor()%>"><%= p.getNombreProveedor()%></option>
-                                <% }%>
-                            </select>
+                            <label for="idProveedor" class="form-label">ID Proveedor</label>
+                            <input type="number" class="form-control" id="idProveedor" name="idProveedor" required min="1">
                         </div>
 
                         <div class="mb-3">

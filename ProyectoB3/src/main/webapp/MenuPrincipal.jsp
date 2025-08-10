@@ -20,32 +20,6 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
         <link rel="stylesheet" href="StyleMenuPrincipal.css">
-
-        <script>
-            function aplicarFiltros() {
-                var genero = "${param.genero}";
-                var ordenar = document.getElementById("ordenar").value;
-                var filtro = document.getElementById("filtro").value;
-
-                var url = "MenuPrincipal.jsp?";
-                if (genero) {
-                    url += "genero=" + genero + "&";
-                }
-                if (ordenar && ordenar !== "default") {
-                    url += "ordenar=" + ordenar + "&";
-                }
-                if (filtro && filtro !== "todos") {
-                    url += "filtro=" + filtro + "&";
-                }
-
-                // Eliminar el último & si existe
-                if (url.endsWith("&")) {
-                    url = url.substring(0, url.length - 1);
-                }
-
-                window.location.href = url;
-            }
-        </script>
     </head>
     <body>
         <!-- Mostrar mensajes -->
@@ -112,19 +86,18 @@
                     <h1 class="TipoDeZapato">Unisex</h1>
                 </a>
             </div>
-            <div class="filtros">
-                <select id="ordenar" onchange="aplicarFiltros()">
+            <div>
+                <select id="ordenar">
                     <option value="default">Ordenar por</option>
-                    <option value="precio-asc" ${param.ordenar == 'precio-asc' ? 'selected' : ''}>Precio: menor a mayor</option>
-                    <option value="precio-desc" ${param.ordenar == 'precio-desc' ? 'selected' : ''}>Precio: mayor a menor</option>
-                    <option value="nombre-asc" ${param.ordenar == 'nombre-asc' ? 'selected' : ''}>Nombre (A-Z)</option>
-                    <option value="nombre-desc" ${param.ordenar == 'nombre-desc' ? 'selected' : ''}>Nombre (Z-A)</option>
+                    <option value="precio-asc">Precio: menor a mayor</option>
+                    <option value="precio-desc">Precio: mayor a menor</option>
+                    <option value="nombre">Nombre (A-Z)</option>
                 </select>
 
-                <select id="filtro" onchange="aplicarFiltros()">
+                <select id="filtro">
                     <option value="todos">Todos</option>
-                    <option value="casual" ${param.filtro == 'casual' ? 'selected' : ''}>Casual</option>
-                    <option value="deportivo" ${param.filtro == 'deportivo' ? 'selected' : ''}>Deportivo</option>
+                    <option value="casual">Casual</option>
+                    <option value="deportivo">Deportivo</option>
                 </select>
             </div>
         </div>
@@ -133,63 +106,37 @@
             <%
                 ProductoDAO productoDAO = new ProductoDAO();
                 String genero = request.getParameter("genero");
-                String ordenar = request.getParameter("ordenar");
-                String filtro = request.getParameter("filtro");
                 List<Producto> productos;
 
-                EntityManager em = Persistence.createEntityManagerFactory("ZapateriaDonPepe").createEntityManager();
-                try {
-                    // Construir la consulta base
-                    StringBuilder jpql = new StringBuilder("SELECT DISTINCT p FROM Producto p "
-                            + "LEFT JOIN FETCH p.categoria c "
-                            + "LEFT JOIN FETCH p.proveedor "
-                            + "WHERE p.estadoProducto = 'ACTIVO' ");
+                if (genero != null && !genero.isEmpty()) {
+                    // Cargar productos por género con todas las relaciones
+                    EntityManager em = Persistence.createEntityManagerFactory("ZapateriaDonPepe").createEntityManager();
+                    try {
+                        String jpql = "SELECT DISTINCT p FROM Producto p "
+                                + "LEFT JOIN FETCH p.categoria c "
+                                + "LEFT JOIN FETCH p.proveedor "
+                                + "WHERE c.nombreCategoriaGenero = :genero";
 
-                    // Aplicar filtro de género si existe
-                    if (genero != null && !genero.isEmpty()) {
-                        jpql.append("WHERE c.nombreCategoriaGenero = :genero ");
-                    }
-
-                    // Aplicar filtro de tipo si existe y no es "todos"
-                    if (filtro != null && !filtro.isEmpty() && !filtro.equals("todos")) {
-                        if (genero != null && !genero.isEmpty()) {
-                            jpql.append("AND ");
-                        } else {
-                            jpql.append("WHERE ");
-                        }
-                        jpql.append("c.nombreCategoriaTipo = :tipo ");
-                    }
-
-                    // Aplicar ordenamiento
-                    if (ordenar != null && !ordenar.isEmpty() && !ordenar.equals("default")) {
-                        jpql.append("ORDER BY ");
-                        if ("precio-asc".equals(ordenar)) {
-                            jpql.append("p.precioProducto ASC");
-                        } else if ("precio-desc".equals(ordenar)) {
-                            jpql.append("p.precioProducto DESC");
-                        } else if ("nombre-asc".equals(ordenar)) {
-                            jpql.append("p.nombreProducto ASC");
-                        } else if ("nombre-desc".equals(ordenar)) {
-                            jpql.append("p.nombreProducto DESC");
-                        }
-                    }
-
-                    TypedQuery<Producto> query = em.createQuery(jpql.toString(), Producto.class);
-
-                    // Establecer parámetros
-                    if (genero != null && !genero.isEmpty()) {
+                        TypedQuery<Producto> query = em.createQuery(jpql, Producto.class);
                         query.setParameter("genero", genero);
+                        productos = query.getResultList();
+                    } finally {
+                        em.close();
                     }
+                } else {
+                    // Cargar todos los productos con relaciones
+                    EntityManager em = Persistence.createEntityManagerFactory("ZapateriaDonPepe").createEntityManager();
+                    try {
+                        String jpql = "SELECT DISTINCT p FROM Producto p "
+                                + "LEFT JOIN FETCH p.categoria "
+                                + "LEFT JOIN FETCH p.proveedor";
 
-                    if (filtro != null && !filtro.isEmpty() && !filtro.equals("todos")) {
-                        query.setParameter("tipo", filtro);
+                        productos = em.createQuery(jpql, Producto.class).getResultList();
+                    } finally {
+                        em.close();
                     }
-
-                    productos = query.getResultList();
-                    request.setAttribute("productos", productos);
-                } finally {
-                    em.close();
                 }
+                request.setAttribute("productos", productos);
             %>
 
             <c:choose>

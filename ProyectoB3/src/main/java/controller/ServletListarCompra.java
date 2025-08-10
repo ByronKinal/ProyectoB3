@@ -13,7 +13,7 @@ import model.Compra;
  *
  * @author Iosef
  */
-@WebServlet("/ServletListarClientes")
+@WebServlet("/ServletListarCompra")
 public class ServletListarCompra {
     CompraDAO compraDao = new CompraDAO();
 

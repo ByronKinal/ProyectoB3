@@ -38,7 +38,10 @@ public class ProductoDAO {
         EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<Producto> query = em.createQuery(
-                    "SELECT p FROM Producto p WHERE p.estadoProducto = 'ACTIVO'",
+                    "SELECT p FROM Producto p "
+                    + "LEFT JOIN FETCH p.categoria "
+                    + "LEFT JOIN FETCH p.proveedor "
+                    + "WHERE p.estadoProducto = 'ACTIVO'",
                     Producto.class);
             return query.getResultList();
         } finally {
