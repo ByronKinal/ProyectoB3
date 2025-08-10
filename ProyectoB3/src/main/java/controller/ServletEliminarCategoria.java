@@ -24,7 +24,7 @@ public class ServletEliminarCategoria extends HttpServlet {
         CategoriaDAO categoriaDAO = new CategoriaDAO();
         Categoria categoria = categoriaDAO.obtenerProveedorPorId(idCategoria);
         
-        response.sendRedirect("MenuAdministrativo.jsp");
+        response.sendRedirect("ListarProductos.jsp");
     }
 
     @Override

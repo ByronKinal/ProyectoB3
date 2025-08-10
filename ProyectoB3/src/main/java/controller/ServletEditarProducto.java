@@ -26,7 +26,7 @@ public class ServletEditarProducto extends HttpServlet {
         if (producto == null) {
             request.getSession().setAttribute("mensaje", "Producto no encontrado");
             request.getSession().setAttribute("tipoMensaje", "danger");
-            response.sendRedirect("MenuAdministrativo.jsp");
+            response.sendRedirect("ListarProductos.jsp");
             return;
         }
         

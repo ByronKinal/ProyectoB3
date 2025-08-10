@@ -150,7 +150,9 @@ DELIMITER $$
 		end$$
 DELIMITER ;
 call sp_AgregarUsuario('Lucía','Ramírez','2000-04-10','FEMENINO',  '3214567890','a','a','Cliente','ACTIVO');
-call sp_ListarUsuarios();
+call sp_AgregarUsuario('Jose','Alvarez','1990-09-12','MASCULINO',  '1234567891','s','s','Empleado','ACTIVO');
+
+-- call sp_ListarUsuarios();
 
 -- ACTUALIZAR
 DELIMITER $$
@@ -740,14 +742,51 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE sp_InsertarProveedoresIniciales()
 BEGIN
+    -- Proveedores globales más famosos
     INSERT INTO Proveedores(nombreProveedor, correoProveedor, telefonoProveedor, direccionProveedor)
-    VALUES ('Nike', 'contacto@nike.com', '1234567890', 'Oregon, USA');
+    VALUES ('Nike', 'contacto@nike.com', '+15054123456', 'One Bowerman Drive, Beaverton, OR 97005, USA');
     
     INSERT INTO Proveedores(nombreProveedor, correoProveedor, telefonoProveedor, direccionProveedor)
-    VALUES ('Adidas', 'contacto@adidas.com', '0987654321', 'Herzogenaurach, Alemania');
+    VALUES ('Adidas', 'contacto@adidas.com', '+498132840', 'Adi-Dassler-Straße 1, 91074 Herzogenaurach, Germany');
     
     INSERT INTO Proveedores(nombreProveedor, correoProveedor, telefonoProveedor, direccionProveedor)
-    VALUES ('Puma', 'contacto@puma.com', '1122334455', 'Herzogenaurach, Alemania');
+    VALUES ('Puma', 'contacto@puma.com', '+499132810', 'Puma Way 1, 91074 Herzogenaurach, Germany');
+    
+    INSERT INTO Proveedores(nombreProveedor, correoProveedor, telefonoProveedor, direccionProveedor)
+    VALUES ('New Balance', 'contacto@newbalance.com', '+18002532200', '100 Guest Street, Boston, MA 02135, USA');
+    
+    INSERT INTO Proveedores(nombreProveedor, correoProveedor, telefonoProveedor, direccionProveedor)
+    VALUES ('Reebok', 'contacto@reebok.com', '+18009322326', '25 Drydock Avenue, Boston, MA 02210, USA');
+    
+    INSERT INTO Proveedores(nombreProveedor, correoProveedor, telefonoProveedor, direccionProveedor)
+    VALUES ('Under Armour', 'contacto@underarmour.com', '+18777872768', '1020 Hull Street, Baltimore, MD 21230, USA');
+    
+    INSERT INTO Proveedores(nombreProveedor, correoProveedor, telefonoProveedor, direccionProveedor)
+    VALUES ('Skechers', 'contacto@skechers.com', '+18007534374', '228 Manhattan Beach Blvd, Manhattan Beach, CA 90266, USA');
+    
+    INSERT INTO Proveedores(nombreProveedor, correoProveedor, telefonoProveedor, direccionProveedor)
+    VALUES ('Vans', 'contacto@vans.com', '+18558382678', '555 Broadway, Costa Mesa, CA 92627, USA');
+    
+    INSERT INTO Proveedores(nombreProveedor, correoProveedor, telefonoProveedor, direccionProveedor)
+    VALUES ('Converse', 'contacto@converse.com', '+18004212126', '160 North Washington Street, Boston, MA 02114, USA');
+    
+    INSERT INTO Proveedores(nombreProveedor, correoProveedor, telefonoProveedor, direccionProveedor)
+    VALUES ('Timberland', 'contacto@timberland.com', '+18004455866', '200 Domain Drive, Stratham, NH 03885, USA');
+    
+    INSERT INTO Proveedores(nombreProveedor, correoProveedor, telefonoProveedor, direccionProveedor)
+    VALUES ('Dr. Martens', 'contacto@drmartens.com', '+442033601000', '28 Jamestown Road, Camden, London NW1 7BY, UK');
+    
+    INSERT INTO Proveedores(nombreProveedor, correoProveedor, telefonoProveedor, direccionProveedor)
+    VALUES ('Clarks', 'contacto@clarks.com', '+441225447700', '40 High Street, Street, Somerset BA16 0EQ, UK');
+    
+    INSERT INTO Proveedores(nombreProveedor, correoProveedor, telefonoProveedor, direccionProveedor)
+    VALUES ('Crocs', 'contacto@crocs.com', '+13036552767', '7477 East Dry Creek Parkway, Niwot, CO 80503, USA');
+    
+    INSERT INTO Proveedores(nombreProveedor, correoProveedor, telefonoProveedor, direccionProveedor)
+    VALUES ('ASICS', 'contacto@asics.com', '+18002274271', '1720 Regal Row, Dallas, TX 75235, USA');
+    
+    INSERT INTO Proveedores(nombreProveedor, correoProveedor, telefonoProveedor, direccionProveedor)
+    VALUES ('Salomon', 'contacto@salomon.com', '+33450504050', '74996 Annecy Cedex 9, France');
 END$$
 DELIMITER ;
 
@@ -755,7 +794,7 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE sp_InsertarProductosIniciales()
 BEGIN
-    -- Obtener IDs de categorías y proveedores
+    -- Obtener IDs de categorías
     DECLARE cat_hombre_casual INT;
     DECLARE cat_hombre_deportivo INT;
     DECLARE cat_mujer_casual INT;
@@ -763,10 +802,24 @@ BEGIN
     DECLARE cat_unisex_casual INT;
     DECLARE cat_unisex_deportivo INT;
     
+    -- Obtener IDs de proveedores
     DECLARE prov_nike INT;
     DECLARE prov_adidas INT;
     DECLARE prov_puma INT;
+    DECLARE prov_newbalance INT;
+    DECLARE prov_reebok INT;
+    DECLARE prov_underarmour INT;
+    DECLARE prov_skechers INT;
+    DECLARE prov_vans INT;
+    DECLARE prov_converse INT;
+    DECLARE prov_timberland INT;
+    DECLARE prov_drmartens INT;
+    DECLARE prov_clarks INT;
+    DECLARE prov_crocs INT;
+    DECLARE prov_asics INT;
+    DECLARE prov_salomon INT;
     
+    -- Obtener categorías
     SELECT idCategoria INTO cat_hombre_casual FROM Categorias 
     WHERE nombreCategoriaTipo = 'casual' AND nombreCategoriaGenero = 'Hombre' LIMIT 1;
     
@@ -785,37 +838,131 @@ BEGIN
     SELECT idCategoria INTO cat_unisex_deportivo FROM Categorias 
     WHERE nombreCategoriaTipo = 'deportivo' AND nombreCategoriaGenero = 'Unisex' LIMIT 1;
     
+    -- Obtener proveedores
     SELECT idProveedor INTO prov_nike FROM Proveedores WHERE nombreProveedor = 'Nike' LIMIT 1;
     SELECT idProveedor INTO prov_adidas FROM Proveedores WHERE nombreProveedor = 'Adidas' LIMIT 1;
     SELECT idProveedor INTO prov_puma FROM Proveedores WHERE nombreProveedor = 'Puma' LIMIT 1;
+    SELECT idProveedor INTO prov_newbalance FROM Proveedores WHERE nombreProveedor = 'New Balance' LIMIT 1;
+    SELECT idProveedor INTO prov_reebok FROM Proveedores WHERE nombreProveedor = 'Reebok' LIMIT 1;
+    SELECT idProveedor INTO prov_underarmour FROM Proveedores WHERE nombreProveedor = 'Under Armour' LIMIT 1;
+    SELECT idProveedor INTO prov_skechers FROM Proveedores WHERE nombreProveedor = 'Skechers' LIMIT 1;
+    SELECT idProveedor INTO prov_vans FROM Proveedores WHERE nombreProveedor = 'Vans' LIMIT 1;
+    SELECT idProveedor INTO prov_converse FROM Proveedores WHERE nombreProveedor = 'Converse' LIMIT 1;
+    SELECT idProveedor INTO prov_timberland FROM Proveedores WHERE nombreProveedor = 'Timberland' LIMIT 1;
+    SELECT idProveedor INTO prov_drmartens FROM Proveedores WHERE nombreProveedor = 'Dr. Martens' LIMIT 1;
+    SELECT idProveedor INTO prov_clarks FROM Proveedores WHERE nombreProveedor = 'Clarks' LIMIT 1;
+    SELECT idProveedor INTO prov_crocs FROM Proveedores WHERE nombreProveedor = 'Crocs' LIMIT 1;
+    SELECT idProveedor INTO prov_asics FROM Proveedores WHERE nombreProveedor = 'ASICS' LIMIT 1;
+    SELECT idProveedor INTO prov_salomon FROM Proveedores WHERE nombreProveedor = 'Salomon' LIMIT 1;
     
-    -- Insertar productos
-    -- Producto 1
+        -- Insertar productos Nike (10 productos) - Precios en GTQ
     INSERT INTO Productos(nombreProducto, descripcionProducto, url_imagen, tallaProducto, marcaProducto, precioProducto, stockProducto, fechaIngresoProducto, idCategoria, idProveedor)
-    VALUES ('Handball Spezial', 'Tenis de running Supernova Rise 2', 'https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/1fa18f47b66e4f4980ba74d48de04ecc_9366/Handball_Spezial_Shoes_Blue_IF7087_01_standard.jpg', '42', 'Adidas', 1325.00, 50, NOW(), cat_hombre_deportivo, prov_adidas);
-    
-    -- Producto 2
+    VALUES 
+    ('Air Jordan 1 Retro High OG', 'Zapatillas clásicas de baloncesto', 'https://static.nike.com/a/images/t_PDP_936_v1/f_auto,q_auto:eco/5e7687f1-c13e-4bac-8ffa-a6f863ae9157/NIKE+DUNK+HI+RETRO.png', '42', 'Nike', 1400.00, 20, NOW(), cat_hombre_casual, prov_nike),
+    ('Nike Air Force 1 ''07', 'Zapatillas urbanas icónicas', 'https://static.nike.com/a/images/t_PDP_936_v1/f_auto,q_auto:eco/b7d9211c-26e7-431a-ac24-b0540fb3c00f/AIR+FORCE+1+%2707.png', '41', 'Nike', 850.00, 20, NOW(), cat_hombre_casual, prov_nike),
+    ('Nike Dunk Low Retro', 'Zapatillas skate clásicas', 'https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/9ce2cbad-9509-4c80-ade5-89228743a459/dunk-low-retro-shoes-l5qCQT.png', '40', 'Nike', 930.00, 20, NOW(), cat_hombre_casual, prov_nike),
+    ('Nike Air Max 90', 'Zapatillas con tecnología Air Max', 'https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/319a45b8-cd48-4457-a109-6d8bd11067b2/air-max-90-gtx-shoes-zq6Lwr.png', '43', 'Nike', 1010.00, 20, NOW(), cat_hombre_deportivo, prov_nike),
+    ('Nike React Infinity Run Flyknit', 'Zapatillas running para larga distancia', 'https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/45544e10-1e4c-437d-8340-dc4e9a9fbead/react-infinity-run-flyknit-3-road-running-shoes-sqDvTF.png', '44', 'Nike', 1240.00, 20, NOW(), cat_hombre_deportivo, prov_nike),
+    ('Nike Air Zoom Pegasus 39', 'Zapatillas running versátiles', 'https://static.nike.com/a/images/t_PDP_936_v1/f_auto,q_auto:eco/74babf4d-2a86-482f-b72d-c24108738c52/NIKE+DOWNSHIFTER+13+WIDE.png', '42', 'Nike', 970.00, 20, NOW(), cat_hombre_deportivo, prov_nike),
+    ('Nike Air Max 270', 'Zapatillas con máxima amortiguación', 'https://th.bing.com/th/id/R.fcb40717db7b8c6d3e2f3dcb70c3c212?rik=AkILmWUHVuOetA&pid=ImgRaw&r=0', '41', 'Nike', 1240.00, 20, NOW(), cat_hombre_deportivo, prov_nike),
+    ('Nike Blazer Mid ''77 Vintage', 'Zapatillas retro de baloncesto', 'https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/cff8f233-33f6-4836-a0ed-0baf153701a5/blazer-mid-77-vintage-zapatillas-4LTRzh.jpg', '39', 'Nike', 780.00, 20, NOW(), cat_mujer_casual, prov_nike),
+    ('Nike Air VaporMax 2023 Flyknit', 'Zapatillas con tecnología VaporMax', 'https://static.nike.com/a/images/t_PDP_936_v1/f_auto,q_auto:eco/877d30e7-4880-46f8-aa71-6704eb7d944d/AIR+MAX+PLUS.png', '38', 'Nike', 1550.00, 20, NOW(), cat_mujer_deportivo, prov_nike),
+    ('Nike Free RN 5.0', 'Zapatillas para entrenamiento natural', 'https://static.nike.com/a/images/t_PDP_936_v1/f_auto,q_auto:eco/3b27eb2b-da90-4a12-bb43-a093ca26b4a3/NIKE+FREE+RN+5.0+NEXT+NATURE.png', '37', 'Nike', 850.00, 20, NOW(), cat_mujer_deportivo, prov_nike);
+
+    -- Insertar productos Adidas (10 productos) - Precios en GTQ
     INSERT INTO Productos(nombreProducto, descripcionProducto, url_imagen, tallaProducto, marcaProducto, precioProducto, stockProducto, fechaIngresoProducto, idCategoria, idProveedor)
-    VALUES ('Campus 00s', 'Tenis Supernova Rise 2 Running', 'https://assets.adidas.com/images/h_2000,f_auto,q_auto,fl_lossy,c_fill,g_auto/4659ee058ba34bd2a5d0af500104c17d_9366/Campus_00s_Shoes_Black_HQ8708_01_standard.jpg', '40', 'Adidas', 1340.00, 45, NOW(), cat_hombre_casual, prov_adidas);
-    
-    -- Producto 3
+    VALUES
+    ('Adidas Ultraboost 22', 'Zapatillas running con Boost', 'https://adidasgt.vtexassets.com/arquivos/ids/170079-800-800?v=638670386719330000&width=800&height=800&aspect=true', '42', 'Adidas', 1350.00, 20, NOW(), cat_hombre_deportivo, prov_adidas),
+    ('Adidas NMD_R1', 'Zapatillas urbanas con Boost', 'https://adidasgt.vtexassets.com/arquivos/ids/170095-800-800?v=638670386755370000&width=800&height=800&aspect=true', '41', 'Adidas', 1100.00, 20, NOW(), cat_hombre_casual, prov_adidas),
+    ('Adidas Superstar', 'Zapatillas clásicas con puntera de goma', 'https://adidasgt.vtexassets.com/arquivos/ids/260447-800-800?v=638784575612000000&width=800&height=800&aspect=true', '40', 'Adidas', 750.00, 20, NOW(), cat_hombre_casual, prov_adidas),
+    ('Adidas Stan Smith', 'Zapatillas clásicas de cuero', 'https://adidasgt.vtexassets.com/arquivos/ids/191038-800-800?v=638736291577170000&width=800&height=800&aspect=true', '39', 'Adidas', 680.00, 20, NOW(), cat_mujer_casual, prov_adidas),
+    ('Adidas Gazelle', 'Zapatillas retro de los 90s', 'https://adidasgt.vtexassets.com/arquivos/ids/420091-800-800?v=638888817030130000&width=800&height=800&aspect=true', '38', 'Adidas', 720.00, 20, NOW(), cat_mujer_casual, prov_adidas),
+    ('Adidas Solarboost 4', 'Zapatillas running de alto rendimiento', 'https://adidasgt.vtexassets.com/arquivos/ids/170669-800-800?v=638670388178200000&width=800&height=800&aspect=true', '43', 'Adidas', 1250.00, 20, NOW(), cat_hombre_deportivo, prov_adidas),
+    ('Adidas Forum Low', 'Zapatillas retro de baloncesto', 'https://adidasgt.vtexassets.com/arquivos/ids/256315-800-800?v=638781076522770000&width=800&height=800&aspect=true', '42', 'Adidas', 850.00, 20, NOW(), cat_hombre_casual, prov_adidas),
+    ('Adidas Dropset 3', 'Zapatillas con estilo futurista', 'https://adidasgt.vtexassets.com/arquivos/ids/189142-800-800?v=638736283630100000&width=800&height=800&aspect=true', '41', 'Adidas', 950.00, 20, NOW(), cat_hombre_casual, prov_adidas),
+    ('Adidas Adizero Adios Pro 3', 'Zapatillas para competición', 'https://adidasgt.vtexassets.com/arquivos/ids/436594-800-800?v=638896658010830000&width=800&height=800&aspect=true', '44', 'Adidas', 1800.00, 20, NOW(), cat_hombre_deportivo, prov_adidas),
+    ('Adidas Duramo SL', 'Zapatillas running para entrenamiento', 'https://adidasgt.vtexassets.com/arquivos/ids/411485-800-800?v=638887369087170000&width=800&height=800&aspect=true', '42', 'Adidas', 650.00, 20, NOW(), cat_hombre_deportivo, prov_adidas);
+
+    -- Insertar productos Puma (5 productos) - Precios en GTQ
     INSERT INTO Productos(nombreProducto, descripcionProducto, url_imagen, tallaProducto, marcaProducto, precioProducto, stockProducto, fechaIngresoProducto, idCategoria, idProveedor)
-    VALUES ('Air Jordan 4 Retro', 'Tenis Supernova Ease', 'https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/540653a2-a2aa-4e3a-8c33-6451f258946c/AIR+JORDAN+4+RETRO.png', '41', 'Nike', 960.00, 60, NOW(), cat_hombre_casual, prov_nike);
-    
-    -- Continuar con los demás productos...
-    -- Producto 4
+    VALUES
+    ('Puma RS-X', 'Zapatillas con estilo retro-futurista', 'https://images.puma.com/image/upload/f_auto,q_auto,b_rgb:fafafa,w_2000,h_2000/global/402373/01/sv01/fnd/PNA/fmt/png/Tenis-PUMA-x-TORTUGAS-NINJA-RS-X', '42', 'Puma', 850.00, 20, NOW(), cat_hombre_casual, prov_puma),
+    ('Puma Suede Classic', 'Zapatillas clásicas de skate', 'https://images.puma.com/image/upload/f_auto,q_auto,b_rgb:fafafa,w_2000,h_2000/global/399781/03/sv01/fnd/PNA/fmt/png/Tenis-Suede-Classic', '41', 'Puma', 600.00, 20, NOW(), cat_hombre_casual, prov_puma),
+    ('Puma Deviate Nitro', 'Zapatillas running con tecnología Nitro', 'https://images.puma.com/image/upload/f_auto,q_auto,b_rgb:fafafa,w_2000,h_2000/global/309809/08/sv01/fnd/PNA/fmt/png/Tenis-de-running-para-hombre-Deviate-NITRO-Elite-3', '43', 'Puma', 1100.00, 20, NOW(), cat_hombre_deportivo, prov_puma),
+    ('Puma Cali Sport', 'Zapatillas deportivas para mujer', 'https://images.puma.com/image/upload/f_auto,q_auto,b_rgb:fafafa,w_600,h_600/global/394384/01/sv01/fnd/PNA/fmt/png/Tenis-para-j%C3%B3venes-PUMA-Cali-Court-de-cuero', '38', 'Puma', 750.00, 20, NOW(), cat_mujer_deportivo, prov_puma),
+    ('Puma Future Rider', 'Zapatillas con estilo retro', 'https://images.puma.com/image/upload/f_auto,q_auto,b_rgb:fafafa,w_600,h_600/global/405728/01/sv01/fnd/PNA/fmt/png/Style-Rider-Lumi-Women', '40', 'Puma', 700.00, 20, NOW(), cat_mujer_casual, prov_puma);
+
+    -- Insertar productos New Balance (5 productos) - Precios en GTQ
     INSERT INTO Productos(nombreProducto, descripcionProducto, url_imagen, tallaProducto, marcaProducto, precioProducto, stockProducto, fechaIngresoProducto, idCategoria, idProveedor)
-    VALUES ('Air Force 1', 'Tenis Supernova Ease', 'https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/4f37fca8-6bce-43e7-ad07-f57ae3c13142/AIR+FORCE+1+%2707.png', '39', 'Nike', 960.00, 55, NOW(), cat_hombre_casual, prov_nike);
-    
-    -- Producto 5
+    VALUES
+    ('New Balance 574', 'Zapatillas clásicas de running', 'https://newbalance.com.gt/cdn/shop/files/WL574YA1-1_p9hsib.jpg?v=1730435193&width=713', '42', 'New Balance', 750.00, 20, NOW(), cat_hombre_casual, prov_newbalance),
+    ('New Balance 990v5', 'Zapatillas premium made in USA', 'https://newbalance.com.gt/cdn/shop/files/U990NC6-1_wl0381.jpg?v=1724350107&width=713', '43', 'New Balance', 1500.00, 20, NOW(), cat_hombre_casual, prov_newbalance),
+    ('New Balance FuelCell Rebel v3', 'Zapatillas running ligeras', 'https://newbalance.com.gt/cdn/shop/files/MRCXLB4-1_ycncux.jpg?v=1731690279&width=713', '44', 'New Balance', 1200.00, 20, NOW(), cat_hombre_deportivo, prov_newbalance),
+    ('New Balance 327', 'Zapatillas con estilo retro', 'https://newbalance.com.gt/cdn/shop/files/WS327GD-1_voneby.jpg?v=1721160485&width=713', '39', 'New Balance', 850.00, 20, NOW(), cat_mujer_casual, prov_newbalance),
+    ('New Balance Fresh Foam X 1080v12', 'Zapatillas running con máxima amortiguación', 'https://newbalance.com.gt/cdn/shop/files/M1080B13-1_9lr0in_961b5fbf-4dda-4a92-b575-fca39c26c22d.jpg?v=1721250989&width=713', '42', 'New Balance', 1300.00, 20, NOW(), cat_hombre_deportivo, prov_newbalance);
+
+    -- Insertar productos Reebok (5 productos) - Precios en GTQ
     INSERT INTO Productos(nombreProducto, descripcionProducto, url_imagen, tallaProducto, marcaProducto, precioProducto, stockProducto, fechaIngresoProducto, idCategoria, idProveedor)
-    VALUES ('Nike Dunk Low Retro', 'Supernova Rise 2 W', 'https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/0f76f73e-2578-4d62-abab-c5563ea4f78c/NIKE+DUNK+LOW+RETRO.png', '38', 'Nike', 1340.00, 40, NOW(), cat_mujer_casual, prov_nike);
-    
-    -- Producto 6
+    VALUES
+    ('Reebok Classic Leather', 'Zapatillas clásicas de cuero', '', '42', 'Reebok', 650.00, 20, NOW(), cat_hombre_casual, prov_reebok),
+    ('Reebok Nano X2', 'Zapatillas para cross training', '', '43', 'Reebok', 1100.00, 20, NOW(), cat_hombre_deportivo, prov_reebok),
+    ('Reebok Club C 85', 'Zapatillas retro de tenis', '', '41', 'Reebok', 700.00, 20, NOW(), cat_hombre_casual, prov_reebok),
+    ('Reebok Floatride Energy 4', 'Zapatillas running ligeras', '', '44', 'Reebok', 950.00, 20, NOW(), cat_hombre_deportivo, prov_reebok),
+    ('Reebok Princess', 'Zapatillas clásicas para mujer', '', '37', 'Reebok', 550.00, 20, NOW(), cat_mujer_casual, prov_reebok);
+
+    -- Insertar productos Under Armour (5 productos) - Precios en GTQ
     INSERT INTO Productos(nombreProducto, descripcionProducto, url_imagen, tallaProducto, marcaProducto, precioProducto, stockProducto, fechaIngresoProducto, idCategoria, idProveedor)
-    VALUES ('Nike Ava Rover', 'Tenis Supernova Surge', 'https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/fe01cb61-0753-4143-accd-b7c654600021/NIKE+AVA+ROVER.png', '37', 'Nike', 1055.00, 65, NOW(), cat_mujer_deportivo, prov_nike);
-    
-    -- Continuar con el resto de productos...
+    VALUES
+    ('Under Armour HOVR Phantom 3', 'Zapatillas running con tecnología HOVR', '', '42', 'Under Armour', 1200.00, 20, NOW(), cat_hombre_deportivo, prov_underarmour),
+    ('Under Armour Charged Assert 9', 'Zapatillas running de entrada', '', '43', 'Under Armour', 750.00, 20, NOW(), cat_hombre_deportivo, prov_underarmour),
+    ('Under Armour Project Rock 5', 'Zapatillas para entrenamiento', '', '44', 'Under Armour', 1400.00, 20, NOW(), cat_hombre_deportivo, prov_underarmour),
+    ('Under Armour Curry Flow 10', 'Zapatillas de baloncesto signature', '', '45', 'Under Armour', 1600.00, 20, NOW(), cat_hombre_deportivo, prov_underarmour),
+    ('Under Armour Slingflex', 'Zapatillas running para mujer', '', '38', 'Under Armour', 900.00, 20, NOW(), cat_mujer_deportivo, prov_underarmour);
+
+    -- Insertar productos Vans (5 productos) - Precios en GTQ
+    INSERT INTO Productos(nombreProducto, descripcionProducto, url_imagen, tallaProducto, marcaProducto, precioProducto, stockProducto, fechaIngresoProducto, idCategoria, idProveedor)
+    VALUES
+    ('Vans Old Skool', 'Zapatillas skate clásicas', '', '42', 'Vans', 550.00, 20, NOW(), cat_unisex_casual, prov_vans),
+    ('Vans Sk8-Hi', 'Zapatillas skate tobilleras', '', '41', 'Vans', 600.00, 20, NOW(), cat_unisex_casual, prov_vans),
+    ('Vans Authentic', 'Zapatillas skate minimalistas', '', '40', 'Vans', 500.00, 20, NOW(), cat_unisex_casual, prov_vans),
+    ('Vans Ultrarange', 'Zapatillas para skate y running', '', '43', 'Vans', 850.00, 20, NOW(), cat_unisex_deportivo, prov_vans),
+    ('Vans Slip-On', 'Zapatillas sin cordones', '', '39', 'Vans', 520.00, 20, NOW(), cat_unisex_casual, prov_vans);
+
+    -- Insertar productos Converse (5 productos) - Precios en GTQ
+    INSERT INTO Productos(nombreProducto, descripcionProducto, url_imagen, tallaProducto, marcaProducto, precioProducto, stockProducto, fechaIngresoProducto, idCategoria, idProveedor)
+    VALUES
+    ('Converse Chuck Taylor All Star', 'Zapatillas clásicas de lona', '', '42', 'Converse', 450.00, 20, NOW(), cat_unisex_casual, prov_converse),
+    ('Converse Chuck 70', 'Versión premium de las All Star', '', '41', 'Converse', 600.00, 20, NOW(), cat_unisex_casual, prov_converse),
+    ('Converse One Star', 'Zapatillas con estilo vintage', '', '40', 'Converse', 650.00, 20, NOW(), cat_hombre_casual, prov_converse),
+    ('Converse Run Star Motion', 'Zapatillas con plataforma', '', '38', 'Converse', 750.00, 20, NOW(), cat_mujer_casual, prov_converse),
+    ('Converse Jack Purcell', 'Zapatillas con puntera sonriente', '', '39', 'Converse', 550.00, 20, NOW(), cat_unisex_casual, prov_converse);
+
+    -- Insertar productos Timberland (5 productos) - Precios en GTQ
+    INSERT INTO Productos(nombreProducto, descripcionProducto, url_imagen, tallaProducto, marcaProducto, precioProducto, stockProducto, fechaIngresoProducto, idCategoria, idProveedor)
+    VALUES
+    ('Timberland Premium 6" Boot', 'Botas clásicas de trabajo', '', '42', 'Timberland', 1200.00, 20, NOW(), cat_hombre_casual, prov_timberland),
+    ('Timberland Euro Hiker', 'Botas de senderismo', '', '43', 'Timberland', 1100.00, 20, NOW(), cat_hombre_deportivo, prov_timberland),
+    ('Timberland Killington Chukka', 'Botines casuales', '', '41', 'Timberland', 950.00, 20, NOW(), cat_hombre_casual, prov_timberland),
+    ('Timberland Nellie Double', 'Botas para mujer', '', '37', 'Timberland', 1000.00, 20, NOW(), cat_mujer_casual, prov_timberland),
+    ('Timberland White Ledge', 'Botas de senderismo ligeras', '', '44', 'Timberland', 900.00, 20, NOW(), cat_hombre_deportivo, prov_timberland);
+
+    -- Insertar productos Dr. Martens (5 productos) - Precios en GTQ
+    INSERT INTO Productos(nombreProducto, descripcionProducto, url_imagen, tallaProducto, marcaProducto, precioProducto, stockProducto, fechaIngresoProducto, idCategoria, idProveedor)
+    VALUES
+    ('Dr. Martens 1460', 'Botas clásicas de 8 ojales', '', '42', 'Dr. Martens', 1300.00, 20, NOW(), cat_hombre_casual, prov_drmartens),
+    ('Dr. Martens 2976 Chelsea', 'Botas tipo Chelsea', '', '41', 'Dr. Martens', 1250.00, 20, NOW(), cat_hombre_casual, prov_drmartens),
+    ('Dr. Martens Jadon', 'Botas con plataforma', '', '39', 'Dr. Martens', 1400.00, 20, NOW(), cat_mujer_casual, prov_drmartens),
+    ('Dr. Martens 1461', 'Zapatos Oxford de 3 ojales', '', '43', 'Dr. Martens', 1200.00, 20, NOW(), cat_hombre_casual, prov_drmartens),
+    ('Dr. Martens Sinclair', 'Botas con cremallera lateral', '', '38', 'Dr. Martens', 1500.00, 20, NOW(), cat_mujer_casual, prov_drmartens);
+
+    -- Insertar productos Crocs (5 productos) - Precios en GTQ
+    INSERT INTO Productos(nombreProducto, descripcionProducto, url_imagen, tallaProducto, marcaProducto, precioProducto, stockProducto, fechaIngresoProducto, idCategoria, idProveedor)
+    VALUES
+    ('Crocs Classic Clog', 'Zuecos clásicos de material Croslite', '', '42', 'Crocs', 350.00, 20, NOW(), cat_unisex_casual, prov_crocs),
+    ('Crocs LiteRide 360', 'Zapatillas cómodas y ligeras', '', '43', 'Crocs', 450.00, 20, NOW(), cat_unisex_deportivo, prov_crocs),
+    ('Crocs Bistro Pro', 'Zuecos para trabajo con suela antideslizante', '', '44', 'Crocs', 400.00, 20, NOW(), cat_hombre_casual, prov_crocs),
+    ('Crocs Swiftwater', 'Sandalias para agua', '', '41', 'Crocs', 380.00, 20, NOW(), cat_unisex_casual, prov_crocs),
+    ('Crocs Brooklyn', 'Zapatillas estilo sneaker', '', '42', 'Crocs', 500.00, 20, NOW(), cat_hombre_casual, prov_crocs);
 END$$
 DELIMITER ;
 
@@ -862,12 +1009,6 @@ BEGIN
     ORDER BY p.nombreProducto;
 END$$
 DELIMITER ;
-
-
-CALL sp_AgregarProveedor('Nike', '@nike.com', '+50212345678', 'Av. Reforma 123, Ciudad de Guatemala');
-CALL sp_AgregarProveedor('Timberland', 'info@timberland.com', '+50223456789', 'Calle Principal 456, Zona 10');
-CALL sp_AgregarProveedor('Crocs', 'ventas@crocs.com', '+50234567890', 'Boulevard Los Próceres 789, Zona 14');
-CALL sp_AgregarProveedor('Clarks', 'soporte@clarks.com', '+50245678901', '5ta Avenida 101, Mixco');
 
 
 
@@ -996,6 +1137,8 @@ delimiter $$
 		end if;
 	end $$
 delimiter ;
-
+/*
 call sp_ListarCompras();
--- call sp_ListarCarritos();
+call sp_ListarCarritos();
+call sp_ListarUsuarios();
+*/

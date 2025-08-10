@@ -27,11 +27,6 @@ body {
     text-align: center;
 }
 
-.card form {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px 15px;
-}
 
 .form-group {
     display: flex;
@@ -54,8 +49,10 @@ body {
     width: 100%;
 }
 
-.buttonAgregar[type="submit"] {
-    grid-column: span 2;
+/* El estilo del botón en el formulario debe ser igual al que ya has definido */
+.card form .buttonAgregar[type="submit"] {
+    
+    grid-column: span 2; /* Hace que ocupe dos columnas en el grid */
     font-size: 16px;
     padding: 10px;
     background-color: #000;
@@ -63,13 +60,15 @@ body {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    width: 100%;
+    width: 100%; /* El ancho del botón se ajusta al 100% del contenedor */
     transition: background-color 0.3s ease;
 }
 
-.buttonAgregar[type="submit"]:hover {
+/* Efecto hover en el botón */
+.card form .buttonAgregar[type="submit"]:hover {
     background-color: blue;
 }
+
 
 .regresar {
     position: fixed;

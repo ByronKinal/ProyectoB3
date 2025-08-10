@@ -73,12 +73,12 @@ public class ServletAgregarProducto extends HttpServlet {
             // Redirigir con mensaje de éxito
             request.getSession().setAttribute("mensaje", "Producto agregado correctamente");
             request.getSession().setAttribute("tipoMensaje", "success");
-            response.sendRedirect("MenuAdministrativo.jsp");
+            response.sendRedirect("ListarProductos.jsp");
 
         } catch (Exception e) {
             // Manejar errores
             request.setAttribute("error", "Error al agregar producto: " + e.getMessage());
-            request.getRequestDispatcher("/RegistroProductos.jsp").forward(request, response);
+            request.getRequestDispatcher("/AgregarProducto.jsp").forward(request, response);
         } finally {
             em.close();
         }

@@ -23,7 +23,7 @@ public class ServletEliminarProducto extends HttpServlet {
         ProductoDAO productoDAO = new ProductoDAO();
         productoDAO.eliminarProducto(idProducto);
         
-        response.sendRedirect("MenuAdministrativo.jsp");
+        response.sendRedirect("ListarProductos.jsp");
     }
 
     @Override

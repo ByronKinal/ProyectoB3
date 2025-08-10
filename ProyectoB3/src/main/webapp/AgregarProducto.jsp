@@ -1,3 +1,6 @@
+<%@page import="model.Proveedor"%>
+<%@page import="java.util.List"%>
+<%@page import="dao.ProveedorDAO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
@@ -10,8 +13,8 @@
     </head>
     <body>
         <div>
-            <a class="regresar" href="MenuAdministrativo.jsp">Regresar</a>
-            
+            <a class="regresar" href="ListarProductos.jsp">Regresar</a>
+
             <c:if test="${not empty error}">
                 <div class="alert alert-danger">${error}</div>
             </c:if>
@@ -41,41 +44,52 @@
                             <label for="tallaProducto" class="form-label">Talla</label>
                             <input type="text" class="form-control" id="tallaProducto" name="tallaProducto">
                         </div>
-                        
+
                         <div class="mb-3">
                             <label for="marcaProducto" class="form-label">Marca</label>
                             <input type="text" class="form-control" id="marcaProducto" name="marcaProducto" required>
                         </div>
-                        
+
                         <div class="mb-3">
                             <label for="precioProducto" class="form-label">Precio (Q)</label>
                             <input type="number" step="0.01" class="form-control" id="precioProducto" name="precioProducto" required min="0">
                         </div>
-                        
+
+                        <!-- Reemplazar el input por un select -->
                         <div class="mb-3">
-                            <label for="idProveedor" class="form-label">ID Proveedor</label>
-                            <input type="number" class="form-control" id="idProveedor" name="idProveedor" required min="1">
+                            <label for="idProveedor" class="form-label">Proveedor:</label>
+                            <select id="idProveedor" name="idProveedor" class="form-select" required>
+                                <option value="">Seleccione un proveedor</option>
+                                <%
+                                    ProveedorDAO proveedorDAO = new ProveedorDAO();
+                                    List<Proveedor> proveedores = proveedorDAO.listarProveedoresActivos();
+                                    for (Proveedor p : proveedores) {
+                                %>
+                                <option value="<%= p.getIdProveedor()%>"><%= p.getNombreProveedor()%></option>
+                                <% }%>
+                            </select>
                         </div>
-                        
+
                         <div class="mb-3">
                             <label for="idCategoria" class="form-label">ID Categoría</label>
                             <input type="number" class="form-control" id="idCategoria" name="idCategoria" required min="1">
                         </div>
-                        
+
                         <div class="mb-3">
                             <label for="stockProducto" class="form-label">Stock</label>
                             <input type="number" class="form-control" id="stockProducto" name="stockProducto" required min="0">
                         </div>
-                        
-                        
-                    </form>
-                    <div class="d-grid">
+
+
+
+                        <div class="d-grid">
                             <button type="submit" class="buttonAgregar">Guardar Producto</button>
                         </div>
+                    </form>
                 </div>
             </div>
         </div>
-        
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

@@ -26,8 +26,37 @@ public class ProductoDAO {
         EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<Producto> query = em.createQuery(
-                    "SELECT p FROM Producto p LEFT JOIN FETCH p.categoria LEFT JOIN FETCH p.proveedor",
+                    "SELECT p FROM Producto p LEFT JOIN FETCH p.categoria LEFT JOIN FETCH p.proveedor ",
                     Producto.class);
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<Producto> listarProductosActivos() {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Producto> query = em.createQuery(
+                    "SELECT p FROM Producto p WHERE p.estadoProducto = 'ACTIVO'",
+                    Producto.class);
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<Producto> listarProductosPorGenero(String genero) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            String jpql = "SELECT DISTINCT p FROM Producto p "
+                    + "LEFT JOIN FETCH p.categoria c "
+                    + "LEFT JOIN FETCH p.proveedor "
+                    + "WHERE p.estadoProducto = 'ACTIVO' AND "
+                    + "c.nombreCategoriaGenero = :genero";
+
+            TypedQuery<Producto> query = em.createQuery(jpql, Producto.class);
+            query.setParameter("genero", genero);
             return query.getResultList();
         } finally {
             em.close();
@@ -44,23 +73,6 @@ public class ProductoDAO {
             return query.getSingleResult();
         } catch (NoResultException e) {
             return null;
-        } finally {
-            em.close();
-        }
-    }
-
-    public List<Producto> listarProductosPorGenero(String genero) {
-        EntityManager em = emf.createEntityManager();
-        try {
-            // Cargar todas las relaciones necesarias
-            String jpql = "SELECT DISTINCT p FROM Producto p "
-                    + "LEFT JOIN FETCH p.categoria c "
-                    + "LEFT JOIN FETCH p.proveedor "
-                    + "WHERE c.nombreCategoriaGenero = :genero";
-
-            TypedQuery<Producto> query = em.createQuery(jpql, Producto.class);
-            query.setParameter("genero", genero);
-            return query.getResultList();
         } finally {
             em.close();
         }

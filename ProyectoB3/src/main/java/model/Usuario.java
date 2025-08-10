@@ -37,6 +37,9 @@ public class Usuario {
     @Column(name = "rolUsuario")
     private String rolUsuario;
 
+    @Column(name = "estadoUsuario")
+    private String estadoUsuario;
+
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Compra> compras = new ArrayList<>();
 
@@ -136,6 +139,14 @@ public class Usuario {
 
     public void setRolUsuario(String rolUsuario) {
         this.rolUsuario = rolUsuario;
+    }
+
+    public String getEstadoUsuario() {
+        return estadoUsuario;
+    }
+
+    public void setEstadoUsuario(String estadoUsuario) {
+        this.estadoUsuario = estadoUsuario;
     }
     
     public List<Compra> getCompras() {
