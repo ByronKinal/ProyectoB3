@@ -901,7 +901,7 @@ BEGIN
     ('New Balance 327', 'Zapatillas con estilo retro', 'https://newbalance.com.gt/cdn/shop/files/WS327GD-1_voneby.jpg?v=1721160485&width=713', '39', 'New Balance', 850.00, 20, NOW(), cat_mujer_casual, prov_newbalance),
     ('New Balance Fresh Foam X 1080v12', 'Zapatillas running con máxima amortiguación', 'https://newbalance.com.gt/cdn/shop/files/M1080B13-1_9lr0in_961b5fbf-4dda-4a92-b575-fca39c26c22d.jpg?v=1721250989&width=713', '42', 'New Balance', 1300.00, 20, NOW(), cat_hombre_deportivo, prov_newbalance);
 
-    -- Insertar productos Reebok (5 productos) - Precios en GTQ
+   /* -- Insertar productos Reebok (5 productos) - Precios en GTQ
     INSERT INTO Productos(nombreProducto, descripcionProducto, url_imagen, tallaProducto, marcaProducto, precioProducto, stockProducto, fechaIngresoProducto, idCategoria, idProveedor)
     VALUES
     ('Reebok Classic Leather', 'Zapatillas clásicas de cuero', '', '42', 'Reebok', 650.00, 20, NOW(), cat_hombre_casual, prov_reebok),
@@ -962,7 +962,7 @@ BEGIN
     ('Crocs LiteRide 360', 'Zapatillas cómodas y ligeras', '', '43', 'Crocs', 450.00, 20, NOW(), cat_unisex_deportivo, prov_crocs),
     ('Crocs Bistro Pro', 'Zuecos para trabajo con suela antideslizante', '', '44', 'Crocs', 400.00, 20, NOW(), cat_hombre_casual, prov_crocs),
     ('Crocs Swiftwater', 'Sandalias para agua', '', '41', 'Crocs', 380.00, 20, NOW(), cat_unisex_casual, prov_crocs),
-    ('Crocs Brooklyn', 'Zapatillas estilo sneaker', '', '42', 'Crocs', 500.00, 20, NOW(), cat_hombre_casual, prov_crocs);
+    ('Crocs Brooklyn', 'Zapatillas estilo sneaker', '', '42', 'Crocs', 500.00, 20, NOW(), cat_hombre_casual, prov_crocs);*/
 END$$
 DELIMITER ;
 

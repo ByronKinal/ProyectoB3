@@ -10,7 +10,7 @@
     </head>
     <body>
         <div>
-            <a class="regresar" href="MenuAdministrativo.jsp">Regresar</a>
+            <a class="regresar" href="ListarProductos.jsp">Regresar</a>
 
             <c:if test="${not empty error}">
                 <div class="alert alert-danger">${error}</div>

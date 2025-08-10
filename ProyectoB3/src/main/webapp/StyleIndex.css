@@ -1,124 +1,156 @@
+/* Estilos generales */
 body {
-    background-color: #f8f9fa;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    color: #333;
 }
 
-.header {
-    background-color: #343a40;
-    color: white;
-    padding: 2rem 0;
-    margin-bottom: 2rem;
-    text-align: center;
-}
-
-.container {
-    max-width: 800px;
-}
-
-.card {
-    border: none;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-    margin-bottom: 1.5rem;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-}
-
-.btn-access {
+/* Barra de navegación completa */
+.navbar {
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: fixed;
     width: 100%;
-    padding: 12px;
-    font-weight: 500;
-    border-radius: 8px;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.navbar-brand h1 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.logo {
+    height: 50px;
+    width: auto;
+}
+
+.navbar-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.btn {
+    padding: 0.5rem 1.5rem;
+    border-radius: 30px;
+    font-weight: 600;
+    text-decoration: none;
     transition: all 0.3s ease;
     border: none;
-    text-decoration: none;
-    display: block;
-    text-align: center;
+    cursor: pointer;
 }
 
 .btn-login {
-    background-color: #28a745;
-    color: white;
+    background-color: transparent;
+    color: #2c3e50;
+    border: 2px solid #2c3e50;
 }
 
 .btn-login:hover {
-    background-color: #218838;
-    color: white;
-}
-
-.btn-client {
-    background-color: #17a2b8;
-    color: white;
-}
-
-.btn-client:hover {
-    background-color: #138496;
+    background-color: #2c3e50;
     color: white;
 }
 
 .btn-register {
-    background-color: #ffc107;
-    color: #212529;
+    background-color: #e74c3c;
+    color: white;
+    border: 2px solid #e74c3c;
 }
 
 .btn-register:hover {
-    background-color: #e0a800;
-    color: #212529;
+    background-color: #c0392b;
+    border-color: #c0392b;
 }
 
-.btn-admin {
-    background-color: #6c757d;
+/* Hero Section */
+.hero {
+    height: 100vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                url('https://images.unsplash.com/photo-1460353581641-37baddab0fa2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80') no-repeat center center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     color: white;
+    margin-top: 80px; /* Para compensar la navbar fija */
 }
 
-.btn-admin:hover {
-    background-color: #5a6268;
-    color: white;
+.hero-content {
+    max-width: 800px;
+    padding: 0 20px;
 }
 
-.btn-cart {
-    background-color: #6610f2;
-    color: white;
-}
-
-.btn-cart:hover {
-    background-color: #560bd0;
-    color: white;
-}
-
-.btn-profile {
-    background-color: #fd7e14;
-    color: white;
-}
-
-.btn-profile:hover {
-    background-color: #e36209;
-    color: white;
-}
-
-.card-body {
-    padding: 1.5rem;
-}
-
-.card-title {
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-}
-
-.card-text {
-    color: #6c757d;
-    margin-bottom: 1.2rem;
-}
-
-.logo {
-    max-width: 150px;
+.hero h2 {
+    font-size: 3.5rem;
     margin-bottom: 1rem;
+    font-weight: 700;
 }
 
-.lead {
-    font-size: 1.25rem;
-    font-weight: 300;
+.hero p {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.btn-explore {
+    background-color: #e74c3c;
+    color: white;
+    font-size: 1.2rem;
+    padding: 0.8rem 2.5rem;
+}
+
+.btn-explore:hover {
+    background-color: #c0392b;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 2rem;
+    background-color: #2c3e50;
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .navbar-container {
+        flex-direction: column;
+        padding: 1rem;
+    }
+    
+    .navbar-brand {
+        margin-bottom: 1rem;
+    }
+    
+    .hero {
+        margin-top: 140px; /* Más espacio para la navbar en móvil */
+    }
+    
+    .hero h2 {
+        font-size: 2.5rem;
+    }
+    
+    .hero p {
+        font-size: 1.2rem;
+    }
 }
