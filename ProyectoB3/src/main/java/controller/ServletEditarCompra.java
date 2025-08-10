@@ -31,7 +31,7 @@ public class ServletEditarCompra extends HttpServlet {
         if (compra == null) {
             request.getSession().setAttribute("mensaje", "Compra no encontrado");
             request.getSession().setAttribute("tipoMensaje", "danger");
-            response.sendRedirect("MenuAdministrativo.jsp");
+            response.sendRedirect("ListarProductos.jsp");
             return;
         }
         

@@ -53,7 +53,7 @@ public class ServletAgregarCategoria  extends HttpServlet {
             // Redirigir con mensaje de éxito
             request.getSession().setAttribute("mensaje", "Categoria agregada correctamente");
             request.getSession().setAttribute("tipoMensaje", "success");
-            response.sendRedirect("MenuAdministrativo.jsp");
+            response.sendRedirect("ListarProductos.jsp");
 
         } catch (Exception e) {
             // Manejar errores

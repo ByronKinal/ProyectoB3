@@ -83,7 +83,7 @@ public class ServletRegistro extends HttpServlet {
 
             if (usuarioDAO.guardarUsuario(nuevoUsuario)) {
                 request.getSession().setAttribute("mensaje", "¡Registro exitoso!");
-                response.sendRedirect("MenuPrincipal.jsp");
+                response.sendRedirect("ServletInicioDeSesion");
             } else {
                 request.setAttribute("error", "Ocurrió un error al registrar el usuario");
                 request.getRequestDispatcher("Registro.jsp").forward(request, response);

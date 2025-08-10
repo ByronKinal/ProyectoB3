@@ -9,13 +9,13 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>ADMIN</title>
+        <title>Menú administrativo</title>
         <link rel="stylesheet" href="StyleAdmin.css">
     </head>
     <body>
     <div class="centrar">
         <div class="rol">
-            <a href="MenuAdministrativo.jsp"><img class="imagen"
+            <a href="ListarProductos.jsp"><img class="imagen"
                     src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyftiXIrUdZ-p8CiTJZPXz2LcNUMmH3--IjQ&s" alt=""></a>
              <p>PRODUCTOS</p>
         </div>

@@ -9,7 +9,7 @@
     </head>
     <body>
         <div class="container mt-4">
-            <h1>Agregar Nuevo Proveedor</h1>
+            <h1>Agregar Proveedor</h1>
             <form action="ServletAgregarProveedor" method="post">
                 <div class="mb-3">
                     <label for="nombreProveedor" class="form-label">Nombre del Proveedor:</label>

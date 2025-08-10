@@ -51,6 +51,9 @@ public class Producto implements Serializable {
     @Column(name = "fechaSalidaProducto")
     private Timestamp fechaSalidaProducto;
 
+    @Column(name = "estadoProducto") // Nombre correcto
+    private String estadoProducto;
+
     @ManyToOne(fetch = FetchType.EAGER) // Cambiado a EAGER para categoría
     @JoinColumn(name = "idCategoria")
     private Categoria categoria;
@@ -160,6 +163,14 @@ public class Producto implements Serializable {
 
     public void setFechaSalidaProducto(Timestamp fechaSalidaProducto) {
         this.fechaSalidaProducto = fechaSalidaProducto;
+    }
+
+    public String getEstadoProducto() {
+        return estadoProducto;
+    }
+
+    public void setEstadoProducto(String estadoProducto) {
+        this.estadoProducto = estadoProducto;
     }
 
     public Categoria getCategoria() {

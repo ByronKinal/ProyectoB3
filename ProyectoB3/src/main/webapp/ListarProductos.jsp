@@ -18,7 +18,7 @@
             <div class="tipos">
                 <p class="titulo">SHOESKI</p>
             </div>
-            <button class="btnCambios" id="agregar" onclick="location.href = 'RegistroProductos.jsp'">AGREGAR</button>
+            <a href="AgregarProducto.jsp" class="btnCambios" id="agregar">AGREGAR</a>
         </div>
 
         <%-- Mensajes de éxito o error --%>

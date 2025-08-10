@@ -34,7 +34,7 @@ public class ServletEditarCategoria extends HttpServlet {
         if (categoria == null) {
             request.getSession().setAttribute("mensaje", "Categoria no encontrado");
             request.getSession().setAttribute("tipoMensaje", "danger");
-            response.sendRedirect("MenuAdministrativo.jsp");
+            response.sendRedirect("ListarProductos.jsp");
             return;
         }
         

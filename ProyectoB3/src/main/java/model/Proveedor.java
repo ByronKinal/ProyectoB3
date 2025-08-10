@@ -99,9 +99,8 @@ public class Proveedor implements Serializable {
         this.direccionProveedor = direccionProveedor;
     }
     
-    
      public String getEstadoProveedor() {
-        return direccionProveedor;
+        return estadoProveedor;
     }
 
     public void setEstadoProveedor(String estadoProveedor) {

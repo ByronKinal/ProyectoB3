@@ -28,7 +28,7 @@ public class ServletEditarUsuario extends HttpServlet {
                 
                 if (usuario != null) {
                     request.setAttribute("usuario", usuario);
-                    request.getRequestDispatcher("EditarUsuario.jsp").forward(request, response);
+                    request.getRequestDispatcher("EditarUsuarios.jsp").forward(request, response);
                 } else {
                     request.getSession().setAttribute("mensaje", "Usuario no encontrado");
                     request.getSession().setAttribute("tipoMensaje", "danger");

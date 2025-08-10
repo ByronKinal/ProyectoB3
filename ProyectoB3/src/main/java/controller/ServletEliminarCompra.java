@@ -23,7 +23,7 @@ public class ServletEliminarCompra extends HttpServlet {
         CompraDAO compraDAO = new CompraDAO();
         compraDAO.eliminarCompra(idCompra);
         
-        response.sendRedirect("MenuAdministrativo.jsp");
+        response.sendRedirect("ListarProductos.jsp");
     }
 
     @Override

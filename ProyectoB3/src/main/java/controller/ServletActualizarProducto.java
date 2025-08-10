@@ -76,7 +76,7 @@ public class ServletActualizarProducto extends HttpServlet {
             em.merge(producto);
             tx.commit();
             
-            response.sendRedirect("MenuAdministrativo.jsp");
+            response.sendRedirect("ListarProductos.jsp");
         } catch (Exception e) {
             if (tx != null && tx.isActive()) {
                 tx.rollback();

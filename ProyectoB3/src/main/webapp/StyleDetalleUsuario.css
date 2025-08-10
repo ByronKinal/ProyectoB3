@@ -1,30 +1,63 @@
 body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #f2f2f2;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #fff;
+}
+
+.linea-superior {
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+}
+
+.barra-superior {
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 10px 0;
+}
+
+.logo img {
+    margin-left: 40px;
+    height: 70px;
 }
 
 .perfil-container {
     background-color: #fff;
-    padding: 25px;
+    padding: 30px;
     border-radius: 10px;
-    max-width: 400px;
-    margin: 20px auto;
-    margin-top: 30px;
+    max-width: 500px;
+    margin: auto;
     text-align: center;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.perfil-container h1 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .perfil-img {
-    width: 110px;
+    width: 120px;
     height: 120px;
     border-radius: 50%;
     object-fit: cover;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+    border: 3px solid #f3f4f6;
 }
 
 .datos-container {
     text-align: left;
-
+    margin-bottom: 20px;
 }
 
 .dato {
@@ -33,34 +66,59 @@ body {
 
 .dato label {
     display: block;
-    font-weight: bold;
+    font-weight: 600;
     margin-bottom: 5px;
+    color: #555;
+    font-size: 14px;
 }
 
 .dato input {
-    width: 95%;
+    width: 100%;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #ddd;
     border-radius: 5px;
     background-color: #f9f9f9;
     color: #333;
+    font-size: 14px;
 }
 
 .dato input:read-only {
-    background-color: #fff;
-    font-size: 14px;
-    padding: 10px;
-    width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    transition: border-color 0.3s;
-    box-sizing: border-box;
-    border-color: #000;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    cursor: not-allowed;
 }
 
-h1 {
-    margin-top: 0px;
-    font-style: italic;
-    font-weight: 400;
-    font-size: 25px;
+.acciones {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.btn-cerrar-sesion {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.btn-cerrar-sesion:hover {
+    background-color: #ff3333;
+}
+
+.btn-regresar {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.btn-cerrar-sesion:hover {
+    background-color: blue;
 }
