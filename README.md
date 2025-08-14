@@ -134,3 +134,7 @@ Contacte a nuestro equipo de desarrollo ante cualquier incidencia:
 
 ## Conclusión  
 Este manual proporciona las instrucciones necesarias para utilizar todas las funcionalidades de SHOESKI. Con esta guía, los usuarios podrán navegar de manera eficiente, realizar compras seguras y gestionar su experiencia en la plataforma. Nos comprometemos a ofrecer comodidad, estilo y calidad en cada interacción con nuestro sistema.
+
+## Cuestionario
+[Cuestionario_Respuestas_Completas.pdf](https://github.com/user-attachments/files/21765781/Cuestionario_Respuestas_Completas.pdf)
+
