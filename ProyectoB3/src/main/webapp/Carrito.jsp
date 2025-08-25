@@ -226,13 +226,18 @@
                 integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" 
         crossorigin="anonymous"></script>
 
+        <!-- Client-side cart optimization script -->
+        <script src="js/cart-optimization.js"></script>
+
         <script>
-            // Ocultar mensajes después de 5 segundos
+            // Enhanced message hiding with better performance
             setTimeout(function () {
                 const alerts = document.querySelectorAll('.alert');
                 alerts.forEach(alert => {
-                    const bsAlert = new bootstrap.Alert(alert);
-                    bsAlert.close();
+                    if (bootstrap && bootstrap.Alert) {
+                        const bsAlert = new bootstrap.Alert(alert);
+                        bsAlert.close();
+                    }
                 });
             }, 5000);
         </script>

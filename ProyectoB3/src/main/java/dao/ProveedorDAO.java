@@ -1,29 +1,25 @@
 package dao;
 
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import model.Proveedor;
+import util.EntityManagerUtil;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.TypedQuery;
+import java.util.List;
 
+/**
+ * Optimized ProveedorDAO with consolidated methods and singleton EntityManagerFactory
+ * @author Performance Optimization
+ */
 public class ProveedorDAO {
-    private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("ZapateriaDonPepe");
     
-    // Método para limpiar caché
+    // Method to clear cache - now optimized
     public void limpiarCache() {
-        EntityManager em = emf.createEntityManager();
-        try {
-            em.getEntityManagerFactory().getCache().evictAll();
-        } finally {
-            em.close();
-        }
+        EntityManagerUtil.getEntityManagerFactory().getCache().evictAll();
     }
     
     public List<Proveedor> listarTodos() {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = EntityManagerUtil.createEntityManager();
         try {
             TypedQuery<Proveedor> query = em.createQuery(
                 "SELECT p FROM Proveedor p ORDER BY p.nombreProveedor", Proveedor.class);
@@ -33,14 +29,11 @@ public class ProveedorDAO {
         }
     }
 
-    public Proveedor obtenerProveedorCompletoPorId(int idProveedor) {
-        EntityManager em = emf.createEntityManager();
+    // Consolidated method - replaced both obtenerProveedorCompletoPorId and obtenerProveedorPorId
+    public Proveedor obtenerProveedorPorId(int idProveedor) {
+        EntityManager em = EntityManagerUtil.createEntityManager();
         try {
-            TypedQuery<Proveedor> query = em.createQuery(
-                    "SELECT p FROM Proveedor p WHERE p.idProveedor = :id",
-                    Proveedor.class);
-            query.setParameter("id", idProveedor);
-            return query.getSingleResult();
+            return em.find(Proveedor.class, idProveedor);
         } catch (Exception e) {
             return null;
         } finally {
@@ -48,8 +41,13 @@ public class ProveedorDAO {
         }
     }
 
+    // Kept for backward compatibility but now delegates to optimized method
+    public Proveedor obtenerProveedorCompletoPorId(int idProveedor) {
+        return obtenerProveedorPorId(idProveedor);
+    }
+
     public List<Proveedor> listarProveedoresPorEstado(String estadoProveedor) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = EntityManagerUtil.createEntityManager();
         try {
             TypedQuery<Proveedor> query = em.createQuery(
                     "SELECT p FROM Proveedor p WHERE p.estadoProveedor = :estadoProveedor",
@@ -62,12 +60,13 @@ public class ProveedorDAO {
     }
 
     public String obtenerEstadoProveedor(int idProveedor) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = EntityManagerUtil.createEntityManager();
         try {
-            Query query = em.createQuery(
-                    "SELECT p.estadoProveedor FROM Proveedor p WHERE p.idProveedor = :idProveedor");
+            TypedQuery<String> query = em.createQuery(
+                    "SELECT p.estadoProveedor FROM Proveedor p WHERE p.idProveedor = :idProveedor",
+                    String.class);
             query.setParameter("idProveedor", idProveedor);
-            return (String) query.getSingleResult();
+            return query.getSingleResult();
         } catch (Exception e) {
             return null;
         } finally {
@@ -76,7 +75,7 @@ public class ProveedorDAO {
     }
 
     public void agregarProveedor(Proveedor proveedor) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = EntityManagerUtil.createEntityManager();
         EntityTransaction tx = null;
         try {
             tx = em.getTransaction();
@@ -94,7 +93,7 @@ public class ProveedorDAO {
     }
 
     public void actualizarProveedor(Proveedor proveedor) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = EntityManagerUtil.createEntityManager();
         EntityTransaction tx = null;
         try {
             tx = em.getTransaction();
@@ -111,9 +110,9 @@ public class ProveedorDAO {
         }
     }
 
-    // Método corregido para eliminar proveedor
+    // Optimized method for deleting provider
     public boolean eliminarProveedor(int idProveedor) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = EntityManagerUtil.createEntityManager();
         EntityTransaction tx = null;
         try {
             tx = em.getTransaction();
@@ -137,19 +136,8 @@ public class ProveedorDAO {
         }
     }
 
-    // Método existente renombrado para claridad
+    // Simplified method - no longer redundant
     public void suspenderProveedor(int idProveedor) {
         eliminarProveedor(idProveedor);
-    }
-
-    public Proveedor obtenerProveedorPorId(int idProveedor) {
-        EntityManager em = emf.createEntityManager();
-        try {
-            return em.find(Proveedor.class, idProveedor);
-        } catch (Exception e) {
-            return null;
-        } finally {
-            em.close();
-        }
     }
 }
