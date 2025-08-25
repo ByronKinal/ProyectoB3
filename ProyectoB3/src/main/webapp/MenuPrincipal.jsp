@@ -109,32 +109,11 @@
                 List<Producto> productos;
 
                 if (genero != null && !genero.isEmpty()) {
-                    // Cargar productos por género con todas las relaciones
-                    EntityManager em = Persistence.createEntityManagerFactory("ZapateriaDonPepe").createEntityManager();
-                    try {
-                        String jpql = "SELECT DISTINCT p FROM Producto p "
-                                + "LEFT JOIN FETCH p.categoria c "
-                                + "LEFT JOIN FETCH p.proveedor "
-                                + "WHERE c.nombreCategoriaGenero = :genero";
-
-                        TypedQuery<Producto> query = em.createQuery(jpql, Producto.class);
-                        query.setParameter("genero", genero);
-                        productos = query.getResultList();
-                    } finally {
-                        em.close();
-                    }
+                    // Usar método optimizado del ProductoDAO
+                    productos = productoDAO.listarProductosPorGenero(genero);
                 } else {
-                    // Cargar todos los productos con relaciones
-                    EntityManager em = Persistence.createEntityManagerFactory("ZapateriaDonPepe").createEntityManager();
-                    try {
-                        String jpql = "SELECT DISTINCT p FROM Producto p "
-                                + "LEFT JOIN FETCH p.categoria "
-                                + "LEFT JOIN FETCH p.proveedor";
-
-                        productos = em.createQuery(jpql, Producto.class).getResultList();
-                    } finally {
-                        em.close();
-                    }
+                    // Usar método optimizado del ProductoDAO para todos los productos activos
+                    productos = productoDAO.listarProductosActivos();
                 }
                 request.setAttribute("productos", productos);
             %>
@@ -200,5 +179,100 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" 
                 integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" 
         crossorigin="anonymous"></script>
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const ordenarSelect = document.getElementById('ordenar');
+                const filtroSelect = document.getElementById('filtro');
+                const galeria = document.querySelector('.galeria .galeria');
+                
+                if (!galeria) return; // No hay productos que mostrar
+                
+                // Función para obtener todos los productos
+                function getProductos() {
+                    return Array.from(galeria.children);
+                }
+                
+                // Función para obtener el precio de un producto
+                function getPrecio(producto) {
+                    const precioElement = producto.querySelector('.precio');
+                    if (!precioElement) return 0;
+                    const precioText = precioElement.textContent.replace('Q ', '').replace(',', '');
+                    return parseFloat(precioText) || 0;
+                }
+                
+                // Función para obtener el nombre de un producto
+                function getNombre(producto) {
+                    const nombreElement = producto.querySelector('.card-title');
+                    return nombreElement ? nombreElement.textContent.trim() : '';
+                }
+                
+                // Función para obtener la categoría de un producto
+                function getCategoria(producto) {
+                    const categoriaElements = producto.querySelectorAll('p');
+                    for (let el of categoriaElements) {
+                        const text = el.textContent.toLowerCase();
+                        if (text.includes('casual') || text.includes('deportivo')) {
+                            return text.includes('casual') ? 'casual' : 'deportivo';
+                        }
+                    }
+                    return 'otros';
+                }
+                
+                // Función para ordenar productos
+                function ordenarProductos(criterio) {
+                    const productos = getProductos();
+                    
+                    productos.sort((a, b) => {
+                        switch(criterio) {
+                            case 'precio-asc':
+                                return getPrecio(a) - getPrecio(b);
+                            case 'precio-desc':
+                                return getPrecio(b) - getPrecio(a);
+                            case 'nombre':
+                                return getNombre(a).localeCompare(getNombre(b));
+                            default:
+                                return 0;
+                        }
+                    });
+                    
+                    // Reorganizar los productos en el DOM
+                    productos.forEach(producto => galeria.appendChild(producto));
+                }
+                
+                // Función para filtrar productos
+                function filtrarProductos(filtro) {
+                    const productos = getProductos();
+                    
+                    productos.forEach(producto => {
+                        const categoria = getCategoria(producto);
+                        const mostrar = filtro === 'todos' || categoria === filtro;
+                        producto.style.display = mostrar ? 'block' : 'none';
+                    });
+                }
+                
+                // Event listeners
+                ordenarSelect.addEventListener('change', function() {
+                    const criterio = this.value;
+                    if (criterio !== 'default') {
+                        ordenarProductos(criterio);
+                    }
+                });
+                
+                filtroSelect.addEventListener('change', function() {
+                    const filtro = this.value;
+                    filtrarProductos(filtro);
+                });
+                
+                // Aplicar filtro por defecto si hay parámetros en la URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const genero = urlParams.get('genero');
+                
+                // Mantener la funcionalidad existente de filtros por género
+                if (genero) {
+                    // El filtro por género ya se maneja en el servidor
+                }
+            });
+        </script>
     </body>
 </html>
