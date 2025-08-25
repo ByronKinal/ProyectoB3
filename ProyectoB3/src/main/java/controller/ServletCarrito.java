@@ -2,6 +2,7 @@ package controller;
 
 import dao.*;
 import model.*;
+import util.EntityManagerUtil;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
@@ -9,7 +10,6 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.Persistence;
 
 @WebServlet("/ServletCarrito")
 public class ServletCarrito extends HttpServlet {
@@ -125,15 +125,16 @@ public class ServletCarrito extends HttpServlet {
         int idProducto = Integer.parseInt(request.getParameter("idProducto"));
         int nuevaCantidad = Integer.parseInt(request.getParameter("cantidad"));
 
-        EntityManager em = Persistence.createEntityManagerFactory("ZapateriaDonPepe").createEntityManager();
+        EntityManager em = EntityManagerUtil.createEntityManager();
         try {
             em.getTransaction().begin();
 
-            // Buscar el item con todas sus relaciones
+            // Buscar el item con todas sus relaciones usando optimized query
             Carrito item = em.createQuery(
                     "SELECT c FROM Carrito c "
                     + "LEFT JOIN FETCH c.producto p "
                     + "LEFT JOIN FETCH p.categoria "
+                    + "LEFT JOIN FETCH p.proveedor "
                     + "WHERE c.id.idCompra = :idCompra AND c.id.idProducto = :idProducto",
                     Carrito.class)
                     .setParameter("idCompra", idCompra)
@@ -239,31 +240,28 @@ public class ServletCarrito extends HttpServlet {
     }
 
     private void actualizarCarritoEnSesion(HttpServletRequest request, int idCompra) throws Exception {
-        EntityManager em = Persistence.createEntityManagerFactory("ZapateriaDonPepe").createEntityManager();
+        EntityManager em = EntityManagerUtil.createEntityManager();
         try {
-            // Cargar la compra con sus relaciones
-            Compra compra = em.find(Compra.class, idCompra);
+            // Optimized query: Load compra with all carrito items and their complete product info in one query
+            // This eliminates the N+1 query problem by fetching everything at once
+            Compra compra = em.createQuery(
+                    "SELECT DISTINCT c FROM Compra c "
+                    + "LEFT JOIN FETCH c.carritos cr "
+                    + "LEFT JOIN FETCH cr.producto p "
+                    + "LEFT JOIN FETCH p.categoria cat "
+                    + "LEFT JOIN FETCH p.proveedor prov "
+                    + "WHERE c.idCompra = :idCompra",
+                    Compra.class)
+                    .setParameter("idCompra", idCompra)
+                    .getSingleResult();
+            
             if (compra != null) {
-                // Forzar la inicialización de la colección
-                compra.getCarritos().size();
-
-                // Cargar información completa de cada producto en el carrito
-                for (Carrito item : compra.getCarritos()) {
-                    Producto producto = em.find(Producto.class, item.getProducto().getIdProducto());
-                    if (producto != null) {
-                        // Forzar carga de relaciones
-                        producto.getCategoria().getNombreCategoriaGenero();
-                        producto.getProveedor().getNombreProveedor();
-                        item.setProducto(producto);
-                    }
-                }
-
-                // Calcular total
+                // Calculate total using stream for better performance
                 double total = compra.getCarritos().stream()
                         .mapToDouble(Carrito::getSubtotal)
                         .sum();
 
-                // Actualizar sesión
+                // Update session with optimized data
                 HttpSession session = request.getSession();
                 session.setAttribute("compra", compra);
                 session.setAttribute("itemsCarrito", compra.getCarritos());

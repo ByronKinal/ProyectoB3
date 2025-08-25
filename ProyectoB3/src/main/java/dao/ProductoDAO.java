@@ -1,9 +1,8 @@
 package dao;
 
 import model.Producto;
+import util.EntityManagerUtil;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.Query;
 import java.util.List;
 import javax.persistence.EntityTransaction;
@@ -16,14 +15,13 @@ import javax.persistence.TypedQuery;
  */
 public class ProductoDAO {
 
-    private final EntityManagerFactory emf;
-
+    // Removed EntityManagerFactory field - now using singleton utility
     public ProductoDAO() {
-        this.emf = Persistence.createEntityManagerFactory("ZapateriaDonPepe");
+        // Constructor simplified - no need to create EntityManagerFactory
     }
 
     public List<Producto> listarProductosCompletos() {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = EntityManagerUtil.createEntityManager();
         try {
             TypedQuery<Producto> query = em.createQuery(
                     "SELECT p FROM Producto p LEFT JOIN FETCH p.categoria LEFT JOIN FETCH p.proveedor ",
@@ -35,7 +33,7 @@ public class ProductoDAO {
     }
 
     public List<Producto> listarProductosActivos() {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = EntityManagerUtil.createEntityManager();
         try {
             TypedQuery<Producto> query = em.createQuery(
                     "SELECT p FROM Producto p "
@@ -50,7 +48,7 @@ public class ProductoDAO {
     }
 
     public List<Producto> listarProductosPorGenero(String genero) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = EntityManagerUtil.createEntityManager();
         try {
             String jpql = "SELECT DISTINCT p FROM Producto p "
                     + "LEFT JOIN FETCH p.categoria c "
@@ -67,7 +65,7 @@ public class ProductoDAO {
     }
 
     public Producto obtenerProductoCompletoPorId(int idProducto) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = EntityManagerUtil.createEntityManager();
         try {
             TypedQuery<Producto> query = em.createQuery(
                     "SELECT p FROM Producto p LEFT JOIN FETCH p.categoria LEFT JOIN FETCH p.proveedor WHERE p.idProducto = :id",
@@ -82,7 +80,7 @@ public class ProductoDAO {
     }
 
     public String obtenerGeneroProducto(int idProducto) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = EntityManagerUtil.createEntityManager();
         try {
             Query query = em.createQuery(
                     "SELECT c.nombreCategoriaGenero FROM Producto p "
@@ -94,15 +92,15 @@ public class ProductoDAO {
         }
     }
 
-    // Modificar el método agregarProducto
+    // Modified method with optimized entity management
     public void agregarProducto(Producto producto) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = EntityManagerUtil.createEntityManager();
         EntityTransaction tx = null;
         try {
             tx = em.getTransaction();
             tx.begin();
 
-            // Asegurarse de que las entidades relacionadas estén gestionadas
+            // Ensure related entities are managed for better performance
             if (producto.getCategoria() != null && producto.getCategoria().getIdCategoria() != 0) {
                 producto.setCategoria(em.merge(producto.getCategoria()));
             }
@@ -123,7 +121,7 @@ public class ProductoDAO {
     }
 
     public void actualizarProducto(Producto producto) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = EntityManagerUtil.createEntityManager();
         EntityTransaction tx = null;
         try {
             tx = em.getTransaction();
@@ -141,7 +139,7 @@ public class ProductoDAO {
     }
 
     public void eliminarProducto(int idProducto) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = EntityManagerUtil.createEntityManager();
         try {
             em.getTransaction().begin();
             Producto producto = em.find(Producto.class, idProducto);
@@ -155,7 +153,7 @@ public class ProductoDAO {
     }
 
     public Producto obtenerProductoPorId(int idProducto) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = EntityManagerUtil.createEntityManager();
         try {
             return em.find(Producto.class, idProducto);
         } finally {
